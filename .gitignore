@@ -35,3 +35,14 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# Cordova
+platforms
+plugins
+
+# bower
+www/lib
+
+# pug, as it is being generated
+www/*.html
+www/*/*.html
