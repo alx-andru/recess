@@ -46,3 +46,6 @@ www/lib
 # pug, as it is being generated
 www/*.html
 www/*/*.html
+
+# firebase credentials
+www/js/firebase*.js
