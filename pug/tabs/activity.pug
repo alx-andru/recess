@@ -1,0 +1,113 @@
+ion-view(view-title='Your Activity' animation="no-animation")
+  ion-nav-bar(align-title='center').bar.bar-transparent.bar-recess
+    ion-nav-buttons(side='right')
+      a(ng-click='toggleMenu()').button.button-clear
+        i.material-icons hdr_strong
+
+
+  ion-content(overflow-scroll='true',).padding.gradient.has-tabs.no-scroll
+    div.notifications
+      span.notifications__message
+        i.material-icons warning
+        span Drop by for an appointment!
+      span.dismiss
+        i.material-icons clear
+
+    ion-slide-box(on-slide-changed='slideHasChanged($index)', disable-scroll='false',drag-content='false').activity
+      ion-slide.activity__slide
+        ui-chart-steps-today(chart-data-steps='data.today.steps', chart-data-goal='goals.steps')
+        div.achievements
+          .full
+            .half-left
+              i(ng-if='!weekday.reached.steps').material-icons.notreached star_border
+              i(ng-if='weekday.reached.steps').material-icons star
+            .half-right
+              i(ng-if='!weekday.reached.active').material-icons.notreached star_border
+              i(ng-if='weekday.reached.active').material-icons star
+        ui-chart-activity-today(chart-data-active='data.today.active', chart-data-goal='goals.active', label-data-total='data.today.activeTotal')
+
+
+      ion-slide.activity__slide
+        ui-chart-steps-week(chart-data-steps='data.week.steps', chart-data-goal='goals.steps')
+        div().achievements
+          .full(ng-repeat='weekday in data.week.days')
+            .half-left
+              i(ng-if='!weekday.reached.steps').material-icons.notreached star_border
+              i(ng-if='weekday.reached.steps').material-icons star
+            .half-right
+              i(ng-if='!weekday.reached.active').material-icons.notreached star_border
+              i(ng-if='weekday.reached.active').material-icons star
+        ui-chart-activity-week(chart-data-active='data.week.active', chart-data-goal='goals.active*7', label-data-total='data.week.activeTotal')
+
+
+
+
+
+
+  footer(activity-active='true')
+
+
+//ion-view(view-title='Your Activity' animation="no-animation").view-dash
+
+  ion-nav-bar(align-title='center').bar.bar-transparent.bar-recess
+    ion-nav-buttons(side='right')
+      a(ng-click='toggleMenu()').button.button-clear
+        i.material-icons hdr_strong
+
+
+  ion-content(overflow-scroll='true',).padding.gradient.has-tabs.no-scroll
+    div.notifications
+      span.notifications__message
+        i.material-icons warning
+        span Drop by for an appointment!
+      span.dismiss
+        i.material-icons clear
+
+    ion-slide-box(on-slide-changed='slideHasChanged($index)', disable-scroll='false',drag-content='false').activity
+      ion-slide.activity__slide
+        ui-chart-steps-today(chart-data-steps='data.today.steps', chart-data-goal='goals.steps')
+        .activity__slide-progress
+          .activity__slide-progress-day
+            .activity__slide-progress-step
+              i(ng-if='!reached.steps').material-icons.notreached panorama_fish_eye
+              i(ng-if='reached.steps').material-icons done
+            .activity__slide-progress-days
+              span Today {{isAndroid}}
+            .activity__slide-progress-active
+              i(ng-if='!reached.active').material-icons.notreached panorama_fish_eye
+              i(ng-if='reached.active').material-icons done
+        ui-chart-activity-today(chart-data-active='data.today.active', chart-data-goal='goals.active', label-data-total='data.today.activeTotal')
+
+      ion-slide.activity__slide
+        ui-chart-steps-week(chart-data-steps='data.week.steps', chart-data-goal='goals.steps')
+        .activity__slide-progress
+          .activity__slide-progress-day(ng-repeat='weekday in data.week.days')
+            .activity__slide-progress-step
+              i(ng-if='!weekday.reached.steps').material-icons.notreached panorama_fish_eye
+              i(ng-if='weekday.reached.steps').material-icons done
+
+            .activity__slide-progress-days
+              span {{weekday.label}}
+            .activity__slide-progress-week
+              i(ng-if='!weekday.reached.active').material-icons.notreached panorama_fish_eye
+              i(ng-if='weekday.reached.active').material-icons done
+
+        ui-chart-activity-week(chart-data-active='data.week.active', chart-data-goal='goals.active*7', label-data-total='data.week.activeTotal')
+
+
+
+
+  div(ng-class='{android:isAndroid}').recess-tabs
+    div(ng-class='{android:isAndroid}').recess-tabs__tab
+      a(href='#/messenger',nav-transition='none')
+        i.material-icons forum
+
+
+    div(ng-class='{android:isAndroid}').recess-tabs__tab.active
+      a(href='#/activity',nav-transition='none')
+        i.material-icons timeline
+
+
+    div(ng-class='{android:isAndroid}').recess-tabs__tab
+      a(href='#/goal',nav-transition='none')
+        i.material-icons assignment

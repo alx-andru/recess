@@ -1,0 +1,67 @@
+.chart-today-activity
+  .tooltip-activity-today
+    i.material-icons av_timer
+    span.active 0
+    span min
+  .chart-activity-today
+    canvas(chart-data='chart.week.data',
+    chart-labels='chart.week.labels',
+    chart-options='chart.week.options',
+    chart-dataset-override='chart.week.dataset').chart-bar.chart-activity-today-bar.image-rendering
+
+  .chart-activity-today-labels
+    span(ng-repeat='day in chart.week.labels').chart-activity-today-labels-day {{day}}
+
+  .chart-legend-activity
+    .chart-legend-activity-item.chart-legend-activity-item_today
+      div.value {{total}}
+      span.label Active min this week
+    .chart-legend-activity-item.chart-legend-activity-item_icon
+      i.material-icons av_timer
+    .chart-legend-activity-item.chart-legend-activity-item_goal
+      div.value {{goal}}
+      span.label Your goal
+
+//.chart
+  .tooltip-activity-today
+    i.material-icons av_timer
+    span.active 0
+    span min
+  .chart-activity-today.chart
+    canvas(chart-data='chart.week.data',
+    chart-labels='chart.week.labels',
+    chart-options='chart.week.options',
+    chart-dataset-override='chart.week.dataset').chart-bar
+  .chart-legend-activity
+    .chart-legend-activity-item.chart-legend-activity-item_today
+      div.value {{total}}
+      span.label Active min this week
+    .chart-legend-activity-item.chart-legend-activity-item_icon
+      i.material-icons av_timer
+    .chart-legend-activity-item.chart-legend-activity-item_goal
+      div.value {{goal}}
+      span.label Your goal
+
+//.chart-activity-week
+  .tooltip-activity-today
+    i.material-icons av_timer
+    span.active 0
+    span min
+  .chart-activity-week-chart
+    canvas(chart-data='chart.week.data',
+    chart-labels='chart.week.labels',
+    chart-options='chart.week.options',
+    chart-dataset-override='chart.week.dataset').chart-bar.chart-activity-week-bar
+
+  .chart-activity-today-labels
+    span(ng-repeat='day in chart.week.labels').chart-activity-today-labels-day {{day}}
+
+  .chart-legend-activity
+    .chart-legend-activity-item.chart-legend-activity-item_today
+      div.value {{total}}
+      span.label Active min this week
+    .chart-legend-activity-item.chart-legend-activity-item_icon
+      i.material-icons av_timer
+    .chart-legend-activity-item.chart-legend-activity-item_goal
+      div.value {{goal}}
+      span.label Your goal

@@ -1,0 +1,50 @@
+ion-view(view-title='Set your Goals' animation="no-animation")
+
+  ion-nav-bar(align-title='center').bar.bar-transparent.bar-recess
+    ion-nav-buttons(side='right')
+      a(ng-click='toggleMenu()').button.button-clear
+
+
+
+  ion-content(overflow-scroll='true',).padding.gradient.has-tabs.no-scroll
+    .goals
+      .goal-steps
+        .goal-header
+          .goal-header__icon
+            i.material-icons directions_run
+          .goal-header__title
+            h1 Steps
+          .goal-header__description
+            p Walking keeps you active, is good for your balance, blood pressure, reduces risks and ah what am I telling you, just walk more!
+        .goal-settings
+          span I'm ready to walk
+          span(ng-click='setGoalSteps()').goal
+            span.value &nbsp; {{goals.steps | number: 0}}&nbsp;
+            span.icons
+              i.material-icons expand_less
+              i.material-icons expand_more
+          span &nbsp;steps a day.
+
+      .goal-active
+        .goal-header
+          .goal-header__icon
+            i.material-icons av_timer
+          .goal-header__title
+            h1 Active all day
+          .goal-header__description
+            p Break sedentary phases and be active consistent over the entire day instead of having bursts of activity.
+        .goal-settings
+          span I will be active for
+          span(ng-click='setGoalActive()').goal
+            span.value &nbsp; {{goals.active | number: 0}}&nbsp;
+            span.icons
+              i.material-icons expand_less
+              i.material-icons expand_more
+          span &nbsp;minutes a day.
+
+      .ready
+        div(ng-click='setReadyGo()').button-recess Start Challenge
+
+
+
+  footer(goal-active='true')

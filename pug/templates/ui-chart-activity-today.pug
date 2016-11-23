@@ -1,0 +1,24 @@
+.chart-today-activity
+  .tooltip-activity-today
+    i.material-icons av_timer
+    span.active 0
+    span min
+  .chart-activity-today
+    canvas(chart-data='chart.day.data',
+    chart-labels='chart.day.labels',
+    chart-options='chart.day.options',
+    chart-dataset-override='chart.day.dataset').chart-bar.chart-activity-today-bar.image-rendering
+
+  .chart-activity-today-labels
+    span 00
+    span noon
+    span 23
+  .chart-legend-activity
+    .chart-legend-activity-item.chart-legend-activity-item_today
+      div.value {{total}}
+      span.label Active min today
+    .chart-legend-activity-item.chart-legend-activity-item_icon
+      i.material-icons av_timer
+    .chart-legend-activity-item.chart-legend-activity-item_goal
+      div.value {{goal}}
+      span.label Your goal

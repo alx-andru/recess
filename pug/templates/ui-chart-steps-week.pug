@@ -1,0 +1,8 @@
+.chart-week-steps
+  canvas(chart-data='chart.week.data',
+  chart-labels='chart.week.labels',
+  chart-options='chart.week.options',
+  chart-dataset-override='chart.week.dataset').chart-bar
+
+  .chart-week-steps-labels
+    span(ng-repeat='day in chart.week.labels').chart-activity-today-labels-day {{day}}
