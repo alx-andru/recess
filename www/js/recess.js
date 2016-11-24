@@ -13,28 +13,27 @@ var recess = angular.module('recess', [
 recess.run(function ($ionicPlatform) {
   $ionicPlatform.ready(function () {
 
-
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
     }
 
     if (window.StatusBar) {
-      //StatusBar.styleBlackTranslucent();
       StatusBar.styleDefault();
     }
-
 
   });
 
 });
 
-recess.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+recess.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider, $localStorageProvider) {
+  $localStorageProvider.setKeyPrefix('recess-');
+
   // force tabs for android to be displayed at the bottom as well
   $ionicConfigProvider.tabs.position('bottom');
 
   $stateProvider
-  // Welcome
+    // Welcome
     .state('welcome', {
       url: '/welcome',
       templateUrl: 'welcome.html',
@@ -67,26 +66,24 @@ recess.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider
     })
   ;
 
-
   $urlRouterProvider.otherwise(function ($injector) {
-    console.log('See if it is a first time runner.');
     var $state = $injector.get('$state');
-    var permissions = JSON.parse(window.localStorage.getItem('recess.permissions'));
+    var permissions = $localStorageProvider.get('permissions');
 
+    // Permission for Health has to be given, if not, prompt user to welcome screen
     if (permissions !== undefined && permissions !== null && permissions.fitness) {
       $state.go('activity');
     } else {
-      window.localStorage.setItem('recess.firstTime', true);
+      // default permissions
       var permissions = {
         notifications: false,
         fitness: false,
       };
-      window.localStorage.setItem('recess.permissions', JSON.stringify(permissions));
+      $localStorageProvider.set('permissions', permissions);
       $state.go('welcome');
     }
 
-
   });
 
-
 });
+

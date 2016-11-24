@@ -35,6 +35,8 @@ ion-view(name='intro', hide-nav-bar='true', has-bouncing='false' )
           .welcome-slide-content__subtitle
             p To participate in the study, it is required to access relevant data.
           .welcome-slide-content__content
+
+            // Notifications
             .welcome-slide-content-content__icon
               i.fa.fa-bell-o
             .row.welcome-slide-content-content__
@@ -47,7 +49,7 @@ ion-view(name='intro', hide-nav-bar='true', has-bouncing='false' )
                   .track
                     .handle
 
-
+            // Fitness Data
             .welcome-slide-content-content__icon
               i.fa.fa-heartbeat
             .row.welcome-slide-content-content__
@@ -57,7 +59,7 @@ ion-view(name='intro', hide-nav-bar='true', has-bouncing='false' )
                 p We measure your fitness to see how active you are.
               .col-20.col-center.welcome-slide-content-content__toggle
                 label.toggle.toggle-balanced
-                  input(type='checkbox' ng-model='permissions.fitness', ng-change='askPermissionHealth()')
+                  input(type='checkbox' ng-model='permissions.fitness', ng-change='askHealthPermission()')
                   .track
                     .handle
 

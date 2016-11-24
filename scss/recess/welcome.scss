@@ -1,5 +1,5 @@
-@import 'colors';
-@import 'mixins';
+@import '../utils/colors';
+@import '../utils/mixins';
 
 .content-intro {
   background-color: $primary_recess;
@@ -24,7 +24,10 @@
 .welcome-slide-action {
   margin: 0 auto;
   margin-bottom: 4em;
-
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 .welcome-slide-content__image {

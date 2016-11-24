@@ -9847,7 +9847,11 @@ a.button {
 
 .welcome-slide-action {
   margin: 0 auto;
-  margin-bottom: 4em; }
+  margin-bottom: 4em;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center; }
 
 .welcome-slide-content__image {
   max-width: 60%;

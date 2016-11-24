@@ -18,7 +18,8 @@
     "material-design-icons-font": "^2.2.3",
     "chart.js": "^2.3.0",
     "angularfire": "^2.1.0",
-    "firebase": "^3.6.1"
+    "firebase": "^3.6.1",
+    "ngstorage": "^0.3.11"
   },
   "resolutions": {
     "angular": "1.5.8"
