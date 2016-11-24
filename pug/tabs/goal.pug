@@ -1,12 +1,18 @@
-ion-view(view-title='Set your Goals' animation="no-animation")
+ion-view(view-title='Set your Goals' animation="no-animation").tab
 
-  ion-nav-bar(align-title='center').bar.bar-transparent.bar-recess
+  ion-nav-bar(align-title='center').bar.bar-transparent.tab__bar
     ion-nav-buttons(side='right')
       a(ng-click='toggleMenu()').button.button-clear
 
 
 
-  ion-content(overflow-scroll='true',).padding.gradient.has-tabs.no-scroll
+  ion-content(overflow-scroll='true',).padding.gradient.has-tabs.no-scroll.tab__content
+    //TODO: optional notification
+    div.notifications.tab--content__notifications.tab-content__notifications--hidden
+      i.tab-content-notifications__severity.material-icons warning
+      span.tab-content-notifications__message Drop by for an appointment!
+      i.tab-content-notifications__action.material-icons clear
+
     .goals
       .goal-steps
         .goal-header

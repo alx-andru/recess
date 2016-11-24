@@ -9,6 +9,10 @@ controllers.config(function () {
   // configuration
 });
 
+controllers.controller('DemoController', function () {
+
+});
+
 controllers.controller('MessengerController', function () {
 
 });
@@ -26,12 +30,12 @@ controllers.controller('WelcomeController', function ($scope, $timeout, $ionicPo
 
   $scope.permissions = $localStorage.permissions;
 
-  $scope.slideChanged = function(idx) {
+  $scope.slideChanged = function (idx) {
     var isSlideEnabled = true;
     if (idx == 1) {
       isSlideEnabled = false;
     }
-    $timeout(function() {
+    $timeout(function () {
       $ionicSlideBoxDelegate.enableSlide(isSlideEnabled);
     }, 0);
   };
@@ -42,7 +46,7 @@ controllers.controller('WelcomeController', function ($scope, $timeout, $ionicPo
       console.log('Successfull health authentication');
       console.log(success);
       // enable sliding again
-      $timeout(function() {
+      $timeout(function () {
         $ionicSlideBoxDelegate.enableSlide(isSlideEnabled);
       }, 0);
     }).error(function (error) {
@@ -84,6 +88,18 @@ controllers.controller('WelcomeController', function ($scope, $timeout, $ionicPo
 
 });
 
-controllers.controller('RecessController', function () {
+controllers.controller('RecessController', function ($scope, $ionicSideMenuDelegate, $state) {
+  $scope.toggleMenu = function () {
+    $ionicSideMenuDelegate.toggleRight();
+  };
 
+  $scope.accessDataCollection = function () {
+    $scope.toggleMenu();
+    $state.go('demo');
+  };
+
+  $scope.accessIntro = function () {
+    $scope.toggleMenu();
+    $state.go('welcome');
+  }
 });

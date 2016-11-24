@@ -1,0 +1,61 @@
+
+.recess-tabs {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #000;
+  color: $white;
+  height: 49px;
+  font-weight: 900;
+  font-size: 2em;
+  &.android {
+    background-color: $primary_recess;
+    color: black;
+  }
+}
+
+.recess-tabs__tab {
+  flex: 1;
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  max-width: 150px;
+
+  a {
+    color: $white;
+    &:hover {
+      color: $white;
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &.active {
+    a {
+      color: $primary_recess;
+    }
+
+  }
+
+  &.android {
+    * {
+      color: white;
+    }
+
+  }
+
+  &.active.android {
+    * {
+      color: black;
+    }
+  }
+
+}

@@ -2,7 +2,18 @@
 @import 'www/lib/ionic/scss/ionic';
 @import 'utils/fonts';
 @import 'recess/welcome';
+@import 'recess/sidemenu';
+@import 'recess/tabs-common';
+@import 'recess/tabs-demo';
+@import 'recess/tabs-footer';
 
 html, body {
-font-size: 1em;
+  font-size: 1em;
+  font-family: 'Lato', 'Open Sans', "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+  font-variant-ligatures: common-ligatures;
+  line-height: 1.6rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+
 }

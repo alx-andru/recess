@@ -1,0 +1,97 @@
+.tab {
+  height: 100%;
+  background-color: $white;
+}
+
+// Bar
+//
+.tab__bar {
+  background: none;
+
+  .button {
+    color: $silver;
+    margin-right: 1em;
+    line-height: 2.5em;
+  }
+}
+
+.tab__content {
+  width: 100%;
+  background-color: $turquoise;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+
+}
+
+.tab__content--message {
+  padding: 4rem 2rem 0 2rem;
+}
+
+.tab-content__image {
+  text-align: center;
+  // padding: 2rem 0;
+  img {
+    max-width: 100%;
+  }
+}
+
+.tab-content-image__icon {
+  i {
+    font-size: 4rem;
+  }
+
+}
+
+// Notification
+//
+.tab-content__notifications {
+  position: absolute;
+  width: 100%;
+  background-color: $amethyst;
+  font-size: 0.8rem;
+  line-height: 2rem;
+  font-weight: 400;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
+}
+
+.tab-content__notifications--hidden {
+  display: none;
+}
+
+.tab-content-notifications__severity {
+  padding: 0 0.5em;
+}
+
+.tab-content-notifications__message {
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
+}
+
+.tab-content-notifications__action {
+  padding: 0 0.5em;
+}
+
+// Slidebox
+//
+.tab-content__slidebox {
+  height: 100%;
+}
+
+.tab-content-slidebox__slide {
+  height: 100%;
+  background-color: $alizarin;
+}
+
+.slider-pager { // ionic override
+
+  font-size: 0.75em;
+}
+
