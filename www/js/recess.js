@@ -22,6 +22,14 @@ recess.run(function ($ionicPlatform) {
       StatusBar.styleDefault();
     }
 
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js').then(function () {
+        console.log('service worker installed');
+      }).catch(function (err) {
+        console.log('Error', err)
+      });
+    }
+
   });
 
 });
@@ -33,7 +41,7 @@ recess.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider
   $ionicConfigProvider.tabs.position('bottom');
 
   $stateProvider
-    // Welcome
+  // Welcome
     .state('welcome', {
       url: '/welcome',
       templateUrl: 'welcome.html',

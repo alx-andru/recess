@@ -15,8 +15,8 @@ ion-view(view-title='Your Activity' animation="no-animation").tab
 
     ion-slide-box(on-slide-changed='slideHasChanged($index)', disable-scroll='false',drag-content='false').tab-content__slidebox
       ion-slide.tab-content-slidebox__slide
-        ui-chart-steps-today(chart-data-steps='data.today.steps', chart-data-goal='goals.steps')
-        div.achievements
+        //ui-chart-steps-today(chart-data-steps='data.today.steps', chart-data-goal='goals.steps')
+        //div.achievements
           .full
             .half-left
               i(ng-if='!weekday.reached.steps').material-icons.notreached star_border
@@ -24,12 +24,12 @@ ion-view(view-title='Your Activity' animation="no-animation").tab
             .half-right
               i(ng-if='!weekday.reached.active').material-icons.notreached star_border
               i(ng-if='weekday.reached.active').material-icons star
-        ui-chart-activity-today(chart-data-active='data.today.active', chart-data-goal='goals.active', label-data-total='data.today.activeTotal')
+        //ui-chart-activity-today(chart-data-active='data.today.active', chart-data-goal='goals.active', label-data-total='data.today.activeTotal')
 
 
-      ion-slidev.tab-content-slidebox__slide
-        ui-chart-steps-week(chart-data-steps='data.week.steps', chart-data-goal='goals.steps')
-        div().achievements
+      ion-slide.tab-content-slidebox__slide.tab-content-slidebox__slide--week
+        //ui-chart-steps-week(chart-data-steps='data.week.steps', chart-data-goal='goals.steps')
+        //div().achievements
           .full(ng-repeat='weekday in data.week.days')
             .half-left
               i(ng-if='!weekday.reached.steps').material-icons.notreached star_border
@@ -37,7 +37,7 @@ ion-view(view-title='Your Activity' animation="no-animation").tab
             .half-right
               i(ng-if='!weekday.reached.active').material-icons.notreached star_border
               i(ng-if='weekday.reached.active').material-icons star
-        ui-chart-activity-week(chart-data-active='data.week.active', chart-data-goal='goals.active*7', label-data-total='data.week.activeTotal')
+        //ui-chart-activity-week(chart-data-active='data.week.active', chart-data-goal='goals.active*7', label-data-total='data.week.activeTotal')
 
 
 

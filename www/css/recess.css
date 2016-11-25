@@ -10132,6 +10132,9 @@ a.button {
   height: 100%;
   background-color: #e74c3c; }
 
+.tab-content-slidebox__slide--week {
+  background-color: #3498db; }
+
 .slider-pager {
   font-size: 0.75em; }
 

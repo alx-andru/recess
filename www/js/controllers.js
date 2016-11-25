@@ -17,8 +17,36 @@ controllers.controller('MessengerController', function () {
 
 });
 
-controllers.controller('ActivityController', function () {
+controllers.controller('ActivityController', function (_, Fitness, $scope, Storage, $ionicPlatform, Collector) {
+  $ionicPlatform.ready(function () {
+    /*
+     $scope.user = Storage.user();
 
+     $scope.config = Storage.config.all();
+
+     $scope.configLast = Storage.config.last();
+
+     $scope.config.$add({
+     test: 'teste',
+     date: firebase.database.ServerValue.TIMESTAMP,
+     });
+
+     $scope.steps = Storage.steps.all();
+
+     Storage.steps.$add({
+     value: 2,
+     date: firebase.database.ServerValue.TIMESTAMP,
+     });
+
+
+     Fitness.getStepsToday(function (steps) {
+     _.each(steps, function (step) {
+     console.log(step);
+     Storage.steps.$add(step);
+     });
+     });
+     */
+  });
 });
 
 controllers.controller('GoalController', function () {
@@ -47,7 +75,7 @@ controllers.controller('WelcomeController', function ($scope, $timeout, $ionicPo
       console.log(success);
       // enable sliding again
       $timeout(function () {
-        $ionicSlideBoxDelegate.enableSlide(isSlideEnabled);
+        $ionicSlideBoxDelegate.enableSlide(true);
       }, 0);
     }).error(function (error) {
       console.error(error);
@@ -89,6 +117,7 @@ controllers.controller('WelcomeController', function ($scope, $timeout, $ionicPo
 });
 
 controllers.controller('RecessController', function ($scope, $ionicSideMenuDelegate, $state) {
+
   $scope.toggleMenu = function () {
     $ionicSideMenuDelegate.toggleRight();
   };
@@ -102,4 +131,5 @@ controllers.controller('RecessController', function ($scope, $ionicSideMenuDeleg
     $scope.toggleMenu();
     $state.go('welcome');
   }
+
 });

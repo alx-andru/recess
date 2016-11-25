@@ -12,7 +12,7 @@
     "angular-chart.js": "angular-chartjs#^1.0.0",
     "angular-peity-charts": "^0.0.3",
     "granim": "^1.0.31",
-    "object-hash": "^1.1.4",
+    "object-hash": "^1.1.5",
     "underscore": "^1.8.3",
     "angular-underscore": "^0.5.0",
     "material-design-icons-font": "^2.2.3",
