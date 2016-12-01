@@ -1,14 +1,16 @@
-.chart-today-steps
-  canvas(chart-data='chart.today.data',
-  chart-labels='chart.today.labels',
-  chart-options='chart.today.options',
-  chart-dataset-override='chart.today.dataset').chart-doughnut
-  .chart-legend
-    .chart-legend-item.chart-legend-item_today
+.chart-steps-today
+  .chart-steps-today__doughnutchart
+    canvas(chart-data='chart.today.data',
+      chart-labels='chart.today.labels',
+      chart-options='chart.today.options',
+      chart-dataset-override='chart.today.dataset').chart-doughnut
+
+  .chart-steps-today__legend
+    .chart-steps-today-legend__today
       div.value {{chart.today.data[0]}}
       span.label Steps today
-    .chart-legend-item.chart-legend-item_logo
+    .chart-steps-today-legend__icon
       i.material-icons directions_run
-    .chart-legend-item.chart-legend-item_goal
+    .chart-steps-today-legend__goal
       div.value {{goal}}
       span.label Your goal

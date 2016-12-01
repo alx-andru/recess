@@ -103,16 +103,15 @@ services.service('Fitness', function ($q, $moment) {
     return false;
   };
 
-  var _getTotalStepsToday = function (callback) {
-    console.log('Get steps today:');
+  var _getTotalStepsThisWeek = function (callback) {
+    var startDate = $moment.utc().subtract(6, 'days').startOf('day');
+    var endDate = $moment.utc().endOf('day');
 
-    var startDate = $moment().startOf('day').add(1, 'second');
-    var endDate = $moment().endOf('day');
     getAggregatedData(startDate, endDate, 'steps', 'day').success(function (data) {
-      if (data[0] === undefined) {
+      if (data.length == 0) {
         callback();
       } else {
-        callback(data[0].value);
+        callback(data);
       }
 
     }).error(function (error) {
@@ -120,7 +119,25 @@ services.service('Fitness', function ($q, $moment) {
     });
   };
 
-  var _getSteps = function (day, callback) {
+  var _getTotalStepsToday = function (callback) {
+    //console.log('Get steps today:');
+
+    var startDate = $moment().startOf('day').add(1, 'second');
+    var endDate = $moment().endOf('day');
+
+    getAggregatedData(startDate, endDate, 'steps', 'day').success(function (data) {
+      if (data.length == 0) {
+        callback();
+      } else {
+        callback(Math.abs(data[0].value));
+      }
+
+    }).error(function (error) {
+      console.error(error);
+    });
+  };
+
+  var _getStepsDay = function (day, callback) {
     var startDate = $moment(day).startOf('day');
     var endDate = $moment(day).endOf('day');
     getData(startDate, endDate, 'steps').success(function (data) {
@@ -135,12 +152,150 @@ services.service('Fitness', function ($q, $moment) {
     })
   };
 
+  var _getSteps = function (startDate, endDate, callback) {
+    var startDate = $moment(startDate);
+    var endDate = $moment(endDate);
+    getData(startDate, endDate, 'steps').success(function (data) {
+      if (data.length > 0) {
+        callback(data);
+      } else {
+        callback();
+      }
+
+    }).error(function (error) {
+      console.error('Error retrieving steps: ' + error);
+    })
+  };
+
   // convenience method
   var _getStepsToday = function (callback) {
-    console.log('Get steps today:');
+    //console.log('Get steps today:');
 
     var today = $moment().startOf('day').add(1, 'second'); // day sometimes starts at 23:59:59
-    _getSteps(today, callback);
+    _getStepsDay(today, callback);
+  };
+
+  // Activity
+  var _getActivityToday = function (callback) {
+    //console.log('Get activity today:');
+
+    var startDate = $moment().startOf('day');
+    var endDate = $moment().endOf('day');
+
+    getData(startDate, endDate, 'steps').success(function (data) {
+      if (data.length > 0) {
+        //console.log('data');
+        //console.log(data);
+
+        calculateDayActivity(data, function (activityData) {
+          callback(activityData);
+        });
+      } else {
+        callback();
+      }
+
+    }).error(function (error) {
+      console.error(error);
+    });
+
+  };
+
+  var _getActiveWeek = function (callback) {
+    console.log('Get active week:');
+
+    var activity = {
+      days: {},
+      total: {
+        ms: 0,
+        min: 0,
+      }
+    };
+
+    var daysCollected = 7;
+
+    for (var i = 6; i >= 0; i--) {
+      var startDate = $moment().startOf('day').subtract(i, 'days');
+      var endDate = $moment().endOf('day').subtract(i, 'days');
+
+      getData(startDate, endDate, 'steps').success(function (data) {
+        if (data.length > 0) {
+          var day = $moment(data[0].startDate).format('DD.MM.YYYY');
+          console.log('Data for day: ' + day);
+          console.log(data);
+
+          calculateDayActivity(data, function (activityData) {
+            activity.days[day] = activityData;
+            activity.total.ms += activityData.total.ms;
+            activity.total.min += activityData.total.min;
+
+            // when last Data is reached, return callback
+            if (Object.keys(activity.days).length === daysCollected) {
+              callback(activity);
+            }
+          });
+        } else {
+          daysCollected -= 1;
+          // check if we're already ready to send the results or not
+          if (Object.keys(activity.days).length === daysCollected) {
+            callback(activity);
+          }
+        }
+
+      }).error(function (error) {
+        console.error(error);
+      });
+    }
+  };
+
+
+  var calculateDayActivity = function (day, callback) {
+
+    var minimumSteps = 10;
+    var minimumDurationInMs = 10 * 1000; // 10sec
+
+    var activity = {};
+
+    _.each(day, function (step, i) {
+      var start = $moment(step.startDate);
+      var end = $moment(step.endDate);
+      var difference = end.diff(start);
+      var stepcount = step.value;
+
+      //console.log(difference + ': ' + stepcount);
+      activity[start.format('H')] = activity[start.format('H')] === undefined ? difference : activity[start.format('H')] + difference;
+
+    });
+
+    var activeDataMs = [];
+    var activeDataMin = [];
+    var totalMs = 0;
+    var totalMin = 0;
+    for (var i = 0; i < 24; i++) {
+      if (activity[i] !== undefined) {
+        var ms = activity[i];
+        var min = $moment.duration(ms).minutes();
+        totalMs += ms;
+        totalMin += min;
+
+        activeDataMs.push(ms);
+        activeDataMin.push(min);
+      } else {
+        activeDataMs.push(0);
+        activeDataMin.push(0);
+      }
+
+    }
+
+    callback({
+      activity: {
+        ms: activeDataMs,
+        min: activeDataMin,
+      },
+      total: {
+        ms: totalMs,
+        min: totalMin
+      }
+    });
   };
 
   /**
@@ -157,11 +312,12 @@ services.service('Fitness', function ($q, $moment) {
     if (cancelService()) {
       deferred.reject('Health is not available.');
     } else {
-      console.log('Fitness Data:' + dataType
-        + ' startDate: ' + $moment(startDate).format('DD.MM.YYYY HH:mm')
-        + ' endDate: ' + $moment(endDate).format('DD.MM.YYYY HH:mm')
-      );
-
+      /*
+       console.log('Fitness Data:' + dataType
+       + ' startDate: ' + $moment(startDate).format('DD.MM.YYYY HH:mm')
+       + ' endDate: ' + $moment(endDate).format('DD.MM.YYYY HH:mm')
+       );
+       */
       // Query health
       navigator.health.query({
         startDate: $moment(startDate).toDate(),
@@ -196,8 +352,8 @@ services.service('Fitness', function ($q, $moment) {
       deferred.reject('Health is not available.');
     } else {
 
-      console.log('start: ' + startDate.toDate());
-      console.log('end: ' + endDate.toDate());
+      //console.log('start: ' + startDate.toDate());
+      //console.log('end: ' + endDate.toDate());
 
       // Query health for aggregated data
       navigator.health.queryAggregated({
@@ -206,8 +362,8 @@ services.service('Fitness', function ($q, $moment) {
         dataType: dataType,
         bucket: bucket,
       }, function (results) {
-        console.log('Aggregated Data:');
-        console.log(results);
+        //console.log('Aggregated Data:');
+        //console.log(results);
         deferred.resolve(results);
       }, function (error) {
         console.error(error);
@@ -229,21 +385,32 @@ services.service('Fitness', function ($q, $moment) {
   }
 
   return {
+    getTotalStepsThisWeek: _getTotalStepsThisWeek,
     getTotalStepsToday: _getTotalStepsToday,
     getStepsToday: _getStepsToday,
+    getStepsDay: _getStepsDay,
     getSteps: _getSteps,
+
+    // Activity
+    getActivityToday: _getActivityToday,
+    getActiveWeek: _getActiveWeek,
+
   };
 });
 
 services.service('Storage', function (_, $localStorage, $moment, hash,
                                       $firebaseAuth, $firebaseObject, $firebaseArray) {
 
-  var user = $localStorage.user;
+  console.log('Storage called');
 
-  var baseRefUserId = firebase.database().ref().child('users').child(user.uid);
+  var _getBaseRef = function () {
+    // assuming a valid userid exists in local storage
+    var user = $localStorage.user;
+    return firebase.database().ref().child('users').child(user.uid);
+  };
 
   var _user = function () {
-    var ref = baseRefUserId.child('user');
+    var ref = _getBaseRef().child('user');
     return $firebaseObject(ref);
   };
 
@@ -267,6 +434,7 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
     return returnLastFromArray('config/sync');
   };
 
+  // Steps
   var _steps = function () {
     return returnArray('steps');
   };
@@ -286,25 +454,61 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
       }
     });
 
-    console.log(step);
+    // console.log(step);
 
-    var ref = baseRefUserId.child('steps').child($moment(step.startDate).format('YYYY-MM-DD'));
+    var ref = _getBaseRef().child('steps').child($moment(step.startDate).format('YYYY-MM-DD'));
     var id = objectHash.sha1(step);
 
     ref.child(id).set(step);
   };
 
+  // Goals
+  var _goals = function () {
+    return returnArray('goals');
+  };
+
+  var _goalsLast = function () {
+    return returnLastFromArray('goals');
+  };
+
+  var _goalsLastItem = function () {
+    return returnLastItemFromArray('goals');
+  };
+
+  var _goalsAdd = function (goal) {
+
+    // clean data
+    // firebase does not support date times, therefore convert it to JSON
+    if (key.includes('Date')) {
+      goal[key] = $moment(attribute).toJSON();
+    }
+
+    // console.log(step);
+    var ref = _getBaseRef().child('goals').child($moment(step.startDate).format('YYYY-MM-DD'));
+    var id = objectHash.sha1(goal);
+
+    ref.child(id).set(goal);
+  };
+
 
   // Helper functions to get references
-
   function returnArray(node) {
-    var ref = baseRefUserId.child(node);
+    var ref = _getBaseRef().child(node);
     return $firebaseArray(ref);
   }
 
   function returnLastFromArray(node) {
-    var ref = baseRefUserId.child(node).limitToLast(1);
+    var ref = _getBaseRef().child(node).limitToLast(1);
     return $firebaseArray(ref);
+  }
+
+  function returnLastItemFromArray(node) {
+    var ref = _getBaseRef().child(node).limitToLast(1);
+    $firebaseArray(ref).$loaded(function (list) {
+      var itemId = list[0].$id;
+      return array.$getRecord(itemId);
+    });
+
   }
 
 
@@ -325,6 +529,12 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
       $add: _stepsAdd,
       // days: _days,
       // day: _day,
+    },
+    goals: {
+      all: _goals,
+      last: _goalsLast,
+      lastItem: _goalsLastItem,
+      $add2: _goalsAdd
     }
   }
 
@@ -351,8 +561,6 @@ services.factory('Authentication', function ($q, $firebaseAuth, uuid4, $timeout,
 
       $firebaseAuth().$createUserWithEmailAndPassword(email, password).then(function (firebaseUser) {
         console.log('User created with uid: ' + firebaseUser.uid);
-        // persist credentials for re-use
-        var user = Storage.user();
 
         var userObject = {
           email: email,
@@ -361,13 +569,34 @@ services.factory('Authentication', function ($q, $firebaseAuth, uuid4, $timeout,
           date: firebase.database.ServerValue.TIMESTAMP,
         };
 
+        // store in localstorage
+        localstorageUser = $localStorage;
+        localstorageUser.user = userObject;
+
+        // persist credentials for re-use
+        var user = Storage.user();
+
         // store in firebase
         user.$value = userObject;
         user.$save();
 
-        // store in localstorage
-        localstorageUser = $localStorage;
-        localstorageUser.user = userObject;
+        // init with default value
+        var goals = Storage.goals.last().$loaded().then(function (goal) {
+          console.log('last goal: ');
+          console.log(goal);
+
+          // initialize with default value
+          if (goal[0] === undefined) {
+            goals = Storage.goals.all();
+            goals.$add({
+              steps: 10000,
+              active: 200,
+            });
+
+            goals = Storage.goals.last();
+          }
+        });
+
 
         deferred.resolve(true);
 
@@ -472,7 +701,7 @@ services.service('Configurator', function () {
 services.service('Collector', function (Storage, Fitness, $moment, $timeout) {
   var _self = this;
   var lastSync = $moment().startOf('day').subtract(14, 'days');
-  var intervalInMs = 1;
+  var intervalInMs = 2000;
   var timesCollected = 0;
 
   _self.collect = function () {
@@ -487,7 +716,7 @@ services.service('Collector', function (Storage, Fitness, $moment, $timeout) {
       console.log(lastSync.format('DD.MM.YYYY'));
 
       _self.timeout = $timeout(function () {
-        Fitness.getSteps(lastSync, function (steps) {
+        Fitness.getStepsDay(lastSync, function (steps) {
           if (steps !== undefined) { // no data available
             _.each(steps, function (step) {
               var startDate = $moment(step.startDate);
@@ -506,6 +735,7 @@ services.service('Collector', function (Storage, Fitness, $moment, $timeout) {
 
         if (!lastSync.isSame($moment(), 'day')) {
           Storage.config.sync.all().$add(lastSync.add(1, 'days').toJSON());
+          intervalInMs = 0;
           _self.collect();
         } else {
           console.log('reached today, stop collecting.');

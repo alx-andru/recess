@@ -1,8 +1,18 @@
-.chart-week-steps
-  canvas(chart-data='chart.week.data',
-  chart-labels='chart.week.labels',
-  chart-options='chart.week.options',
-  chart-dataset-override='chart.week.dataset').chart-bar
+.chart-steps-week
+  .chart-steps-week__tooltip
+    .chart-steps-week-tooltip__display.chart-steps-week-tooltip__display--hidden
+      span
+        i.material-icons directions_run
+      span.value 0
+      span &nbsp;steps
+      span &nbsp;on&nbsp;
+      span.day
 
-  .chart-week-steps-labels
-    span(ng-repeat='day in chart.week.labels').chart-activity-today-labels-day {{day}}
+  .chart-steps-week__barchart
+    canvas(chart-data='chart.week.data',
+    chart-labels='chart.week.labels',
+    chart-options='chart.week.options',
+    chart-dataset-override='chart.week.dataset').chart-bar
+
+  .chart-steps-week__labels
+    span(ng-repeat='day in chart.week.labels') {{day}}

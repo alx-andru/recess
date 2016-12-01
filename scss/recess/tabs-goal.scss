@@ -1,0 +1,326 @@
+.goals {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.goal-steps {
+  .goal-header__icon {
+    i {
+      color: $primary_steps;
+    }
+  }
+  .goal {
+    .value {
+      color: $primary_steps;
+    }
+  }
+}
+
+.goal-active {
+  .goal-header__icon {
+    i {
+      color: $primary_active;
+    }
+  }
+  .goal {
+    .value {
+      color: $primary_active;
+    }
+  }
+}
+
+.goal-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.goal-header__icon {
+  i {
+    font-size: 1.5em;
+  }
+
+}
+
+.goal-header__title {
+  h1 {
+    font-size: 1em;
+  }
+}
+
+.goal-header__description {
+  padding: 0 2em;
+  text-align: center;
+  p {
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    text-align: center;
+  }
+}
+
+.goal-settings {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+  align-content: center;
+  text-align: center;
+
+  padding: 0 .5em;
+
+  span {
+    flex-grow: 1;
+    flex-basis: 0;
+  }
+
+  .goal {
+    font-weight: 600;
+    font-size: 1.25em;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+
+    max-width: 100%;
+
+    span {
+      flex-grow:0;
+      max-width: 100%;
+      align-self: flex-start;
+      //background-color:$alizarin;
+      &.value {
+        //background-color: $emerald;
+        flex-grow: 2;
+      }
+    }
+  }
+  .icons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 0.5em;
+    i {
+      color: $black;
+      font-size: 1em;
+      padding: 0;
+      margin: 0;
+      line-height: 0.7em;
+
+    }
+  }
+}
+
+.ready {
+  padding-top: 1em;
+  padding-bottom: 2em;
+}
+
+.button-recess {
+  //border: 0.25em solid $primary_recess;
+  background-color: $primary_recess;
+  padding: 0.8em 1.8em;
+  font-weight: 600;
+  @include border-radius(2em);
+}
+
+.popup-container {
+
+  padding: 1em;
+  .popup {
+    width: 100%;
+    * {
+      border: none;
+    }
+    margin: 1em;
+  }
+}
+
+.choices {
+
+  * {
+    background: none;
+    border: none;
+  }
+}
+
+.popup-goal-active {
+
+  .popup-buttons, .popup-head, .popup-body {
+    padding: 1em 2em;
+    background-color: $primary_active;
+    color: $white;
+    * {
+      color: $white;
+    }
+  }
+
+  .popup-sub-title {
+    font-size: 1em;
+  }
+
+  .item-complex .item-content, .item-radio .item-content {
+    background: none;
+    border: none;
+
+  }
+  .choices {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    &.active {
+      .item-radio input:checked + .radio-content .item-content, .radio-icon {
+        background: $primary_active;
+        border: none;
+      }
+    }
+    &.steps {
+      .item-radio input:checked + .radio-content .item-content, .radio-icon {
+        background: $primary_steps;
+        border: none;
+        color: $white;
+      }
+    }
+  }
+
+  .radio-content {
+    font-weight: 900;
+  }
+
+  .button {
+    color: black;
+  }
+  .button-recesss-active {
+    border-color: transparent;
+    background-color: $white;
+    color: $primary_active;
+    @include border-radius(2em);
+    * {
+      color: $primary_active;
+    }
+  }
+
+  .button-recess-cancel {
+    background: none;
+    color: $white;
+    font-weight: 900;
+  }
+}
+
+.popup-goal-steps {
+  .popup-buttons, .popup-head, .popup-body {
+    background-color: $primary_steps;
+    padding: 1em;
+    color: $white;
+    * {
+      color: $white;
+    }
+  }
+
+  .popup-sub-title {
+    font-size: 1em;
+  }
+
+  .item-complex .item-content, .item-radio .item-content {
+    background: none;
+    border: none;
+    max-width: 50%;
+
+  }
+  .choices {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+
+    &.active {
+      .item-radio input:checked + .radio-content .item-content, .radio-icon {
+        background: $primary_active;
+        border: none;
+
+      }
+    }
+    &.steps {
+      .item-radio input:checked + .radio-content .item-content, .radio-icon {
+        background: $primary_steps;
+        border: none;
+        color: $white;
+
+      }
+    }
+    .item {
+      width: 10em;
+    }
+  }
+
+  .radio-content {
+    font-weight: 900;
+
+  }
+
+  .button {
+    color: black;
+  }
+
+  .button-recesss-steps {
+    border-color: transparent;
+    background-color: $white;
+    * {
+      color: $primary_steps;
+    }
+
+    @include border-radius(2em);
+
+  }
+
+  .button-recess-cancel {
+    background: none;
+    color: $white;
+    font-weight: 900;
+  }
+
+}
+
+.popup-ready {
+  background-color: rgba(0, 0, 0, 0.6);
+  * {
+    border: none;
+  }
+
+  .popup {
+    background-color: $primary_recess;
+    text-align: center;
+
+    .popup-sub-title {
+      font-size: 1em;
+    }
+
+    h1, h2 {
+      font-size: 1.2em;
+    }
+    h2 {
+      color: $white;
+      font-size: 1.4em;
+      font-weight: 900;
+    }
+  }
+
+  .button-recesss-ready {
+    background-color: $white;
+    @include border-radius(2em);
+    border: $white solid 0.25em;
+  }
+
+  .button-recesss-ready-cancel {
+    background-color: $primary_recess;
+    color: black;
+  }
+
+}

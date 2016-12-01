@@ -21,9 +21,9 @@ ion-view(view-title='Set your Goals' animation="no-animation").tab
           .goal-header__title
             h1 Steps
           .goal-header__description
-            p Walking keeps you active, is good for your balance, blood pressure, reduces risks and ah what am I telling you, just walk more!
+            p Walking keeps you active, is good for your balance, blood pressure.
         .goal-settings
-          span I'm ready to walk
+          span I'm walk
           span(ng-click='setGoalSteps()').goal
             span.value &nbsp; {{goals.steps | number: 0}}&nbsp;
             span.icons
@@ -38,9 +38,9 @@ ion-view(view-title='Set your Goals' animation="no-animation").tab
           .goal-header__title
             h1 Active all day
           .goal-header__description
-            p Break sedentary phases and be active consistent over the entire day instead of having bursts of activity.
+            p Break sedentary phases and be active consistent over the entire day.
         .goal-settings
-          span I will be active for
+          span I am active for
           span(ng-click='setGoalActive()').goal
             span.value &nbsp; {{goals.active | number: 0}}&nbsp;
             span.icons

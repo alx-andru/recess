@@ -6,6 +6,17 @@
 @import 'recess/tabs-common';
 @import 'recess/tabs-demo';
 @import 'recess/tabs-footer';
+@import 'recess/tabs-messenger';
+@import 'recess/tabs-activity';
+@import 'recess/tabs-goal';
+
+
+
+*,
+*:after,
+*:before {
+  @include box-sizing(border-box);
+}
 
 html, body {
   font-size: 1em;
@@ -14,6 +25,5 @@ html, body {
   line-height: 1.6rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
 
 }

@@ -22,13 +22,15 @@ recess.run(function ($ionicPlatform) {
       StatusBar.styleDefault();
     }
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js').then(function () {
-        console.log('service worker installed');
-      }).catch(function (err) {
-        console.log('Error', err)
-      });
-    }
+    /*
+     if ('serviceWorker' in navigator) {
+     navigator.serviceWorker.register('service-worker.js').then(function () {
+     console.log('service worker installed');
+     }).catch(function (err) {
+     console.log('Error', err)
+     });
+     }
+     */
 
   });
 
@@ -75,6 +77,9 @@ recess.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider
   ;
 
   $urlRouterProvider.otherwise(function ($injector) {
+
+    console.log('UrlRouterProvider');
+
     var $state = $injector.get('$state');
     var permissions = $localStorageProvider.get('permissions');
 

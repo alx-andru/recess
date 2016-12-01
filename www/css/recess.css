@@ -9955,6 +9955,34 @@ a.button {
   font-weight: 100;
   font-style: italic; }
 
+/* Responsive Breakpoints
+   ========================================================================== */
+/* Sub-section comment block
+   ========================================================================== */
+/* Clearfix
+  ========================================================================== */
+/* Box Model
+  ========================================================================== */
+/* Border Radius
+  ========================================================================== */
+/* Opacity
+  ========================================================================== */
+/* Center-align a block level element
+  ========================================================================== */
+/* Text overflow
+  ========================================================================== */
+/* Absolute positioned
+  ========================================================================== */
+/* Font Size
+  ========================================================================== */
+/* Cross browser inline block
+  ========================================================================== */
+/* Text replacement (instead of text-indent)
+  ========================================================================== */
+/* Line Height
+  ========================================================================== */
+/* Placeholder
+  ========================================================================== */
 .content-intro {
   background-color: #f1c40f; }
 
@@ -9999,9 +10027,9 @@ a.button {
   background-color: #fefefe;
   padding: 0.8em 1.8em;
   -webkit-border-radius: 4em;
-  -moz-border-radius: 4em;
-  -ms-border-radius: 4em;
   border-radius: 4em;
+  background-clip: padding-box;
+  /* stops bg color from leaking outside the border: */
   color: black;
   text-decoration: none;
   font-size: 1em; }
@@ -10080,7 +10108,6 @@ a.button {
 
 .tab__content {
   width: 100%;
-  background-color: #1abc9c;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -10129,11 +10156,7 @@ a.button {
   height: 100%; }
 
 .tab-content-slidebox__slide {
-  height: 100%;
-  background-color: #e74c3c; }
-
-.tab-content-slidebox__slide--week {
-  background-color: #3498db; }
+  height: 100%; }
 
 .slider-pager {
   font-size: 0.75em; }
@@ -10179,6 +10202,515 @@ a.button {
     color: white; }
   .recess-tabs__tab.active.android * {
     color: black; }
+
+/* Responsive Breakpoints
+   ========================================================================== */
+/* Sub-section comment block
+   ========================================================================== */
+/* Clearfix
+  ========================================================================== */
+/* Box Model
+  ========================================================================== */
+/* Border Radius
+  ========================================================================== */
+/* Opacity
+  ========================================================================== */
+/* Center-align a block level element
+  ========================================================================== */
+/* Text overflow
+  ========================================================================== */
+/* Absolute positioned
+  ========================================================================== */
+/* Font Size
+  ========================================================================== */
+/* Cross browser inline block
+  ========================================================================== */
+/* Text replacement (instead of text-indent)
+  ========================================================================== */
+/* Line Height
+  ========================================================================== */
+/* Placeholder
+  ========================================================================== */
+.chart-steps-today {
+  position: relative;
+  height: 12rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between; }
+
+.chart-steps-today__doughnutchart {
+  width: 100%;
+  height: 100%; }
+  .chart-steps-today__doughnutchart .chart-doughnut {
+    width: 100%;
+    padding: 0 1rem; }
+
+.chart-steps-today__legend {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 3rem; }
+
+.chart-steps-today-legend__icon i {
+  font-size: 2.5em;
+  color: #27ae60; }
+
+.chart-steps-today-legend__today .value {
+  font-size: 1.5em;
+  font-weight: 500; }
+
+.chart-steps-today-legend__goal .value {
+  font-size: 1.5em;
+  font-weight: 500; }
+
+.chart-steps-week {
+  height: 12rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%; }
+
+.chart-steps-week__tooltip {
+  width: 100%;
+  height: 2rem; }
+
+.chart-steps-week__barchart {
+  padding: 0 0.9rem;
+  height: 8rem;
+  width: 100%; }
+  .chart-steps-week__barchart canvas {
+    max-height: 100%;
+    width: 100%;
+    min-width: 100%; }
+
+.chart-steps-week__labels {
+  width: 100%;
+  display: flex;
+  flex-direction: "row";
+  align-items: center;
+  justify-content: space-between;
+  padding: 0rem 1rem; }
+  .chart-steps-week__labels span {
+    flex-grow: 1;
+    flex-basis: 0;
+    text-align: center; }
+
+.achievements {
+  display: flex;
+  flex-direction: "row";
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em 0; }
+
+.full {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  font-size: 1em;
+  flex-grow: 1; }
+
+.half-left, .half-right {
+  color: #27ae60;
+  font-size: 1.5em;
+  width: 0.75em;
+  overflow: hidden;
+  padding: 0;
+  margin: 0; }
+  .half-left i, .half-right i {
+    font-size: 1.5em;
+    width: 0.5em;
+    margin: 0;
+    padding: 0; }
+
+.half-right {
+  color: #2980b9;
+  overflow: hidden; }
+  .half-right i {
+    margin-left: -1em; }
+
+.chart-activity-today {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  justify-content: flex-start;
+  min-height: 13em;
+  max-height: 100%;
+  width: 100%; }
+
+.chart-activity-today__tooltip,
+.chart-activity-week__tooltip,
+.chart-steps-week__tooltip {
+  width: 100%;
+  height: 2rem;
+  text-align: center;
+  padding: 0 1rem; }
+
+.chart-activity-today-tooltip__display,
+.chart-activity-week-tooltip__display,
+.chart-steps-week__tooltip__display {
+  display: flex;
+  flex-direction: "row";
+  align-items: center;
+  justify-content: space-between;
+  justify-content: flex-start; }
+
+.chart-activity-today-tooltip__display--hidden,
+.chart-activity-week-tooltip__display--hidden,
+.chart-steps-week-tooltip__display--hidden {
+  display: none; }
+
+.chart-activity-today__barchart {
+  height: 5em;
+  width: 100%;
+  padding: 0 0.8em; }
+  .chart-activity-today__barchart canvas {
+    max-height: 100%;
+    width: 100%;
+    max-width: 100%; }
+
+.chart-activity-today__labels {
+  width: 100%;
+  display: flex;
+  flex-direction: "row";
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.8em; }
+
+.chart-activity-today__legend {
+  display: flex;
+  flex-direction: "row";
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 0.8em;
+  text-align: center; }
+
+.chart-activity-today-legend__today,
+.chart-activity-today-legend__icon,
+.chart-activity-today-legend__goal {
+  flex: 1;
+  width: 100%; }
+
+.chart-activity-today-legend__icon {
+  color: #2980b9; }
+  .chart-activity-today-legend__icon i {
+    font-size: 2.5rem; }
+
+.chart-activity-today-legend__today .value {
+  font-size: 1.5em;
+  font-weight: 500; }
+
+.chart-activity-today-legend__goal .value {
+  font-size: 1.5em;
+  font-weight: 500; }
+
+.chart-activity-week {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  justify-content: flex-start;
+  min-height: 13em;
+  max-height: 100%;
+  width: 100%; }
+
+.chart-activity-week__tooltip {
+  width: 100%;
+  height: 2rem; }
+
+.chart-activity-week__barchart {
+  height: 5em;
+  width: 100%;
+  padding: 0 0.8em; }
+  .chart-activity-week__barchart canvas {
+    max-height: 100%;
+    width: 100%;
+    max-width: 100%; }
+
+.chart-activity-week__labels {
+  width: 100%;
+  display: flex;
+  flex-direction: "row";
+  align-items: center;
+  justify-content: space-between;
+  padding: 0rem 0.9rem; }
+  .chart-activity-week__labels span {
+    flex-grow: 1;
+    flex-basis: 0;
+    text-align: center; }
+
+.chart-activity-week__legend {
+  display: flex;
+  flex-direction: "row";
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 0.8em;
+  text-align: center; }
+
+.chart-activity-week-legend__week,
+.chart-activity-week-legend__icon,
+.chart-activity-week-legend__goal {
+  flex: 1;
+  width: 100%; }
+
+.chart-activity-week-legend__icon {
+  color: #2980b9; }
+  .chart-activity-week-legend__icon i {
+    font-size: 2.5rem; }
+
+.chart-activity-week-legend__week .value {
+  font-size: 1.5em;
+  font-weight: 500; }
+
+.chart-activity-week-legend__goal .value {
+  font-size: 1.5em;
+  font-weight: 500; }
+
+.goals {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%; }
+
+.goal-steps .goal-header__icon i {
+  color: #27ae60; }
+
+.goal-steps .goal .value {
+  color: #27ae60; }
+
+.goal-active .goal-header__icon i {
+  color: #2980b9; }
+
+.goal-active .goal .value {
+  color: #2980b9; }
+
+.goal-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center; }
+
+.goal-header__icon i {
+  font-size: 1.5em; }
+
+.goal-header__title h1 {
+  font-size: 1em; }
+
+.goal-header__description {
+  padding: 0 2em;
+  text-align: center; }
+  .goal-header__description p {
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    text-align: center; }
+
+.goal-settings {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+  align-content: center;
+  text-align: center;
+  padding: 0 .5em; }
+  .goal-settings span {
+    flex-grow: 1;
+    flex-basis: 0; }
+  .goal-settings .goal {
+    font-weight: 600;
+    font-size: 1.25em;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    max-width: 100%; }
+    .goal-settings .goal span {
+      flex-grow: 0;
+      max-width: 100%;
+      align-self: flex-start; }
+      .goal-settings .goal span.value {
+        flex-grow: 2; }
+  .goal-settings .icons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 0.5em; }
+    .goal-settings .icons i {
+      color: #232323;
+      font-size: 1em;
+      padding: 0;
+      margin: 0;
+      line-height: 0.7em; }
+
+.ready {
+  padding-top: 1em;
+  padding-bottom: 2em; }
+
+.button-recess {
+  background-color: #f1c40f;
+  padding: 0.8em 1.8em;
+  font-weight: 600;
+  -webkit-border-radius: 2em;
+  border-radius: 2em;
+  background-clip: padding-box;
+  /* stops bg color from leaking outside the border: */ }
+
+.popup-container {
+  padding: 1em; }
+  .popup-container .popup {
+    width: 100%;
+    margin: 1em; }
+    .popup-container .popup * {
+      border: none; }
+
+.choices * {
+  background: none;
+  border: none; }
+
+.popup-goal-active .popup-buttons, .popup-goal-active .popup-head, .popup-goal-active .popup-body {
+  padding: 1em 2em;
+  background-color: #2980b9;
+  color: #fefefe; }
+  .popup-goal-active .popup-buttons *, .popup-goal-active .popup-head *, .popup-goal-active .popup-body * {
+    color: #fefefe; }
+
+.popup-goal-active .popup-sub-title {
+  font-size: 1em; }
+
+.popup-goal-active .item-complex .item-content, .popup-goal-active .item-radio .item-content {
+  background: none;
+  border: none; }
+
+.popup-goal-active .choices {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center; }
+  .popup-goal-active .choices.active .item-radio input:checked + .radio-content .item-content, .popup-goal-active .choices.active .radio-icon {
+    background: #2980b9;
+    border: none; }
+  .popup-goal-active .choices.steps .item-radio input:checked + .radio-content .item-content, .popup-goal-active .choices.steps .radio-icon {
+    background: #27ae60;
+    border: none;
+    color: #fefefe; }
+
+.popup-goal-active .radio-content {
+  font-weight: 900; }
+
+.popup-goal-active .button {
+  color: black; }
+
+.popup-goal-active .button-recesss-active {
+  border-color: transparent;
+  background-color: #fefefe;
+  color: #2980b9;
+  -webkit-border-radius: 2em;
+  border-radius: 2em;
+  background-clip: padding-box;
+  /* stops bg color from leaking outside the border: */ }
+  .popup-goal-active .button-recesss-active * {
+    color: #2980b9; }
+
+.popup-goal-active .button-recess-cancel {
+  background: none;
+  color: #fefefe;
+  font-weight: 900; }
+
+.popup-goal-steps .popup-buttons, .popup-goal-steps .popup-head, .popup-goal-steps .popup-body {
+  background-color: #27ae60;
+  padding: 1em;
+  color: #fefefe; }
+  .popup-goal-steps .popup-buttons *, .popup-goal-steps .popup-head *, .popup-goal-steps .popup-body * {
+    color: #fefefe; }
+
+.popup-goal-steps .popup-sub-title {
+  font-size: 1em; }
+
+.popup-goal-steps .item-complex .item-content, .popup-goal-steps .item-radio .item-content {
+  background: none;
+  border: none;
+  max-width: 50%; }
+
+.popup-goal-steps .choices {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center; }
+  .popup-goal-steps .choices.active .item-radio input:checked + .radio-content .item-content, .popup-goal-steps .choices.active .radio-icon {
+    background: #2980b9;
+    border: none; }
+  .popup-goal-steps .choices.steps .item-radio input:checked + .radio-content .item-content, .popup-goal-steps .choices.steps .radio-icon {
+    background: #27ae60;
+    border: none;
+    color: #fefefe; }
+  .popup-goal-steps .choices .item {
+    width: 10em; }
+
+.popup-goal-steps .radio-content {
+  font-weight: 900; }
+
+.popup-goal-steps .button {
+  color: black; }
+
+.popup-goal-steps .button-recesss-steps {
+  border-color: transparent;
+  background-color: #fefefe;
+  -webkit-border-radius: 2em;
+  border-radius: 2em;
+  background-clip: padding-box;
+  /* stops bg color from leaking outside the border: */ }
+  .popup-goal-steps .button-recesss-steps * {
+    color: #27ae60; }
+
+.popup-goal-steps .button-recess-cancel {
+  background: none;
+  color: #fefefe;
+  font-weight: 900; }
+
+.popup-ready {
+  background-color: rgba(0, 0, 0, 0.6); }
+  .popup-ready * {
+    border: none; }
+  .popup-ready .popup {
+    background-color: #f1c40f;
+    text-align: center; }
+    .popup-ready .popup .popup-sub-title {
+      font-size: 1em; }
+    .popup-ready .popup h1, .popup-ready .popup h2 {
+      font-size: 1.2em; }
+    .popup-ready .popup h2 {
+      color: #fefefe;
+      font-size: 1.4em;
+      font-weight: 900; }
+  .popup-ready .button-recesss-ready {
+    background-color: #fefefe;
+    -webkit-border-radius: 2em;
+    border-radius: 2em;
+    background-clip: padding-box;
+    /* stops bg color from leaking outside the border: */
+    border: #fefefe solid 0.25em; }
+  .popup-ready .button-recesss-ready-cancel {
+    background-color: #f1c40f;
+    color: black; }
+
+*,
+*:after,
+*:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
 
 html, body {
   font-size: 1em;
