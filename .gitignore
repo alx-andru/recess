@@ -50,3 +50,4 @@ www/*/*.html
 # firebase credentials
 www/js/firebase.js
 www/js/firebase*.js
+www/js/firebase.js
