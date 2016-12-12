@@ -120,6 +120,8 @@ directives.directive('uiChartStepsToday', function () {
           console.log('goal updated from: ' + oldValue + ' to: ' + newValue);
           scope.goal = newValue;
           console.log('new value for goal');
+          // update chart data manually
+          scope.chart.today.data = [scope.steps, scope.goal - scope.steps];
         }
       }, true);
 

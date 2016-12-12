@@ -38,11 +38,11 @@ controllers.controller('ActivityController', function (_, Fitness, Storage, $sco
    */
 
   $scope.goals = {
-    steps: 10,
+    steps: 10000,
     active: 0,
   };
 
-  $scope.stepsToday = 0;
+  $scope.stepsToday = 10000;
 
 
   $scope.reached = {};
