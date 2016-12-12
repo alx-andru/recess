@@ -452,6 +452,10 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
       if (key.includes('Date')) {
         step[key] = $moment(attribute).toJSON();
       }
+      // make sure that no identifiers are send to the backend
+      delete step.sourceBundleId;
+      delete step.sourceName;
+
     });
 
     // console.log(step);

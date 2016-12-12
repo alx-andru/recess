@@ -377,7 +377,7 @@ controllers.controller('WelcomeController', function (Authentication, $scope, $t
 
 });
 
-controllers.controller('RecessController', function ($scope, $ionicSideMenuDelegate, $state) {
+controllers.controller('RecessController', function (Authentication, $scope, $ionicSideMenuDelegate, $state) {
 
   $scope.toggleMenu = function () {
     $ionicSideMenuDelegate.toggleRight();
