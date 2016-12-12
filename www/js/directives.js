@@ -269,6 +269,7 @@ directives.directive('uiChartActivityToday', function ($moment, _) {
                 console.log(tooltip);
 
                 if (tooltip.body.length == 1 && tooltip.body[0] !== undefined) {
+
                   $('.chart-activity-today-tooltip__display').find('.value').html(Math.ceil(tooltip.dataPoints[0].yLabel));
                   $('.chart-activity-today-tooltip__display').find('.hour').html(tooltip.dataPoints[0].index);
                   $('.chart-activity-today-tooltip__display').removeClass('chart-activity-today-tooltip__display--hidden');
@@ -420,8 +421,10 @@ directives.directive('uiChartStepsWeek', function ($moment, _) {
                 console.log(tooltip);
 
                 if (tooltip.body.length == 1 && tooltip.body[0] !== undefined) {
+                  var xLabel = tooltip.dataPoints[0].xLabel;
+                  var displayXlabel = (xLabel === 'Today' ? ' ' : ' on ') + xLabel;
                   $('.chart-steps-week-tooltip__display').find('.value').html(Math.ceil(tooltip.dataPoints[0].yLabel));
-                  $('.chart-steps-week-tooltip__display').find('.day').html(tooltip.dataPoints[0].xLabel);
+                  $('.chart-steps-week-tooltip__display').find('.day').html(displayXlabel);
                   $('.chart-steps-week-tooltip__display').removeClass('chart-steps-week-tooltip__display--hidden');
 
                 }
@@ -610,8 +613,10 @@ directives.directive('uiChartActivityWeek', function ($moment, _) {
                 console.log(tooltip);
 
                 if (tooltip.body.length == 1 && tooltip.body[0] !== undefined) {
+                  var xLabel = tooltip.dataPoints[0].xLabel;
+                  var displayXlabel = (xLabel === 'Today' ? ' ' : ' on ') + xLabel;
                   $('.chart-activity-week-tooltip__display').find('.value').html(Math.ceil(tooltip.dataPoints[0].yLabel));
-                  $('.chart-activity-week-tooltip__display').find('.day').html(tooltip.dataPoints[0].xLabel);
+                  $('.chart-activity-week-tooltip__display').find('.day').html(displayXlabel);
                   $('.chart-activity-week-tooltip__display').removeClass('chart-activity-week-tooltip__display--hidden');
 
                 }

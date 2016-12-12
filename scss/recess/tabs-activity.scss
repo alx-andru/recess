@@ -171,6 +171,8 @@
 
 }
 
+
+
 .chart-activity-today__tooltip,
 .chart-activity-week__tooltip,
 .chart-steps-week__tooltip {
@@ -179,13 +181,23 @@
   height: 2rem;
   text-align: center;
   padding: 0 1rem;
+  @include flex('row');
+  justify-content: center;
 }
 
 .chart-activity-today-tooltip__display,
 .chart-activity-week-tooltip__display,
 .chart-steps-week__tooltip__display {
+  vertical-align: middle;
+  align-items: baseline;
+  display: inline-flex;
+
   @include flex('row');
-  justify-content: flex-start;
+  justify-content:flex-start;
+
+
+
+
 }
 
 .chart-activity-today-tooltip__display--hidden,
