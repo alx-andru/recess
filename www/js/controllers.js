@@ -19,6 +19,9 @@ controllers.controller('MessengerController', function () {
 
 controllers.controller('ActivityController', function (_, Fitness, Storage, $scope, $ionicPlatform, Collector, $moment) {
 
+
+
+
   /*
    var goals = Storage.goals.last().$loaded().then(function (goal) {
    console.log('last goal: ');
@@ -81,6 +84,10 @@ controllers.controller('ActivityController', function (_, Fitness, Storage, $sco
 
 
   $ionicPlatform.ready(function () {
+
+
+
+
     Storage.goals.last().$loaded().then(function (goal) {
       if (goal[0] !== undefined) {
         var id = goal[0].$id;

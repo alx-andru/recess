@@ -194,17 +194,22 @@ services.service('Fitness', function ($q, $moment) {
   var _getActivityToday = function (callback) {
     //console.log('Get activity today:');
 
-    var startDate = $moment().startOf('day');
-    var endDate = $moment().endOf('day');
+    var startDate = $moment().subtract(2, 'days').startOf('day');
+    var endDate = $moment().subtract(2, 'days').endOf('day');
 
     getData(startDate, endDate, 'steps').success(function (data) {
       if (data.length > 0) {
-        //console.log('data');
-        //console.log(data);
 
-        calculateDayActivity(data, function (activityData) {
-          callback(activityData);
+        /*
+         calculateDayActivity(data, function (activityData) {
+         callback(activityData);
+         });
+         */
+
+        calculateDaySedentary(data, function (sedentaryData) {
+          callback(sedentaryData);
         });
+
       } else {
         callback();
       }
@@ -262,6 +267,32 @@ services.service('Fitness', function ($q, $moment) {
     }
   };
 
+  var calculateDaySedentary = function (day, callback) {
+    var previousEnd = undefined;
+    _.each(day, function (step, i) {
+      var start = $moment(step.startDate);
+      var end = $moment(step.endDate);
+      var duration = moment.duration(end.diff(start));
+      var stepcount = step.value;
+
+      if (previousEnd === undefined) {
+        previousEnd = end;
+      } else {
+        var startSedentary = previousEnd;
+        var endSedentary = start;
+        var sedentaryPhaseDuration = moment.duration(start.diff(startSedentary));
+
+        console.log('Start Sedentary: ' + startSedentary.format('HH:mm') + ' End: ' + endSedentary.format('HH:mm') + ' duration: ' + sedentaryPhaseDuration.asMinutes());
+        previousEnd = end;
+      }
+
+
+      console.log('Start: ' + start.format('HH:mm') + ' End: ' + end.format('HH:mm') + ' duration: ' + duration.asMinutes());
+
+    });
+
+    callback();
+  };
 
   var calculateDayActivity = function (day, callback) {
 
@@ -338,6 +369,8 @@ services.service('Fitness', function ($q, $moment) {
         startDate: $moment(startDate).toDate(),
         endDate: $moment(endDate).toDate(),
         dataType: dataType,
+        limit: 10000,
+        ascending: true,
       }, function (results) {
         deferred.resolve(results);
       }, function (error) {
