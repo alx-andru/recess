@@ -219,7 +219,22 @@
     max-width: 100%;
     //padding: 0 0.8em;
 
+
   }
+}
+
+.chart-activity-sedentary__linechart {
+  height: 15em;
+
+  width: 100%;
+  padding: 0 0.8em;
+
+}
+
+#chart1 {
+  height: 100%;
+  width: 100%;
+  background: red;
 }
 
 .chart-activity-today__labels {

@@ -10034,6 +10034,10 @@ a.button {
   text-decoration: none;
   font-size: 1em; }
 
+.welcome-slide-action__button-cancel {
+  background-color: #232323;
+  color: #fefefe; }
+
 .sidemenu {
   background-color: #f4d03f; }
   .sidemenu h1 {
@@ -10383,6 +10387,16 @@ a.button {
     max-height: 100%;
     width: 100%;
     max-width: 100%; }
+
+.chart-activity-sedentary__linechart {
+  height: 15em;
+  width: 100%;
+  padding: 0 0.8em; }
+
+#chart1 {
+  height: 100%;
+  width: 100%;
+  background: red; }
 
 .chart-activity-today__labels {
   width: 100%;

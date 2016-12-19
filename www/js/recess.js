@@ -7,7 +7,8 @@ var recess = angular.module('recess', [
   'recess.services', '' +
   'recess.directives',
   'chart.js',
-  'angular-momentjs']
+  'angular-momentjs',
+  'highcharts-ng']
 );
 
 recess.run(function ($ionicPlatform) {

@@ -20,13 +20,35 @@ ion-view(name='intro', hide-nav-bar='true', has-bouncing='false' )
             | quos dolores et quas molestias excepturi sint occaecati cupiditate non providents est et ex.
             br
             br
-            p To participate we require some permissions from you
+            p To participate you have to read and agree to our Terms and Services.
 
         .welcome-slide-action
           a(ng-click='next(0)').welcome-slide-action__button.welcome-slide-action__button-next
             span Sure, let's go &nbsp;
             i.fa.fa-chevron-right
 
+      ion-slide.welcome-slide.welcome-slide--introduction
+        .welcome-slide-content
+          .welcome-slide-content__image
+
+          .welcome-slide-content__title
+            h1 Terms and Services
+          .welcome-slide-content__subtitle
+            p This app is part of a study to qui blanditiis praesentium voluptatum deleniti atque corrupti
+            | quos dolores et quas molestias excepturi sint occaecati cupiditate non providents est et ex.
+            br
+            br
+            p To participate you have to read and agree to our Terms and Services.
+
+        .welcome-slide-action
+          a(ng-click='prev(0)').welcome-slide-action__button.welcome-slide-action__button-cancel
+            i.fa.fa-times
+            span &nbsp; I disagree &nbsp;
+          span &nbsp;
+
+          a(ng-click='next(0)').welcome-slide-action__button.welcome-slide-action__button-next
+            span I agree &nbsp;
+            i.fa.fa-chevron-check
 
       ion-slide.welcome-slide.welcome-slide--permissions
         .welcome-slide-content

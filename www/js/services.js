@@ -194,21 +194,22 @@ services.service('Fitness', function ($q, $moment) {
   var _getActivityToday = function (callback) {
     //console.log('Get activity today:');
 
-    var startDate = $moment().subtract(2, 'days').startOf('day');
-    var endDate = $moment().subtract(2, 'days').endOf('day');
+    var startDate = $moment().subtract(1, 'days').startOf('day');
+    var endDate = $moment().subtract(1, 'days').endOf('day');
 
     getData(startDate, endDate, 'steps').success(function (data) {
       if (data.length > 0) {
 
+
+        calculateDayActivity(data, function (activityData) {
+          callback(activityData);
+        });
+
         /*
-         calculateDayActivity(data, function (activityData) {
-         callback(activityData);
+         calculateDaySedentary(data, function (sedentaryData) {
+         callback(sedentaryData);
          });
          */
-
-        calculateDaySedentary(data, function (sedentaryData) {
-          callback(sedentaryData);
-        });
 
       } else {
         callback();
@@ -267,31 +268,90 @@ services.service('Fitness', function ($q, $moment) {
     }
   };
 
-  var calculateDaySedentary = function (day, callback) {
-    var previousEnd = undefined;
-    _.each(day, function (step, i) {
-      var start = $moment(step.startDate);
-      var end = $moment(step.endDate);
-      var duration = moment.duration(end.diff(start));
-      var stepcount = step.value;
+  var calculateDaySedentary = function (days, callback) {
 
-      if (previousEnd === undefined) {
-        previousEnd = end;
-      } else {
-        var startSedentary = previousEnd;
-        var endSedentary = start;
-        var sedentaryPhaseDuration = moment.duration(start.diff(startSedentary));
+    var datapoints = {
+      active: [],
+      sedentary: []
+    };
 
-        console.log('Start Sedentary: ' + startSedentary.format('HH:mm') + ' End: ' + endSedentary.format('HH:mm') + ' duration: ' + sedentaryPhaseDuration.asMinutes());
-        previousEnd = end;
-      }
+    datapoints.active = _.groupBy(days, function (day) {
+      return day.sourceName;
+    });
+    var sedentaryDatapoints = [];
+    var activeDatapoints = [];
 
+    _.each(datapoints.active, function (activeData, i) {
+      var previousEnd = undefined;
+      var previousStart = undefined;
+      var stepsTotal = 0;
+      _.each(activeData, function (step, i) {
+        var start = $moment(step.startDate);
+        var end = $moment(step.endDate);
+        var duration = Math.round(moment.duration(end.diff(start)).asMinutes());
+        var stepcount = step.value;
+        stepsTotal += stepcount;
 
-      console.log('Start: ' + start.format('HH:mm') + ' End: ' + end.format('HH:mm') + ' duration: ' + duration.asMinutes());
+        if (duration < 6) {
+          previousStart = start;
+        } else {
+          var startDate = start;
+          if (previousStart !== undefined) {
+            startDate = previousStart;
+
+          }
+          activeDatapoints.push({
+            startDate: startDate,
+            endDate: end,
+            duration: duration,
+            sourceName: step.sourceName,
+            steps: stepcount,
+            stepsTotal: stepsTotal,
+          });
+          previousStart = undefined;
+        }
+
+        if (previousEnd === undefined) {
+          previousEnd = end;
+        } else if (previousStart === undefined) {
+          var startSedentary = previousEnd;
+          var endSedentary = start;
+
+          var sedentaryPhaseDuration = moment.duration(start.diff(startSedentary));
+          sedentaryDatapoints.push({
+            startDate: startSedentary,
+            endDate: endSedentary,
+            duration: Math.round(sedentaryPhaseDuration.asMinutes()),
+            sourceName: step.sourceName,
+          });
+          console.log('Start Sedentary: ' + step.sourceName + ' ' + startSedentary.format('HH:mm') + ' End: ' + endSedentary.format('HH:mm') + ' duration: ' + Math.round(sedentaryPhaseDuration.asMinutes()));
+          previousEnd = end;
+        } else {
+
+        }
+        //TODO: add last sedentary point of day
+
+        console.log('Start: ' + step.sourceName + ' ' + start.format('HH:mm') + ' End: ' + end.format('HH:mm') + ' duration: ' + duration);
+      });
+
 
     });
 
-    callback();
+    var datapointsProcessed = {
+      active: [],
+      sedentary: []
+    };
+
+    datapointsProcessed.sedentary = _.groupBy(sedentaryDatapoints, function (day) {
+      return day.sourceName;
+    });
+
+    datapointsProcessed.active = _.groupBy(activeDatapoints, function (day) {
+      return day.sourceName;
+    });
+
+
+    callback(datapointsProcessed);
   };
 
   var calculateDayActivity = function (day, callback) {
@@ -372,6 +432,25 @@ services.service('Fitness', function ($q, $moment) {
         limit: 10000,
         ascending: true,
       }, function (results) {
+
+        // cleanup data to ensure consistency and anonymity
+        for (var result in results) {
+          var data = results[result];
+          if (data.sourceBundleId.toLowerCase().indexOf('pebble') > 0) {
+            data.sourceName = 'Pebble';
+          }
+          if (data.sourceBundleId.toLowerCase().indexOf('apple') > 0) {
+            data.sourceName = 'Apple';
+          }
+          if (data.sourceBundleId.toLowerCase().indexOf('iphone') > 0) {
+            data.sourceName = 'iPhone';
+          }
+          if (data.sourceBundleId.toLowerCase().indexOf('watch') > 0) {
+            data.sourceName = 'Watch';
+          }
+          delete data.sourceBundleId;
+        }
+
         deferred.resolve(results);
       }, function (error) {
         console.error(error);
@@ -464,6 +543,11 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
     return $firebaseObject(ref);
   };
 
+  var _device = function() {
+    var ref = _getBaseRef().child('device');
+    return $firebaseObject(ref);
+  };
+
   var _permissions = function () {
     return returnArray('permissions');
   };
@@ -503,8 +587,7 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
         step[key] = $moment(attribute).toJSON();
       }
       // make sure that no identifiers are send to the backend
-      delete step.sourceBundleId;
-      delete step.sourceName;
+
 
     });
 
@@ -600,6 +683,7 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
 
   return {
     user: _user,
+    device: _device,
     permissions: _permissions,
     config: {
       all: _config,
@@ -793,7 +877,7 @@ services.service('Configurator', function () {
 
 services.service('Collector', function (Storage, Fitness, $moment, $timeout) {
   var _self = this;
-  var lastSync = $moment().startOf('day').subtract(14, 'days');
+  var lastSync = $moment().startOf('day').subtract(30, 'days');
   var intervalInMs = 2000;
   var timesCollected = 0;
 
@@ -819,10 +903,11 @@ services.service('Collector', function (Storage, Fitness, $moment, $timeout) {
               step.duration = duration;
               Storage.steps.$add(step);
             });
-          } else {
             console.log('Date: ' + lastSync.format('DD.MM.YYYY') + ' #: ' + timesCollected++ + ' # steps: ' + steps.length);
+          } else {
+            console.log('Date: ' + lastSync.format('DD.MM.YYYY') + ' #: ' + timesCollected++);
           }
-          console.log('Date: ' + lastSync.format('DD.MM.YYYY') + ' #: ' + timesCollected++);
+
         });
 
         Fitness.getDistancesDay(lastSync, function (distances) {
@@ -835,10 +920,11 @@ services.service('Collector', function (Storage, Fitness, $moment, $timeout) {
               distance.duration = duration;
               Storage.distances.$add(distance);
             });
-          } else {
             console.log('Date: ' + lastSync.format('DD.MM.YYYY') + ' #: ' + timesCollected++ + ' # distances: ' + distances.length);
+          } else {
+            console.log('Date: ' + lastSync.format('DD.MM.YYYY') + ' #: ' + timesCollected++);
           }
-          console.log('Date: ' + lastSync.format('DD.MM.YYYY') + ' #: ' + timesCollected++);
+
         });
 
 

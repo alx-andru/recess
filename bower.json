@@ -20,7 +20,9 @@
     "angularfire": "^2.1.0",
     "firebase": "^3.6.1",
     "ngstorage": "^0.3.11",
-    "lato": "^0.3.0"
+    "lato": "^0.3.0",
+    "highcharts": "^5.0.6",
+    "highcharts-ng": "^0.0.13"
   },
   "resolutions": {
     "angular": "1.5.8"

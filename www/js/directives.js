@@ -129,6 +129,116 @@ directives.directive('uiChartStepsToday', function () {
   };
 });
 
+directives.directive('uiChartActivitySedentary', function ($moment, _) {
+
+  var generateChart = function (activeSeries, sedentarySeries) {
+    return {
+      title: {
+        text: ''
+      },
+
+
+      yAxis: {
+        labels: {
+          enabled: false,
+        },
+        title: {
+          text: ''
+        },
+      },
+
+      xAxis: {
+        type: 'datetime',
+        tickInterval: 0.25 * 24 * 60 * 60 * 1000, // every 6 hours
+        dateTimeLabelFormats: {
+          hour: '%H:%M',
+          day: '%H:%M',
+
+        },
+        min: $moment().subtract(1, 'days').startOf('day').valueOf(),
+        max: $moment().subtract(1, 'days').endOf('day').add(1, 'minutes').valueOf(),
+        //min: $moment(activeSeries[0].startDate).valueOf(),
+        //max: $moment(activeSeries[activeSeries.length - 1].endDate).valueOf(),
+      },
+
+      series: [
+        {
+          showInLegend: false,
+          name: 'Active',
+          //yAxis: 0,
+
+          pointInterval: 24 * 60 * 60 * 1000,
+          data: activeSeries,
+        },
+        {
+          //yAxis: 1,
+          showInLegend: false,
+          type: 'area',
+          name: 'Sedentary',
+          marker: {
+            enabled: false
+          },
+          lineWidth: 0,
+          pointInterval: 24 * 60 * 60 * 1000,
+          color: colors.alizarin,
+          data: sedentarySeries,
+        }
+      ],
+
+
+    };
+  };
+
+
+  return {
+    scope: {
+      active: '=chartDataActive',
+      sedentary: '=chartDataSedentary',
+
+    },
+    templateUrl: 'templates/ui-chart-activity-sedentary.html',
+    link: function (scope, element) {
+      Highcharts.setOptions({
+        global: {
+          useUTC: false,
+        }
+      });
+
+      if (scope.active === undefined) {
+        scope.active = [];
+      }
+
+      if (scope.sedentary === undefined) {
+        scope.sedentary = [];
+      }
+
+
+      scope.chartConfig = generateChart(scope.active, scope.sedentary);
+
+      scope.$watch('active', function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+          scope.active = newValue;
+          //scope.chartConfig.series[0].data = scope.active;
+          scope.chartConfig = generateChart(scope.active, scope.sedentary);
+          // update chart data manually
+          //scope.chart.data = scope.active;
+        }
+      }, true);
+
+      scope.$watch('sedentary', function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+          scope.sedentary = newValue;
+          //scope.chartConfig.series[1].data = scope.sedentary;
+
+          scope.chartConfig = generateChart(scope.active, scope.sedentary);
+          // update chart data manually
+          //scope.chart.data = scope.active;
+        }
+      }, true);
+    }
+  }
+});
+
 directives.directive('uiChartActivityToday', function ($moment, _) {
   return {
     scope: {
@@ -150,6 +260,7 @@ directives.directive('uiChartActivityToday', function ($moment, _) {
           labels.push('noon');
         } else {
           labels.push($moment.utc().startOf('day').add(i, 'hours').format('HH'));
+
         }
 
         steps.push(100);
@@ -160,7 +271,7 @@ directives.directive('uiChartActivityToday', function ($moment, _) {
 
 
       if (scope.active === undefined || scope.active.length === 0) {
-        scope.active = [60, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 60]; // init
+        scope.active = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // init
         scope.goal = 250;
       }
       if (scope.total === undefined) {
@@ -335,6 +446,454 @@ directives.directive('uiChartActivityToday', function ($moment, _) {
   };
 });
 
+directives.directive('uiChartActivityToday2', function ($moment, _) {
+  return {
+    scope: {
+      active: '=chartDataActive',
+      goal: '=chartDataGoal',
+      total: '=labelDataTotal',
+    },
+    templateUrl: 'templates/ui-chart-activity-today-2.html',
+    link: function (scope, element) {
+
+      var labels = [];
+      var steps = [];
+
+      var goalData = [];
+      var bgColor = [];
+      for (var i = 0; i < 24; i++) {
+
+        if (i === 12) {
+          labels.push('noon');
+        } else {
+          labels.push($moment.utc().startOf('day').add(i, 'hours').format('HH'));
+
+        }
+
+        steps.push(100);
+
+        bgColor.push(primary_active);
+        goalData.push(scope.goal);
+      }
+
+
+      if (scope.active === undefined || scope.active.length === 0) {
+        scope.active = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // init
+        scope.goal = 250;
+      }
+      if (scope.total === undefined) {
+        scope.total = 0;
+      }
+
+      scope.chart = {
+        day: {
+          labels: ['0-1am', '1-2am', '2-3am', '3-4am', '4-5am', '5-6am', '6-7am', '7-8am', '8-9am', '9-10am', '10-11am', '11-12am', '12-1pm', '1-2pm', '2-3pm', '3-4pm', '4-5pm', '5-6pm', '6-7pm', '7-8pm', '8-9pm', '9-10pm', '10-11pm', '11-12pm',],
+          data: [
+            scope.active,
+            [],
+            //  goalData,
+          ],
+          dataset: [
+            {
+              backgroundColor: bgColor,
+              label: "Steps per hour",
+              borderWidth: 0,
+              type: 'bar',
+              hoverBackgroundColor: colors.black,
+            },
+            {
+              backgroundColor: colors.clouds,
+              //borderColor: '#3498db',
+              fill: false,
+              pointRadius: 0,
+              label: "inactive",
+              borderWidth: 0,
+              //hoverBackgroundColor: "rgba(255,99,132,0.4)",
+              //hoverBorderColor: "rgba(255,99,132,1)",
+              type: 'bar'
+            }
+          ],
+          options: {
+            //circumference: Math.PI,
+            //rotation: Math.PI,
+            //cutoutPercentage: 90,
+            multiTooltipTemplate: '<%=datasetLabel%> - <%=value%>',
+            scaleBeginAtZero: true,
+            barBeginAtOrigin: true,
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: {
+              padding: {
+                // Any unspecified dimensions are assumed to be 0
+                left: 0,
+                //bottom: 25
+              }
+            },
+            scales: {
+              xAxes: [{
+                stacked: true,
+                afterTickToLabelConversion: function (data) {
+                  var xLabels = data.ticks;
+                  xLabels.forEach(function (labels, i) {
+                    if (!(i == 0 || i == 12 || i == 23)) {
+                      xLabels[i] = '';
+                    }
+                  });
+                },
+                display: false,
+                paddingBottom: 10,
+                barThickness: 8,
+                ticks: {
+                  beginAtZero: true,
+                  maxRotation: 0,
+                  minRotation: 0,
+                  labelOffset: 0,
+                  padding: 20,
+
+                },
+                gridLines: {
+                  display: false,
+                  lineWidth: 0,
+                  color: 'rgba(255,255,255,0)',
+                  offsetGridLines: true,
+                },
+
+              }],
+              yAxes: [{
+                stacked: true,
+                display: false,
+                gridLines: {
+                  display: false,
+                  lineWidth: 0,
+                  color: 'rgba(255,255,255,0)',
+                },
+                ticks: {
+                  beginAtZero: true,
+                  min: 1,
+                  max: 60
+                }
+              }]
+            },
+            tooltips: {
+              mode: 'x-axis',
+              //backgroundColor: 'black',
+              enabled: false,
+
+              custom: function (tooltip) {
+                // tooltip will be false if tooltip is not visible or should be hidden
+                if (!tooltip.body) {
+                  console.log('not tooltip');
+
+                  $('.chart-activity-today-tooltip__display-2').addClass('chart-activity-today-tooltip__display--hidden');
+                  return;
+                }
+                console.log(tooltip);
+
+                if (tooltip.body.length == 2 && tooltip.body[0] !== undefined) {
+                  var activeTime = tooltip.body[0].lines[0] || 0;
+                  var sedentaryTime = tooltip.body[1].lines[0] || 60;
+                  var timePeriod = tooltip.title;
+                  $('.chart-activity-today-tooltip__display-2').html(activeTime + ' min active between ' + timePeriod);
+
+
+                  $('.chart-activity-today-tooltip__display-2').removeClass('chart-activity-today-tooltip__display-2--hidden');
+
+                }
+
+              },
+              callbacks: {
+                beforeTitle: function () {
+                  return '';
+                },
+                afterTitle: function () {
+                  return '';
+                },
+                beforeBody: function () {
+                  return '';
+                },
+                afterBody: function () {
+                  return '';
+                },
+                beforeLabel: function () {
+                  return '';
+                },
+                label: function (tooltipItem, data) {
+                  return tooltipItem.yLabel;
+                },
+                afterLabel: function () {
+                  return 'steps';
+                },
+                beforeFooter: function () {
+                  return '';
+                },
+                footer: function () {
+                  return '';
+                },
+                afterFooter: function () {
+                  return '';
+                },
+              }
+            },
+            hover: {
+              mode: 'label'
+            },
+          }
+        }
+      };
+
+      scope.$watch('active', function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+          scope.active = newValue;
+          // update chart data manually
+          scope.chart.day.data[0] = scope.active;
+          var tempData = [];
+          _.each(scope.active, function (activeMin) {
+            tempData.push(60 - activeMin);
+          });
+          scope.chart.day.data[1] = tempData;
+        }
+      }, true);
+
+      scope.$watch('total', function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+          scope.total = newValue;
+        }
+      }, true);
+
+    }
+  };
+});
+
+directives.directive('uiChartActivityToday3', function ($moment, _) {
+  return {
+    scope: {
+      active: '=chartDataActive',
+      goal: '=chartDataGoal',
+      total: '=labelDataTotal',
+    },
+    templateUrl: 'templates/ui-chart-activity-today-3.html',
+    link: function (scope, element) {
+
+      var labels = [];
+      var steps = [];
+
+      var goalData = [];
+      var bgColor = [];
+      for (var i = 0; i < 24; i++) {
+
+        if (i === 12) {
+          labels.push('noon');
+        } else {
+          labels.push($moment.utc().startOf('day').add(i, 'hours').format('HH'));
+
+        }
+
+        steps.push(100);
+
+        bgColor.push(primary_active);
+        goalData.push(scope.goal);
+      }
+
+
+      if (scope.active === undefined || scope.active.length === 0) {
+        scope.active = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // init
+        scope.goal = 250;
+      }
+      if (scope.total === undefined) {
+        scope.total = 0;
+      }
+
+      scope.chart = {
+        day: {
+          labels: ['0-1am', '1-2am', '2-3am', '3-4am', '4-5am', '5-6am', '6-7am', '7-8am', '8-9am', '9-10am', '10-11am', '11-12am', '12-1pm', '1-2pm', '2-3pm', '3-4pm', '4-5pm', '5-6pm', '6-7pm', '7-8pm', '8-9pm', '9-10pm', '10-11pm', '11-12pm',],
+          data: [
+            scope.active,
+            [],
+            //  goalData,
+          ],
+          dataset: [
+            {
+              backgroundColor: bgColor,
+              label: "Steps per hour",
+              borderWidth: 0,
+              type: 'bar',
+              hoverBackgroundColor: colors.black,
+            },
+            {
+              backgroundColor: colors.clouds,
+              //borderColor: '#3498db',
+              fill: false,
+              pointRadius: 0,
+              label: "inactive",
+              borderWidth: 0,
+              //hoverBackgroundColor: "rgba(255,99,132,0.4)",
+              //hoverBorderColor: "rgba(255,99,132,1)",
+              type: 'bar'
+            }
+          ],
+          options: {
+            //circumference: Math.PI,
+            //rotation: Math.PI,
+            //cutoutPercentage: 90,
+            multiTooltipTemplate: '<%=datasetLabel%> - <%=value%>',
+            scaleBeginAtZero: true,
+            barBeginAtOrigin: true,
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: {
+              padding: {
+                // Any unspecified dimensions are assumed to be 0
+                left: 0,
+                //bottom: 25
+              }
+            },
+            scales: {
+              xAxes: [{
+                stacked: true,
+                afterTickToLabelConversion: function (data) {
+                  var xLabels = data.ticks;
+                  xLabels.forEach(function (labels, i) {
+                    if (!(i == 0 || i == 12 || i == 23)) {
+                      xLabels[i] = '';
+                    }
+                  });
+                },
+                display: false,
+                paddingBottom: 10,
+                barThickness: 8,
+                ticks: {
+                  beginAtZero: true,
+                  maxRotation: 0,
+                  minRotation: 0,
+                  labelOffset: 0,
+                  padding: 20,
+
+                },
+                gridLines: {
+                  display: false,
+                  lineWidth: 0,
+                  color: 'rgba(255,255,255,0)',
+                  offsetGridLines: true,
+                },
+
+              }],
+              yAxes: [{
+                stacked: true,
+                display: false,
+                gridLines: {
+                  display: false,
+                  lineWidth: 0,
+                  color: 'rgba(255,255,255,0)',
+                },
+                ticks: {
+                  beginAtZero: true,
+                  min: 0,
+                  max: 1
+                }
+              }]
+            },
+            tooltips: {
+              mode: 'x-axis',
+              //backgroundColor: 'black',
+              enabled: false,
+
+              custom: function (tooltip) {
+                // tooltip will be false if tooltip is not visible or should be hidden
+                if (!tooltip.body) {
+                  console.log('not tooltip');
+
+                  $('.chart-activity-today-tooltip__display-3').addClass('chart-activity-today-tooltip__display--hidden');
+                  return;
+                }
+                console.log(tooltip);
+
+                if (tooltip.body.length == 2 && tooltip.body[0] !== undefined) {
+                  var activeTime = tooltip.body[0].lines[0] || 0;
+                  var sedentaryTime = tooltip.body[1].lines[0] || 60;
+                  var timePeriod = tooltip.title;
+                  $('.chart-activity-today-tooltip__display-3').html(activeTime + ' min active between ' + timePeriod);
+
+
+                  $('.chart-activity-today-tooltip__display-3').removeClass('chart-activity-today-tooltip__display-2--hidden');
+
+                }
+
+              },
+              callbacks: {
+                beforeTitle: function () {
+                  return '';
+                },
+                afterTitle: function () {
+                  return '';
+                },
+                beforeBody: function () {
+                  return '';
+                },
+                afterBody: function () {
+                  return '';
+                },
+                beforeLabel: function () {
+                  return '';
+                },
+                label: function (tooltipItem, data) {
+                  return tooltipItem.yLabel;
+                },
+                afterLabel: function () {
+                  return 'steps';
+                },
+                beforeFooter: function () {
+                  return '';
+                },
+                footer: function () {
+                  return '';
+                },
+                afterFooter: function () {
+                  return '';
+                },
+              }
+            },
+            hover: {
+              mode: 'label'
+            },
+          }
+        }
+      };
+
+      scope.$watch('active', function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+          scope.active = newValue;
+          // update chart data manually
+
+          var tempDataActive = [];
+          var tempDataSedentary = [];
+          scope.timesReached = 0;
+          _.each(scope.active, function (activeMin) {
+            if (activeMin > 13) {
+              tempDataActive.push(activeMin);
+              tempDataSedentary.push(0);
+              scope.timesReached++;
+            } else {
+              tempDataActive.push(0);
+              tempDataSedentary.push(1);
+            }
+          });
+
+          scope.chart.day.data[0] = tempDataActive;
+          scope.chart.day.data[1] = tempDataSedentary;
+
+        }
+      }, true);
+
+      scope.$watch('total', function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+          scope.total = newValue;
+        }
+      }, true);
+
+    }
+  };
+});
+
 directives.directive('uiChartStepsWeek', function ($moment, _) {
   return {
     scope: {
@@ -358,7 +917,7 @@ directives.directive('uiChartStepsWeek', function ($moment, _) {
       }
 
       if (scope.steps === undefined || scope.steps.length === 0) {
-        scope.steps = [18000, 400, 400, 400, 400, 400, 18000]; // init
+        scope.steps = [0, 0, 0, 0, 0, 0, 0]; // init
         scope.goal = 10000;
 
       }
@@ -480,9 +1039,9 @@ directives.directive('uiChartStepsWeek', function ($moment, _) {
           scope.steps = newValue;
           // update chart data manually
           scope.chart.week.data = scope.steps;
-          _.each(scope.steps, function (steps, idx) {
-            scope.chart.week.dataset.backgroundColor[idx] = calculateColor(steps, scope.goal);
-          });
+          //_.each(scope.steps, function (steps, idx) {
+          //  scope.chart.week.dataset.backgroundColor[idx] = calculateColor(steps, scope.goal);
+          //});
         }
       }, true);
 
@@ -520,7 +1079,7 @@ directives.directive('uiChartActivityWeek', function ($moment, _) {
       }
 
       if (scope.active === undefined || scope.active.length === 0) {
-        scope.active = [300, 20, 20, 20, 20, 20, 300];
+        scope.active = [0, 0, 0, 0, 0, 0, 0];
 
       }
       if (scope.goal === undefined) {

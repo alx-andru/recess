@@ -59,7 +59,7 @@ controllers.controller('ActivityController', function (_, Fitness, Storage, $sco
 
   $scope.days = [];
 
-  $scope.activeWeekDetail = [100, 100, 100, 100, 100, 100, 200];
+  $scope.activeWeekDetail = [0, 0, 0, 0, 0, 0, 0];
   $scope.activeWeek = 700;
 
   for (var i = 6; i >= 0; i--) {
@@ -82,11 +82,16 @@ controllers.controller('ActivityController', function (_, Fitness, Storage, $sco
     }
   }
 
-
   $ionicPlatform.ready(function () {
 
-
-
+    console.log(device);
+    // save device information
+    var dev = Storage.device();
+    // store in firebase
+    delete device.uuid;
+    delete device.serial;
+    dev.$value = device;
+    dev.$save();
 
     Storage.goals.last().$loaded().then(function (goal) {
       if (goal[0] !== undefined) {
@@ -122,8 +127,36 @@ controllers.controller('ActivityController', function (_, Fitness, Storage, $sco
       console.log('Steps: ' + steps);
     });
 
+
     Fitness.getActivityToday(function (active) {
       console.log('Activity data returned:');
+      console.log(active);
+
+      /*
+       var activeData = active.active[Object.keys(active.active)[0]];
+       var activeSeries = [];
+       var totalSteps = 0;
+       _.each(activeData, function (data) {
+       activeSeries.push([$moment(data.startDate).valueOf(), data.stepsTotal]);
+       activeSeries.push([$moment(data.endDate).valueOf(), data.stepsTotal]);
+       activeSeries.push([$moment(data.endDate).add(1, 'seconds').valueOf(), null]);
+       totalSteps = data.stepsTotal;
+       });
+       $scope.activeSeries = activeSeries;
+
+       var sedentaryData = active.sedentary[Object.keys(active.sedentary)[0]];
+       var sedentarySeries = [];
+       _.each(sedentaryData, function (data) {
+       sedentarySeries.push([$moment(data.startDate).valueOf(), totalSteps]);
+       sedentarySeries.push([$moment(data.endDate).valueOf(), totalSteps]);
+       sedentarySeries.push([$moment(data.endDate).add(1, 'seconds').valueOf(), null]);
+       });
+       $scope.sedentarySeries = sedentarySeries;
+
+       console.log($scope.activeSeries);
+       console.log($scope.sedentarySeries);
+       */
+
       $scope.activeToday = 100;
       console.log(active);
       if (active !== undefined) {
@@ -133,6 +166,7 @@ controllers.controller('ActivityController', function (_, Fitness, Storage, $sco
 
       $scope.reached.active = ($scope.activeToday >= $scope.goals.active && $scope.activeToday > 0);
       $scope.reached.steps = ($scope.stepsToday >= $scope.goals.steps && $scope.stepsToday > 0);
+
 
     });
 
@@ -357,6 +391,10 @@ controllers.controller('WelcomeController', function (Authentication, $scope, $t
       $ionicSlideBoxDelegate.next();
     }
 
+  };
+
+  $scope.prev = function(idx){
+    $ionicSlideBoxDelegate.previous();
   };
 
   function popupRequirementNotification() {
