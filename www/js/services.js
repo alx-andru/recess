@@ -194,8 +194,8 @@ services.service('Fitness', function ($q, $moment) {
   var _getActivityToday = function (callback) {
     //console.log('Get activity today:');
 
-    var startDate = $moment().subtract(1, 'days').startOf('day');
-    var endDate = $moment().subtract(1, 'days').endOf('day');
+    var startDate = $moment().startOf('day');
+    var endDate = $moment().endOf('day');
 
     getData(startDate, endDate, 'steps').success(function (data) {
       if (data.length > 0) {

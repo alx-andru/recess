@@ -80,10 +80,16 @@ directives.directive('uiChartStepsToday', function () {
         scope.goal = 10000;
       }
 
+      var data = [scope.steps, scope.goal - scope.steps];
+      // if steps exceed goal, max out
+      if (scope.goal - scope.steps < 0) {
+        data = [scope.steps, 0];
+      }
+
 
       scope.chart = {
         today: {
-          data: [scope.steps, scope.goal - scope.steps],
+          data: data,
           labels: ['Steps', 'Goal'],
           dataset: {
             backgroundColor: [primary_steps, colors.clouds,],
@@ -112,7 +118,12 @@ directives.directive('uiChartStepsToday', function () {
           console.log('steps updated from: ' + oldValue + ' to: ' + newValue);
           scope.steps = newValue;
           // update chart data manually
-          scope.chart.today.data = [scope.steps, scope.goal - scope.steps];
+          var data = [scope.steps, scope.goal - scope.steps];
+          // if steps exceed goal, max out
+          if (scope.goal - scope.steps < 0) {
+            data = [scope.steps, 0];
+          }
+          scope.chart.today.data = data;
         }
       }, true);
       scope.$watch('goal', function (newValue, oldValue) {
@@ -121,7 +132,12 @@ directives.directive('uiChartStepsToday', function () {
           scope.goal = newValue;
           console.log('new value for goal');
           // update chart data manually
-          scope.chart.today.data = [scope.steps, scope.goal - scope.steps];
+          var data = [scope.steps, scope.goal - scope.steps];
+          // if steps exceed goal, max out
+          if (scope.goal - scope.steps < 0) {
+            data = [scope.steps, 0];
+          }
+          scope.chart.today.data = data;
         }
       }, true);
 
