@@ -40,6 +40,9 @@ services.factory('hash', function ($window) {
 
 services.factory('Permissions', function ($q, $localStorage, Storage) {
   var permissions = $localStorage.permissions;
+  if (permissions === undefined) {
+    $localStorage.permissions = {fitness: false, notifications: false};
+  }
 
   var _health = function () {
     var deferred = $q.defer();
@@ -436,19 +439,24 @@ services.service('Fitness', function ($q, $moment) {
         // cleanup data to ensure consistency and anonymity
         for (var result in results) {
           var data = results[result];
-          if (data.sourceBundleId.toLowerCase().indexOf('pebble') > 0) {
-            data.sourceName = 'Pebble';
+          if (data.sourceBundleId !== undefined) {
+            if (data.sourceBundleId.toLowerCase().indexOf('pebble') > 0) {
+              data.sourceName = 'Pebble';
+            }
+            if (data.sourceBundleId.toLowerCase().indexOf('apple') > 0) {
+              data.sourceName = 'Apple';
+            }
+            if (data.sourceBundleId.toLowerCase().indexOf('iphone') > 0) {
+              data.sourceName = 'iPhone';
+            }
+            if (data.sourceBundleId.toLowerCase().indexOf('watch') > 0) {
+              data.sourceName = 'Watch';
+            }
+            delete data.sourceBundleId;
+          } else {
+            data.sourceName = 'Android'; //TODO: get deviceinfo and place it here
           }
-          if (data.sourceBundleId.toLowerCase().indexOf('apple') > 0) {
-            data.sourceName = 'Apple';
-          }
-          if (data.sourceBundleId.toLowerCase().indexOf('iphone') > 0) {
-            data.sourceName = 'iPhone';
-          }
-          if (data.sourceBundleId.toLowerCase().indexOf('watch') > 0) {
-            data.sourceName = 'Watch';
-          }
-          delete data.sourceBundleId;
+
         }
 
         deferred.resolve(results);
@@ -543,7 +551,7 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
     return $firebaseObject(ref);
   };
 
-  var _device = function() {
+  var _device = function () {
     var ref = _getBaseRef().child('device');
     return $firebaseObject(ref);
   };

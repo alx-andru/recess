@@ -501,12 +501,18 @@ directives.directive('uiChartActivityToday2', function ($moment, _) {
         scope.total = 0;
       }
 
+      var tempData = [];
+      _.each(scope.active, function (activeMin) {
+        tempData.push(60 - activeMin);
+      });
+
+
       scope.chart = {
         day: {
           labels: ['0-1am', '1-2am', '2-3am', '3-4am', '4-5am', '5-6am', '6-7am', '7-8am', '8-9am', '9-10am', '10-11am', '11-12am', '12-1pm', '1-2pm', '2-3pm', '3-4pm', '4-5pm', '5-6pm', '6-7pm', '7-8pm', '8-9pm', '9-10pm', '10-11pm', '11-12pm',],
           data: [
             scope.active,
-            [],
+            tempData,
             //  goalData,
           ],
           dataset: [
@@ -823,13 +829,11 @@ directives.directive('uiChartActivityToday3', function ($moment, _) {
                 }
                 console.log(tooltip);
 
-                if (tooltip.body.length == 2 && tooltip.body[0] !== undefined) {
+                if (tooltip.body.length == 1 && tooltip.body[0] !== undefined) {
                   var activeTime = tooltip.body[0].lines[0] || 0;
-                  var sedentaryTime = tooltip.body[1].lines[0] || 60;
+                  //var sedentaryTime = tooltip.body[1].lines[0] || 60;
                   var timePeriod = tooltip.title;
                   $('.chart-activity-today-tooltip__display-3').html(activeTime + ' min active between ' + timePeriod);
-
-
                   $('.chart-activity-today-tooltip__display-3').removeClass('chart-activity-today-tooltip__display-2--hidden');
 
                 }

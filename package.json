@@ -1,6 +1,6 @@
 {
   "name": "recess-app",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "recess-app: An Ionic project",
   "dependencies": {
     "gulp": "^3.5.6",
