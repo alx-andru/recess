@@ -17,6 +17,57 @@ controllers.controller('MessengerController', function () {
 
 });
 
+
+controllers.controller('ChatController', function ($scope,$ionicScrollDelegate, $timeout, $moment) {
+  $scope.hideTime = true;
+
+  var alternate,
+    isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
+
+  $scope.sendMessage = function() {
+    alternate = !alternate;
+
+
+    $scope.messages.push({
+      userId: alternate ? '12345' : '54321',
+      text: $scope.data.message,
+      time: $moment().toDate(),
+    });
+    //$ionicScrollDelegate.resize();
+    delete $scope.message;
+
+
+      $ionicScrollDelegate.scrollBottom(false);
+
+
+
+  };
+
+
+  $scope.inputUp = function() {
+    if (isIOS) $scope.data.keyboardHeight = 216;
+    $timeout(function() {
+      $ionicScrollDelegate.scrollBottom(true);
+    }, 300);
+
+
+  };
+
+  $scope.inputDown = function() {
+    if (isIOS) $scope.data.keyboardHeight = 0;
+    //$ionicScrollDelegate.resize();
+  };
+
+  $scope.closeKeyboard = function() {
+    // cordova.plugins.Keyboard.close();
+  };
+
+
+  $scope.data = {};
+  $scope.myId = '12345';
+  $scope.messages = [];
+});
+
 controllers.controller('ActivityController', function (_, Fitness, Storage, $scope, $ionicPlatform, Collector, $moment) {
 
 
@@ -84,14 +135,16 @@ controllers.controller('ActivityController', function (_, Fitness, Storage, $sco
 
   $ionicPlatform.ready(function () {
 
-    console.log(device);
     // save device information
     var dev = Storage.device();
-    // store in firebase
-    delete device.uuid;
-    delete device.serial;
-    dev.$value = device;
-    dev.$save();
+    var device;
+    if (device !== undefined) {
+      // store in firebase
+      delete device.uuid;
+      delete device.serial;
+      dev.$value = device;
+      dev.$save();
+    }
 
     Storage.goals.last().$loaded().then(function (goal) {
       if (goal[0] !== undefined) {
@@ -439,5 +492,7 @@ controllers.controller('RecessController', function (Authentication, $scope, $io
   };
 
   $scope.user = Storage.user();
+
+  $scope.chatActive = true;
 
 });

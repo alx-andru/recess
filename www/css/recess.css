@@ -10207,6 +10207,53 @@ a.button {
   .recess-tabs__tab.active.android * {
     color: black; }
 
+.back-to-activity {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+  padding-top: 0.25rem; }
+  .back-to-activity a {
+    text-decoration: none;
+    color: black;
+    line-height: 1.6rem;
+    height: 1.8rem; }
+
+.tab__content--chat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%; }
+
+.message {
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: "row";
+  align-items: center;
+  justify-content: space-between;
+  justify-content: flex-end; }
+
+.msg {
+  background-color: #f1c40f;
+  color: black;
+  padding: 0.25rem 0.75rem;
+  -webkit-border-radius: 0.5rem;
+  border-radius: 0.5rem;
+  background-clip: padding-box;
+  /* stops bg color from leaking outside the border: */
+  margin-bottom: 0.125rem; }
+
+.other {
+  justify-content: flex-start;
+  color: black; }
+  .other .msg {
+    background-color: #ecf0f1; }
+
+.button-send i {
+  color: #f1c40f;
+  padding-top: 0.5rem; }
+
 /* Responsive Breakpoints
    ========================================================================== */
 /* Sub-section comment block

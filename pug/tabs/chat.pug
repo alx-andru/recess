@@ -1,0 +1,20 @@
+ion-view(view-title='Buddy' animation="no-animation").tab
+
+  ion-nav-bar(align-title='center').bar.bar-transparent.tab__bar
+    ion-nav-buttons(side='left')
+      .back-to-activity
+        i.material-icons keyboard_arrow_left
+        a(href='#/activity',nav-transition='none') Your Activity
+
+  ion-content(overflow-scroll='true').tab__content.tab__content--chat.has-footer
+    .messages
+      .message(ng-repeat='msg in messages',ng-class='{other: msg.userId != myId}')
+        .msg() {{msg.text}}
+
+
+
+  ion-footer-bar(keyboard-attach='true').bar-stable.item-input-inset
+    label.item-input-wrapper
+      input(type='text', placeholder='...', on-return='send(); closeKeyboard();',ng-model='data.message',on-focus='inputUp()', on-blur='inputDown()')
+    button(ng-click='sendMessage()').button.button-clear.button-send
+      i.material-icons send

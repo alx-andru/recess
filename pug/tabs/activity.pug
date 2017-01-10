@@ -29,6 +29,7 @@ ion-view(view-title='Your Activity' animation="no-animation").tab
 
       // =================
       ion-slide.tab-content-slidebox__slide
+        h1 {{isChatActive}}
         ui-chart-steps-today(chart-data-steps='stepsToday', chart-data-goal='goals.steps')
 
         div.achievements
@@ -61,4 +62,5 @@ ion-view(view-title='Your Activity' animation="no-animation").tab
 
 
 
-  footer(activity-active='true')
+  footer(activity-active='true', chat-active='chatActive')
+

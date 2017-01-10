@@ -53,11 +53,61 @@ directives.directive('footer', function () {
       isMessengerActive: '=messengerActive',
       isActivityActive: '=activityActive',
       isGoalActive: '=goalActive',
+      isChatActive: '=chatActive'
     },
-    templateUrl: 'templates/footer.html',
+    templateUrl: 'footer.html',
     link: function (scope, element) {
       scope.isAndroid = ionic.Platform.isAndroid();
+      //scope.isChatActive = 'test';
+    }
+  }
+});
 
+directives.directive('uiChatMessageField', function () {
+  return {
+    scope: {
+    },
+    templateUrl: 'templates/ui-chat-messagefield.html',
+    link: function (scope, element) {
+
+    }
+  }
+});
+
+directives.directive('input', function($timeout) {
+  return {
+    restrict: 'E',
+    scope: {
+      'returnClose': '=',
+      'onReturn': '&',
+      'onFocus': '&',
+      'onBlur': '&'
+    },
+    link: function(scope, element, attr) {
+      element.bind('focus', function(e) {
+        if (scope.onFocus) {
+          $timeout(function() {
+            scope.onFocus();
+          });
+        }
+      });
+      element.bind('blur', function(e) {
+        if (scope.onBlur) {
+          $timeout(function() {
+            scope.onBlur();
+          });
+        }
+      });
+      element.bind('keydown', function(e) {
+        if (e.which == 13) {
+          if (scope.returnClose) element[0].blur();
+          if (scope.onReturn) {
+            $timeout(function() {
+              scope.onReturn();
+            });
+          }
+        }
+      });
     }
   }
 });
@@ -823,7 +873,7 @@ directives.directive('uiChartActivityWeek', function ($moment, _) {
       scope.$watch('active', function (newValue, oldValue) {
         if (newValue !== oldValue) {
           scope.active = newValue;
-          // update chart data manually
+          // update chart data manually'
           scope.chart.week.data[0] = scope.active;
         }
       }, true);

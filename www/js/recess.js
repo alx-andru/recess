@@ -63,6 +63,12 @@ recess.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider
       templateUrl: 'tabs/messenger.html',
       controller: 'MessengerController',
     })
+    // Messenger
+    .state('chat', {
+      url: '/chat',
+      templateUrl: 'tabs/chat.html',
+      controller: 'ChatController',
+    })
     // Goal
     .state('goal', {
       url: '/goal',

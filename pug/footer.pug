@@ -1,6 +1,9 @@
 div(ng-class='{android:isAndroid}').recess-tabs
+
   div(ng-class='{android:isAndroid, active:isMessengerActive}').recess-tabs__tab
-    a(href='#/messenger',nav-transition='none')
+    a(href='#/messenger',nav-transition='none', ng-if='!isChatActive')
+      i.material-icons forum
+    a(href='#/chat',nav-transition='none', ng-if='isChatActive')
       i.material-icons forum
 
 

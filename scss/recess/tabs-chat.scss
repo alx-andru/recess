@@ -1,0 +1,59 @@
+.back-to-activity {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+  padding-top: 0.25rem;
+
+  a {
+    text-decoration: none;
+    color: black;
+    line-height: 1.6rem;
+    height: 1.8rem;
+  }
+}
+
+
+
+.tab__content--chat {
+  @include flex();
+  width: 100%;
+
+}
+
+.message {
+
+  padding: 1rem 1.5rem;
+  @include flex('row');
+  justify-content:flex-end;
+
+}
+
+.msg {
+  //align-self: flex-start;
+
+  background-color: $primary_recess;
+  color: black;
+  padding:  0.25rem 0.75rem;
+  @include border-radius(0.5rem);
+  margin-bottom: 0.125rem;
+
+
+}
+
+.other {
+  justify-content:flex-start;
+
+  color: black;
+  .msg {
+    background-color: $clouds;
+  }
+}
+
+.button-send {
+
+  i {
+    color: $primary_recess;
+    padding-top: 0.5rem;
+  }
+}
