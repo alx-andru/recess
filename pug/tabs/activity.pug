@@ -1,9 +1,9 @@
 ion-view(view-title='Your Activity' animation="no-animation").tab
 
   ion-nav-bar(align-title='center').bar.bar-transparent.tab__bar
-    //ion-nav-buttons(side='right')
-      a(ng-click='toggleMenu()').button.button-clear
-        i.material-icons hdr_strong
+    ion-nav-buttons(side='right')
+      //a(ng-click='toggleMenu()').button.button-clear
+        //i.material-icons hdr_strong
 
 
   ion-content(overflow-scroll='true',).gradient.has-tabs.no-scroll.tab__content
@@ -26,6 +26,7 @@ ion-view(view-title='Your Activity' animation="no-animation").tab
         div {{goals}}
         div {{data.week.active}}
         div {{data.week.activeTotal}}
+
       // =================
       ion-slide.tab-content-slidebox__slide
         ui-chart-steps-today(chart-data-steps='stepsToday', chart-data-goal='goals.steps')
@@ -39,37 +40,7 @@ ion-view(view-title='Your Activity' animation="no-animation").tab
               i(ng-if='!weekday.reached.active').material-icons.notreached star_border
               i(ng-if='weekday.reached.active').material-icons star
 
-        ui-chart-activity-today2(chart-data-active='activeTodayDetail', chart-data-goal='goals.active', label-data-total='activeToday')
-
-      ion-slide.tab-content-slidebox__slide
-        ui-chart-steps-today(chart-data-steps='stepsToday', chart-data-goal='goals.steps')
-
-        div.achievements
-          .full
-            .half-left
-              i(ng-if='!weekday.reached.steps').material-icons.notreached star_border
-              i(ng-if='weekday.reached.steps').material-icons star
-            .half-right
-              i(ng-if='!weekday.reached.active').material-icons.notreached star_border
-              i(ng-if='weekday.reached.active').material-icons star
-
-        ui-chart-activity-today3(chart-data-active='activeTodayDetail', chart-data-goal='goals.active', label-data-total='activeToday')
-
-
-      ion-slide.tab-content-slidebox__slide
-        ui-chart-steps-today(chart-data-steps='stepsToday', chart-data-goal='goals.steps')
-
-        div.achievements
-          .full
-            .half-left
-              i(ng-if='!weekday.reached.steps').material-icons.notreached star_border
-              i(ng-if='weekday.reached.steps').material-icons star
-            .half-right
-              i(ng-if='!weekday.reached.active').material-icons.notreached star_border
-              i(ng-if='weekday.reached.active').material-icons star
-
         ui-chart-activity-today(chart-data-active='activeTodayDetail', chart-data-goal='goals.active', label-data-total='activeToday')
-        //ui-chart-activity-sedentary(chart-data-active='activeSeries', chart-data-sedentary='sedentarySeries')
 
       // =================
       ion-slide.tab-content-slidebox__slide.tab-content-slidebox__slide--week

@@ -393,7 +393,7 @@ controllers.controller('WelcomeController', function (Authentication, $scope, $t
 
   };
 
-  $scope.prev = function(idx){
+  $scope.prev = function (idx) {
     $ionicSlideBoxDelegate.previous();
   };
 
@@ -422,7 +422,7 @@ controllers.controller('WelcomeController', function (Authentication, $scope, $t
 
 });
 
-controllers.controller('RecessController', function (Authentication, $scope, $ionicSideMenuDelegate, $state) {
+controllers.controller('RecessController', function (Authentication, $scope, $ionicSideMenuDelegate, $state, Storage) {
 
   $scope.toggleMenu = function () {
     $ionicSideMenuDelegate.toggleRight();
@@ -436,6 +436,8 @@ controllers.controller('RecessController', function (Authentication, $scope, $io
   $scope.accessIntro = function () {
     $scope.toggleMenu();
     $state.go('welcome');
-  }
+  };
+
+  $scope.user = Storage.user();
 
 });

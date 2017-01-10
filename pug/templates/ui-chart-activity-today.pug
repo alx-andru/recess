@@ -1,12 +1,7 @@
 .chart-activity-today
   .chart-activity-today__tooltip
     .chart-activity-today-tooltip__display.chart-activity-today-tooltip__display--hidden
-      i.material-icons av_timer
-      span.value 0
-      span &nbsp;min
-      span &nbsp;at&nbsp;
-      span.hour
-      span  :00
+
   .chart-activity-today__barchart
     canvas(chart-data='chart.day.data',
     chart-labels='chart.day.labels',
@@ -20,8 +15,8 @@
 
   .chart-activity-today__legend
     .chart-activity-today-legend__today
-      div.value {{total | number :0}}
-      span.label Active today
+      div.value {{timesReached | number :0}} x
+      span.label hours per day
     .chart-activity-today-legend__icon
       i.material-icons av_timer
     .chart-activity-today-legend__goal

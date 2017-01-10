@@ -364,7 +364,7 @@ services.service('Fitness', function ($q, $moment) {
 
     var activity = {};
 
-    _.each(day, function (step, i) {
+    _.each(day, function (step) {
       var start = $moment(step.startDate);
       var end = $moment(step.endDate);
       var difference = end.diff(start);
@@ -775,7 +775,7 @@ services.factory('Authentication', function ($q, $firebaseAuth, uuid4, $timeout,
             goals = Storage.goals.all();
             goals.$add({
               steps: 10000,
-              active: 200,
+              active: 8,
             });
 
             goals = Storage.goals.last();
@@ -885,7 +885,7 @@ services.service('Configurator', function () {
 
 services.service('Collector', function (Storage, Fitness, $moment, $timeout) {
   var _self = this;
-  var lastSync = $moment().startOf('day').subtract(30, 'days');
+  var lastSync = $moment().startOf('day').subtract(7, 'days');
   var intervalInMs = 2000;
   var timesCollected = 0;
 

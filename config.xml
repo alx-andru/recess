@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.alexandrugogan.recess" version="0.0.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.alexandrugogan.app.recess" version="0.0.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Recess</name>
   <description>
         A mobile application to collect and visualize fitness related data. Set goals, track your activity and help others achieve their goal.
     </description>
-  <author email="alexandrugogan86@gmail.com" href="http://alexandrugogan.com/">
+  <author email="alexandru.gogan@icloud.com" href="http://alexandrugogan.com/">
       Alexandru Gogan
     </author>
   <content src="index.html"/>
@@ -49,6 +49,9 @@
     <splash src="resources/ios/splash/Default-Portrait~ipad.png" width="768" height="1024"/>
     <splash src="resources/ios/splash/Default@2x~iphone.png" width="640" height="960"/>
     <splash src="resources/ios/splash/Default~iphone.png" width="320" height="480"/>
+
+    <hook type="after_prepare" src="scripts/recess_edit_plist.js" />
+
   </platform>
   <platform name="android">
     <icon src="resources/android/icon/drawable-ldpi-icon.png" density="ldpi"/>

@@ -9,6 +9,7 @@
     "gulp-pug": "^3.2.0",
     "gulp-rename": "^1.2.0",
     "gulp-sass": "^2.0.4",
+    "plist": "^2.0.1",
     "pug": "^2.0.0-beta6"
   },
   "devDependencies": {

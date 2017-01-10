@@ -38,15 +38,15 @@ ion-view(view-title='Set your Goals' animation="no-animation").tab
           .goal-header__title
             h1 Active all day
           .goal-header__description
-            p Break sedentary phases and be active consistent over the entire day.
+            p Walk at least 200 steps a minute for 11 minutes an hour.
         .goal-settings
-          span I am active for
+          span I am active in
           span(ng-click='setGoalActive()').goal
             span.value &nbsp; {{goals.active | number: 0}}&nbsp;
             span.icons
               i.material-icons expand_less
               i.material-icons expand_more
-          span &nbsp;minutes a day.
+          span &nbsp;hours a day.
 
       .ready
         div(ng-click='setReadyGo()').button-recess Start Challenge
