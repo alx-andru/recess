@@ -18,54 +18,52 @@ controllers.controller('MessengerController', function () {
 });
 
 
-controllers.controller('ChatController', function ($scope,$ionicScrollDelegate, $timeout, $moment) {
+controllers.controller('ChatController', function ($scope, $ionicScrollDelegate, $timeout, $moment, Storage) {
   $scope.hideTime = true;
 
-  var alternate,
-    isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
+  var alternate;
+  var isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
 
-  $scope.sendMessage = function() {
+  $scope.sendMessage = function () {
     alternate = !alternate;
 
-
-    $scope.messages.push({
-      userId: alternate ? '12345' : '54321',
-      text: $scope.data.message,
-      time: $moment().toDate(),
+    Storage.config.conversation.last().$loaded().then(function (last) {
+      var uid = last[0].uid;
+      Storage.conversation.$add({
+        text: $scope.data.message,
+      }, uid);
     });
-    //$ionicScrollDelegate.resize();
+
+
     delete $scope.message;
-
-
-      $ionicScrollDelegate.scrollBottom(false);
-
-
-
+    $ionicScrollDelegate.scrollBottom(false);
   };
 
 
-  $scope.inputUp = function() {
+  $scope.inputUp = function () {
     if (isIOS) $scope.data.keyboardHeight = 216;
-    $timeout(function() {
+    $timeout(function () {
       $ionicScrollDelegate.scrollBottom(true);
     }, 300);
-
-
   };
 
-  $scope.inputDown = function() {
+  $scope.inputDown = function () {
     if (isIOS) $scope.data.keyboardHeight = 0;
     //$ionicScrollDelegate.resize();
   };
 
-  $scope.closeKeyboard = function() {
+  $scope.closeKeyboard = function () {
     // cordova.plugins.Keyboard.close();
   };
 
 
   $scope.data = {};
-  $scope.myId = '12345';
-  $scope.messages = [];
+  $scope.user = Storage.user();
+  //$scope.uid = Storage.user.$value.uid;
+  var conversationUid = Storage.config.conversation.last().$loaded().then(function (last) {
+    $scope.messages = Storage.conversation.all(last[0].uid);
+  });
+
 });
 
 controllers.controller('ActivityController', function (_, Fitness, Storage, $scope, $ionicPlatform, Collector, $moment) {

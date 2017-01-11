@@ -32,21 +32,37 @@
 .msg {
   //align-self: flex-start;
 
-  background-color: $primary_recess;
-  color: black;
-  padding:  0.25rem 0.75rem;
-  @include border-radius(0.5rem);
+
   margin-bottom: 0.125rem;
 
 
 }
 
+.text {
+  background-color: $primary_recess;
+  color: black;
+  padding:  0.25rem 0.75rem;
+  @include border-radius(0.5rem);
+  text-align: right;
+}
+.timestamp {
+  font-size: 0.8rem;
+  font-weight:300;
+  display: block;
+  text-align: right;
+
+}
 .other {
   justify-content:flex-start;
 
   color: black;
-  .msg {
+  .text {
     background-color: $clouds;
+    text-align: left;
+  }
+
+  .timestamp {
+    text-align: left;
   }
 }
 

@@ -10235,6 +10235,9 @@ a.button {
   justify-content: flex-end; }
 
 .msg {
+  margin-bottom: 0.125rem; }
+
+.text {
   background-color: #f1c40f;
   color: black;
   padding: 0.25rem 0.75rem;
@@ -10242,13 +10245,22 @@ a.button {
   border-radius: 0.5rem;
   background-clip: padding-box;
   /* stops bg color from leaking outside the border: */
-  margin-bottom: 0.125rem; }
+  text-align: right; }
+
+.timestamp {
+  font-size: 0.8rem;
+  font-weight: 300;
+  display: block;
+  text-align: right; }
 
 .other {
   justify-content: flex-start;
   color: black; }
-  .other .msg {
-    background-color: #ecf0f1; }
+  .other .text {
+    background-color: #ecf0f1;
+    text-align: left; }
+  .other .timestamp {
+    text-align: left; }
 
 .button-send i {
   color: #f1c40f;

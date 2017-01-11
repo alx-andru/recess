@@ -540,10 +540,13 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
 
   console.log('Storage called');
 
-  var _getBaseRef = function () {
+  var _getBaseRef = function (uid) {
     // assuming a valid userid exists in local storage
-    var user = $localStorage.user;
-    return firebase.database().ref().child('users').child(user.uid);
+    var userId = $localStorage.user.uid;
+    if (uid !== undefined) {
+      userId = uid;
+    }
+    return firebase.database().ref().child('users').child(userId);
   };
 
   var _user = function () {
@@ -564,16 +567,53 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
     return returnArray('config');
   };
 
+  var _conversation = function (uid) {
+    if (uid !== undefined) {
+      return returnArray('conversation', uid);
+    } else {
+      return returnArray('conversation');
+    }
+
+  };
+
+  var _conversationAdd = function (message, uid) {
+
+    // add timestamp
+    message.timestamp = $moment().toJSON();
+
+    // add userid
+    message.uid = $localStorage.user.uid;
+    _conversation(uid).$add(message);
+
+  };
+
   var _configLast = function () {
     return returnLastFromArray('config');
   };
 
+  // Sync
   var _sync = function () {
     return returnArray('config/sync');
   };
 
   var _syncLast = function () {
     return returnLastFromArray('config/sync');
+  };
+
+  // Config Conversation
+  var _cfgConversation = function () {
+    return returnArray('config/conversation');
+  };
+
+  var _cfgConversationLast = function () {
+    return returnLastFromArray('config/conversation');
+  };
+
+  var _cfgConversationAdd = function (uid) {
+    _cfgConversation().$add({
+      uid: uid,
+      timestamp: $moment().toJSON(),
+    })
   };
 
   // Steps
@@ -654,12 +694,6 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
 
   var _goalsAdd = function (goal) {
 
-    // clean data
-    // firebase does not support date times, therefore convert it to JSON
-    if (key.includes('Date')) {
-      goal[key] = $moment(attribute).toJSON();
-    }
-
     // console.log(step);
     var ref = _getBaseRef().child('goals').child($moment(step.startDate).format('YYYY-MM-DD'));
     var id = objectHash.sha1(goal);
@@ -669,8 +703,8 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
 
 
   // Helper functions to get references
-  function returnArray(node) {
-    var ref = _getBaseRef().child(node);
+  function returnArray(node, uid) {
+    var ref = _getBaseRef(uid).child(node);
     return $firebaseArray(ref);
   }
 
@@ -699,7 +733,16 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
       sync: {
         all: _sync,
         last: _syncLast,
+      },
+      conversation: {
+        all: _cfgConversation,
+        last: _cfgConversationLast,
+        $add: _cfgConversationAdd,
       }
+    },
+    conversation: {
+      all: _conversation,
+      $add: _conversationAdd,
     },
     steps: {
       all: _steps,
@@ -781,6 +824,8 @@ services.factory('Authentication', function ($q, $firebaseAuth, uuid4, $timeout,
             goals = Storage.goals.last();
           }
         });
+
+        Storage.config.conversation.$add(userObject.uid);
 
 
         deferred.resolve(true);
