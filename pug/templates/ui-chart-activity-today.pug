@@ -15,8 +15,9 @@
 
   .chart-activity-today__legend
     .chart-activity-today-legend__today
-      div.value {{timesReached | number :0}} x
-      span.label hours per day
+      div.value {{timesReached | number :0}} hour
+        span(ng-if='timesReached > 1') s
+      span.label of active time
     .chart-activity-today-legend__icon
       i.material-icons av_timer
     .chart-activity-today-legend__goal

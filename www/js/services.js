@@ -271,91 +271,6 @@ services.service('Fitness', function ($q, $moment) {
     }
   };
 
-  var calculateDaySedentary = function (days, callback) {
-
-    var datapoints = {
-      active: [],
-      sedentary: []
-    };
-
-    datapoints.active = _.groupBy(days, function (day) {
-      return day.sourceName;
-    });
-    var sedentaryDatapoints = [];
-    var activeDatapoints = [];
-
-    _.each(datapoints.active, function (activeData, i) {
-      var previousEnd = undefined;
-      var previousStart = undefined;
-      var stepsTotal = 0;
-      _.each(activeData, function (step, i) {
-        var start = $moment(step.startDate);
-        var end = $moment(step.endDate);
-        var duration = Math.round(moment.duration(end.diff(start)).asMinutes());
-        var stepcount = step.value;
-        stepsTotal += stepcount;
-
-        if (duration < 6) {
-          previousStart = start;
-        } else {
-          var startDate = start;
-          if (previousStart !== undefined) {
-            startDate = previousStart;
-
-          }
-          activeDatapoints.push({
-            startDate: startDate,
-            endDate: end,
-            duration: duration,
-            sourceName: step.sourceName,
-            steps: stepcount,
-            stepsTotal: stepsTotal,
-          });
-          previousStart = undefined;
-        }
-
-        if (previousEnd === undefined) {
-          previousEnd = end;
-        } else if (previousStart === undefined) {
-          var startSedentary = previousEnd;
-          var endSedentary = start;
-
-          var sedentaryPhaseDuration = moment.duration(start.diff(startSedentary));
-          sedentaryDatapoints.push({
-            startDate: startSedentary,
-            endDate: endSedentary,
-            duration: Math.round(sedentaryPhaseDuration.asMinutes()),
-            sourceName: step.sourceName,
-          });
-          console.log('Start Sedentary: ' + step.sourceName + ' ' + startSedentary.format('HH:mm') + ' End: ' + endSedentary.format('HH:mm') + ' duration: ' + Math.round(sedentaryPhaseDuration.asMinutes()));
-          previousEnd = end;
-        } else {
-
-        }
-        //TODO: add last sedentary point of day
-
-        console.log('Start: ' + step.sourceName + ' ' + start.format('HH:mm') + ' End: ' + end.format('HH:mm') + ' duration: ' + duration);
-      });
-
-
-    });
-
-    var datapointsProcessed = {
-      active: [],
-      sedentary: []
-    };
-
-    datapointsProcessed.sedentary = _.groupBy(sedentaryDatapoints, function (day) {
-      return day.sourceName;
-    });
-
-    datapointsProcessed.active = _.groupBy(activeDatapoints, function (day) {
-      return day.sourceName;
-    });
-
-
-    callback(datapointsProcessed);
-  };
 
   var calculateDayActivity = function (day, callback) {
 
@@ -377,8 +292,11 @@ services.service('Fitness', function ($q, $moment) {
 
     var activeDataMs = [];
     var activeDataMin = [];
+    var activeTime = [];
+
     var totalMs = 0;
     var totalMin = 0;
+    var totalActiveTime = 0;
     for (var i = 0; i < 24; i++) {
       if (activity[i] !== undefined) {
         var ms = activity[i];
@@ -388,6 +306,12 @@ services.service('Fitness', function ($q, $moment) {
 
         activeDataMs.push(ms);
         activeDataMin.push(min);
+        // TODO: shift 13 to be in FB config
+        if (min > 13) {
+          activeTime.push(1);
+          totalActiveTime++;
+        }
+
       } else {
         activeDataMs.push(0);
         activeDataMin.push(0);
@@ -399,10 +323,12 @@ services.service('Fitness', function ($q, $moment) {
       activity: {
         ms: activeDataMs,
         min: activeDataMin,
+        activeTime: activeTime,
       },
       total: {
         ms: totalMs,
-        min: totalMin
+        min: totalMin,
+        activeTime: totalActiveTime,
       }
     });
   };
@@ -542,11 +468,14 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
 
   var _getBaseRef = function (uid) {
     // assuming a valid userid exists in local storage
-    var userId = $localStorage.user.uid;
-    if (uid !== undefined) {
-      userId = uid;
+    if ($localStorage.user !== undefined) {
+      var userId = $localStorage.user.uid;
+      if (uid !== undefined) {
+        userId = uid;
+      }
+      return firebase.database().ref().child('users').child(userId);
     }
-    return firebase.database().ref().child('users').child(userId);
+
   };
 
   var _user = function () {
@@ -579,10 +508,11 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
   var _conversationAdd = function (message, uid) {
 
     // add timestamp
-    message.timestamp = $moment().toJSON();
+    message.timestamp = firebase.database.ServerValue.TIMESTAMP;
 
     // add userid
     message.uid = $localStorage.user.uid;
+    message.alias = $localStorage.user.alias;
     _conversation(uid).$add(message);
 
   };
@@ -609,11 +539,21 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
     return returnLastFromArray('config/conversation');
   };
 
-  var _cfgConversationAdd = function (uid) {
+  var _cfgConversationAdd = function (uid, alias) {
     _cfgConversation().$add({
-      uid: uid,
-      timestamp: $moment().toJSON(),
+      uid: $localStorage.user.uid,
+      alias: $localStorage.user.alias,
+      timestamp: firebase.database.ServerValue.TIMESTAMP,
     })
+  };
+
+  var _chat = function () {
+    return returnObject('config/chat');
+  };
+
+  var _cfgGoals = function () {
+
+    return returnObject('config/goals');
   };
 
   // Steps
@@ -693,12 +633,9 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
   };
 
   var _goalsAdd = function (goal) {
-
-    // console.log(step);
-    var ref = _getBaseRef().child('goals').child($moment(step.startDate).format('YYYY-MM-DD'));
-    var id = objectHash.sha1(goal);
-
-    ref.child(id).set(goal);
+    // add server timestamp to goal
+    goal.timestamp = firebase.database.ServerValue.TIMESTAMP;
+    _goals().$add(goal);
   };
 
 
@@ -722,6 +659,11 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
 
   }
 
+  function returnObject(node) {
+    var ref = _getBaseRef().child(node);
+    return $firebaseObject(ref);
+  }
+
 
   return {
     user: _user,
@@ -738,7 +680,9 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
         all: _cfgConversation,
         last: _cfgConversationLast,
         $add: _cfgConversationAdd,
-      }
+      },
+      chat: _chat,
+      goals: _cfgGoals,
     },
     conversation: {
       all: _conversation,
@@ -762,13 +706,13 @@ services.service('Storage', function (_, $localStorage, $moment, hash,
       all: _goals,
       last: _goalsLast,
       lastItem: _goalsLastItem,
-      $add2: _goalsAdd
+      $add: _goalsAdd
     }
   }
 
 });
 
-services.factory('Authentication', function ($q, $firebaseAuth, uuid4, $timeout, $localStorage, Storage) {
+services.factory('Authentication', function ($q, $firebaseAuth, uuid4, $timeout, $localStorage, Storage, $window, $moment) {
   var _self = this;
   var authRetries = 3;
 
@@ -791,10 +735,13 @@ services.factory('Authentication', function ($q, $firebaseAuth, uuid4, $timeout,
         console.log('User created with uid: ' + firebaseUser.uid);
 
         var userObject = {
+          alias: $window.faker.name.firstName(),
+          type: 'participant',
           email: email,
           password: password,
+          group: 'A',
           uid: firebaseUser.uid,
-          date: firebase.database.ServerValue.TIMESTAMP,
+          timestamp: firebase.database.ServerValue.TIMESTAMP,
         };
 
         // store in localstorage
@@ -808,6 +755,27 @@ services.factory('Authentication', function ($q, $firebaseAuth, uuid4, $timeout,
         user.$value = userObject;
         user.$save();
 
+        // user talks in his own channel
+        Storage.config.conversation.$add(userObject.uid);
+
+        // chat is inactive per default
+        var chat = Storage.config.chat();
+        chat.$value = {
+          isActive: true, // true for this release
+        };
+        chat.$save();
+
+
+        var cfgGoals = Storage.config.goals();
+        cfgGoals.$value = {
+          default: {
+            active: 8,
+            steps: 10000,
+            expiresInSeconds: moment.duration(7, 'days').asSeconds(),
+          }
+        };
+        cfgGoals.$save();
+
         // init with default value
         var goals = Storage.goals.last().$loaded().then(function (goal) {
           console.log('last goal: ');
@@ -815,17 +783,13 @@ services.factory('Authentication', function ($q, $firebaseAuth, uuid4, $timeout,
 
           // initialize with default value
           if (goal[0] === undefined) {
-            goals = Storage.goals.all();
-            goals.$add({
+            Storage.goals.$add({
               steps: 10000,
               active: 8,
+              expiresAt: $moment().subtract(1, 'days').toJSON(), // make sure expiry date is before today
             });
-
-            goals = Storage.goals.last();
           }
         });
-
-        Storage.config.conversation.$add(userObject.uid);
 
 
         deferred.resolve(true);
@@ -935,17 +899,19 @@ services.service('Collector', function (Storage, Fitness, $moment, $timeout) {
   var timesCollected = 0;
 
   _self.collect = function () {
-    Storage.config.sync.last().$loaded().then(function (last) {
-      console.log('last: ' + last);
-      // initialize with default value
-      if (last[0] === undefined) {
-        Storage.config.sync.all().$add(lastSync.toJSON());
-      } else {
-        lastSync = $moment(last[0].$value);
-      }
-      console.log(lastSync.format('DD.MM.YYYY'));
+    _self.timeout = $timeout(function () {
 
-      _self.timeout = $timeout(function () {
+      Storage.config.sync.last().$loaded().then(function (last) {
+        console.log('last: ' + last);
+        // initialize with default value
+        if (last[0] === undefined) {
+          Storage.config.sync.all().$add(lastSync.toJSON());
+        } else {
+          lastSync = $moment(last[0].$value);
+        }
+        console.log(lastSync.format('DD.MM.YYYY'));
+
+
         Fitness.getStepsDay(lastSync, function (steps) {
           if (steps !== undefined) { // no data available
             _.each(steps, function (step) {
@@ -980,18 +946,20 @@ services.service('Collector', function (Storage, Fitness, $moment, $timeout) {
 
         });
 
-
+        // update sync marker
         if (!lastSync.isSame($moment(), 'day')) {
           Storage.config.sync.all().$add(lastSync.add(1, 'days').toJSON());
-          intervalInMs = 0;
+          //intervalInMs = 0;
           _self.collect();
         } else {
           console.log('reached today, stop collecting.');
         }
 
-      }, intervalInMs);
+      });
 
-    });
+
+    }, intervalInMs);
+
 
   };
 

@@ -10644,6 +10644,9 @@ a.button {
   background-clip: padding-box;
   /* stops bg color from leaking outside the border: */ }
 
+.button-recess--locked {
+  background-color: #bdc3c7; }
+
 .popup-container {
   padding: 1em; }
   .popup-container .popup {

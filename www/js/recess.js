@@ -1,5 +1,6 @@
 'use strict';
 
+
 var recess = angular.module('recess', [
   'ionic',
   'ngCordova',
@@ -23,15 +24,8 @@ recess.run(function ($ionicPlatform) {
       StatusBar.styleDefault();
     }
 
-    /*
-     if ('serviceWorker' in navigator) {
-     navigator.serviceWorker.register('service-worker.js').then(function () {
-     console.log('service worker installed');
-     }).catch(function (err) {
-     console.log('Error', err)
-     });
-     }
-     */
+    //window.device = {platform: 'desktop'};
+
 
   });
 

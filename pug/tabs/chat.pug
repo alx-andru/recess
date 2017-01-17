@@ -12,7 +12,7 @@ ion-view(view-title='Buddy' animation="no-animation").tab
         .msg()
           .text {{msg.text}}
           .timestamp {{msg.timestamp | date : 'shortTime'}}
-    span {{uid}}
+    #anchorScroll
 
 
   ion-footer-bar(keyboard-attach='true').bar-stable.item-input-inset

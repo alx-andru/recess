@@ -49,8 +49,10 @@ ion-view(view-title='Set your Goals' animation="no-animation").tab
           span &nbsp;hours a day.
 
       .ready
-        div(ng-click='setReadyGo()').button-recess Start Challenge
+        div(ng-click='setReadyGo()', ng-if='!isChallengeLocked').button-recess Start Challenge
+        div(ng-if='isChallengeLocked').button-recess.button-recess--locked New Challenge in {{goals.expiresIn}}
 
 
 
-  footer(goal-active='true', chat-active='true')
+
+  footer(goal-active='true', chat-active='chat.isActive')

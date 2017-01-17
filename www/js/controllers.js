@@ -1,5 +1,5 @@
 'use strict';
-
+var appVersion = '0.0.8';
 
 var controllers = angular.module('recess.controllers', [
   'ngStorage',
@@ -18,11 +18,13 @@ controllers.controller('MessengerController', function () {
 });
 
 
-controllers.controller('ChatController', function ($scope, $ionicScrollDelegate, $timeout, $moment, Storage) {
+controllers.controller('ChatController', function ($scope, $ionicScrollDelegate, $timeout, $moment, Storage, $location, $anchorScroll) {
   $scope.hideTime = true;
 
   var alternate;
   var isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
+
+  $location.hash('anchorScroll');
 
   $scope.sendMessage = function () {
     alternate = !alternate;
@@ -32,11 +34,13 @@ controllers.controller('ChatController', function ($scope, $ionicScrollDelegate,
       Storage.conversation.$add({
         text: $scope.data.message,
       }, uid);
+
+      $scope.data.message = undefined;
+      $ionicScrollDelegate.scrollBottom(false);
+      //$anchorScroll();
     });
 
 
-    delete $scope.message;
-    $ionicScrollDelegate.scrollBottom(false);
   };
 
 
@@ -44,7 +48,7 @@ controllers.controller('ChatController', function ($scope, $ionicScrollDelegate,
     if (isIOS) $scope.data.keyboardHeight = 216;
     $timeout(function () {
       $ionicScrollDelegate.scrollBottom(true);
-    }, 300);
+    }, 200);
   };
 
   $scope.inputDown = function () {
@@ -131,18 +135,21 @@ controllers.controller('ActivityController', function (_, Fitness, Storage, $sco
     }
   }
 
+
   $ionicPlatform.ready(function () {
 
     // save device information
     var dev = Storage.device();
-    var device;
+
     if (device !== undefined) {
+      device.appVersion = appVersion;
       // store in firebase
       delete device.uuid;
       delete device.serial;
       dev.$value = device;
       dev.$save();
     }
+
 
     Storage.goals.last().$loaded().then(function (goal) {
       if (goal[0] !== undefined) {
@@ -254,7 +261,7 @@ controllers.controller('ActivityController', function (_, Fitness, Storage, $sco
           } else {
             $scope.days[idx].reached.active = false;
           }
-          total += day.total.min;
+          total += day.total.activeTime;
           idx += 1;
         });
 
@@ -270,7 +277,7 @@ controllers.controller('ActivityController', function (_, Fitness, Storage, $sco
   });
 });
 
-controllers.controller('GoalController', function ($scope, $ionicPopup, Storage) {
+controllers.controller('GoalController', function ($scope, $ionicPopup, Storage, $moment) {
   $scope.goals = {
     steps: 0,
     active: 0,
@@ -278,10 +285,18 @@ controllers.controller('GoalController', function ($scope, $ionicPopup, Storage)
 
   Storage.goals.last().$loaded().then(function (goal) {
     if (goal[0] !== undefined) {
-      var id = goal[0].$id;
+
+      var expiresAt = $moment(goal[0].expiresAt);
+      var expiresInSeconds = 0;
+
+      $scope.isChallengeLocked = $moment().isSameOrBefore(expiresAt, 'day');
+      if ($scope.isChallengeLocked) {
+        expiresInSeconds = expiresAt.diff($moment(), 'seconds');
+      }
       $scope.goals = {
         steps: goal[0].steps,
-        active: goal[0].active
+        active: goal[0].active,
+        expiresIn: $moment.duration(expiresInSeconds, 'seconds').humanize(),
       }
 
     }
@@ -363,19 +378,16 @@ controllers.controller('GoalController', function ($scope, $ionicPopup, Storage)
       subTitle: 'Your goals will be set and you will not be able to change them for 7 days.',
       cssClass: 'popup-ready',
       scope: $scope,
-      buttons: [
-        {
-          text: 'Cancel',
-          type: 'button-recesss-ready-cancel'
-        },
-        {
-          text: '<b>Save</b>',
-          type: 'button-recesss-ready',
-          onTap: function (e) {
-            return true;
-          }
+      buttons: [{
+        text: 'Cancel',
+        type: 'button-recesss-ready-cancel'
+      }, {
+        text: '<b>Save</b>',
+        type: 'button-recesss-ready',
+        onTap: function (e) {
+          return true;
         }
-      ]
+      }]
     });
 
     popup.then(function (res) {
@@ -383,24 +395,26 @@ controllers.controller('GoalController', function ($scope, $ionicPopup, Storage)
       if (res) {
         console.log('time to set the goals for good: ' + $scope.goals.steps);
 
-        Storage.goals.all().$add({
-          steps: $scope.goals.steps,
-          active: $scope.goals.active,
+        Storage.config.goals().$loaded().then(function (cfgGoal) {
+          console.log('expires in seconds: ' + cfgGoal.default.expiresInSeconds);
+          Storage.goals.$add({
+            steps: $scope.goals.steps,
+            active: $scope.goals.active,
+            expiresAt: $moment().add(cfgGoal.default.expiresInSeconds, 'seconds').toJSON(),
+          });
+
+          // update goals for UI right away, reload will take it from FB
+          $scope.isChallengeLocked = true;
+          var expiresInSeconds = $moment().add(cfgGoal.default.expiresInSeconds, 'seconds').diff($moment(), 'seconds');
+          $scope.goals = {
+            steps: $scope.goals.steps,
+            active: $scope.goals.active,
+            expiresIn: $moment.duration(expiresInSeconds, 'seconds').humanize(),
+          }
         });
-        //Goal.setGoal('steps', $scope.goals.steps);
-        //Goal.setGoal('active', $scope.goals.active);
 
-        //var ref = firebase.database().ref().child('users/' + $rootScope.user.uid + '/goals');
-        //$scope.firegoals = $firebaseArray(ref);
-
-        //$scope.firegoals.$add({
-        //  timestamp: $moment().toJSON(),
-        //  goals: $scope.goals
-        //});
       }
-
     });
-
   }
 
 });
@@ -473,7 +487,7 @@ controllers.controller('WelcomeController', function (Authentication, $scope, $t
 
 });
 
-controllers.controller('RecessController', function (Authentication, $scope, $ionicSideMenuDelegate, $state, Storage) {
+controllers.controller('RecessController', function (Authentication, $scope, $ionicSideMenuDelegate, $state, Storage, $localStorage) {
 
   $scope.toggleMenu = function () {
     $ionicSideMenuDelegate.toggleRight();
@@ -489,8 +503,12 @@ controllers.controller('RecessController', function (Authentication, $scope, $io
     $state.go('welcome');
   };
 
-  $scope.user = Storage.user();
+  // if user doesn't exist yet, don't load it.
+  if ($localStorage.user !== undefined) {
+    $scope.user = Storage.user();
 
-  $scope.chatActive = true;
+    $scope.chat = Storage.config.chat();
+  }
+
 
 });

@@ -47,9 +47,11 @@ html
 
     script(src='lib/granim/dist/granim.min.js')
 
+    // manually copied from node_modules as bower has module conflicts
+    script(src='lib/faker/faker.js')
+
     script(src='lib/ngstorage/ngStorage.js')
     script(src='lib/object-hash/dist/object_hash.js')
-
 
     script(src='js/firebase.js')
     script(src='js/recess.js')
@@ -67,7 +69,9 @@ html
         .sidemenu__header
           .sidemenu__header-device
             i.material-icons smartphone
-            h1 ID: {{user.uid | limitTo : 5 : 0}}
+            h1 ID: {{user.uid | limitTo : 5 : 0}} - {{user.alias}}
+            h2 {{chat.isActive}}
+
 
           //.sidemenu__header-device-details
             div.sidemenu__header-device-details-detail
