@@ -27,6 +27,14 @@ recess.run(function ($ionicPlatform) {
     //window.device = {platform: 'desktop'};
 
 
+
+    window.FirebasePlugin.onNotificationOpen(function(notification) {
+      console.error(notification);
+    }, function(error) {
+      console.error(error);
+    });
+
+
   });
 
 });

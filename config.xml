@@ -18,9 +18,10 @@
   <preference name="BackupWebStorage" value="none"/>
   <preference name="SplashScreen" value="screen"/>
   <feature name="StatusBar">
-    <param name="ios-package" value="CDVStatusBar" onload="true"/>
+    <param name="ios-package" onload="true" value="CDVStatusBar"/>
   </feature>
   <platform name="ios">
+    <hook src="scripts/recess_edit_plist.js" type="after_prepare"/>
     <icon src="resources/ios/icon/icon.png" width="57" height="57"/>
     <icon src="resources/ios/icon/icon@2x.png" width="114" height="114"/>
     <icon src="resources/ios/icon/icon-40.png" width="40" height="40"/>
@@ -49,9 +50,6 @@
     <splash src="resources/ios/splash/Default-Portrait~ipad.png" width="768" height="1024"/>
     <splash src="resources/ios/splash/Default@2x~iphone.png" width="640" height="960"/>
     <splash src="resources/ios/splash/Default~iphone.png" width="320" height="480"/>
-
-    <hook type="after_prepare" src="scripts/recess_edit_plist.js" />
-
   </platform>
   <platform name="android">
     <icon src="resources/android/icon/drawable-ldpi-icon.png" density="ldpi"/>
@@ -74,4 +72,5 @@
     <splash src="resources/android/splash/drawable-port-xxxhdpi-screen.png" density="port-xxxhdpi"/>
   </platform>
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
+  <plugin name="cordova-plugin-firebase" spec="~0.1.18"/>
 </widget>

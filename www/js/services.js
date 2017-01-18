@@ -107,8 +107,8 @@ services.service('Fitness', function ($q, $moment) {
   };
 
   var _getTotalStepsThisWeek = function (callback) {
-    var startDate = $moment.utc().subtract(5, 'days').startOf('day');
-    var endDate = $moment.utc().endOf('day');
+    var startDate = $moment().subtract(6, 'days').startOf('day');
+    var endDate = $moment().endOf('day');
 
     getAggregatedData(startDate, endDate, 'steps', 'day').success(function (data) {
       if (data.length == 0) {
@@ -733,6 +733,8 @@ services.factory('Authentication', function ($q, $firebaseAuth, uuid4, $timeout,
 
       $firebaseAuth().$createUserWithEmailAndPassword(email, password).then(function (firebaseUser) {
         console.log('User created with uid: ' + firebaseUser.uid);
+        window.FirebasePlugin.setUserId(firebaseUser.uid);
+
 
         var userObject = {
           alias: $window.faker.name.firstName(),
@@ -790,6 +792,23 @@ services.factory('Authentication', function ($q, $firebaseAuth, uuid4, $timeout,
             });
           }
         });
+
+
+
+        window.FirebasePlugin.getToken(function (token) {
+          // save this server-side and use it to push notifications to this device
+          userObject.pushToken = token;
+          // store in firebase
+          user.$value = userObject;
+          user.$save();
+          console.log('get token: ' + token);
+        }, function (error) {
+          console.error(error);
+        });
+
+        window.FirebasePlugin.setUserProperty('alias', userObject.alias);
+
+
 
 
         deferred.resolve(true);

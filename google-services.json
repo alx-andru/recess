@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "105024553958",
+    "firebase_url": "https://recess-app-008.firebaseio.com",
+    "project_id": "recess-app-008",
+    "storage_bucket": "recess-app-008.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:105024553958:android:18a3dba99fdfbff8",
+        "android_client_info": {
+          "package_name": "com.alexandrugogan.app.recess"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "105024553958-pmc21ijikg70309g6e494pd5lm6ag933.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwP4REAzbKdFbBlOSqOexBHqAOcTLlDmg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

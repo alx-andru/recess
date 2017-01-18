@@ -67,7 +67,7 @@ ion-view(name='intro', hide-nav-bar='true', has-bouncing='false' )
                 p Keeping you on track with your progress and goals.
               .col-20.col-center.welcome-slide-content-content__toggle
                 label.toggle.toggle-balanced
-                  input(type='checkbox' ng-model='permissions.notifications', ng-change='askPermissionPush()')
+                  input(type='checkbox' ng-model='permissions.notifications', ng-change='askPushNotificationPermission()')
                   .track
                     .handle
 

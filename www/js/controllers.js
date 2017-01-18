@@ -9,16 +9,26 @@ controllers.config(function () {
   // configuration
 });
 
-controllers.controller('DemoController', function () {
+controllers.controller('DemoController', function ($ionicPlatform) {
+  $ionicPlatform.ready(function () {
+    window.FirebasePlugin.logEvent('page_view', {page: 'demo'});
+  });
 
 });
 
-controllers.controller('MessengerController', function () {
+controllers.controller('MessengerController', function ($ionicPlatform) {
+  $ionicPlatform.ready(function () {
+    window.FirebasePlugin.logEvent('page_view', {page: 'messenger'});
+  });
 
 });
 
 
-controllers.controller('ChatController', function ($scope, $ionicScrollDelegate, $timeout, $moment, Storage, $location, $anchorScroll) {
+controllers.controller('ChatController', function ($ionicPlatform, $scope, $ionicScrollDelegate, $timeout, $moment, Storage, $location, $anchorScroll) {
+  $ionicPlatform.ready(function () {
+    window.FirebasePlugin.logEvent('page_view', {page: 'chat'});
+  });
+
   $scope.hideTime = true;
 
   var alternate;
@@ -73,8 +83,6 @@ controllers.controller('ChatController', function ($scope, $ionicScrollDelegate,
 controllers.controller('ActivityController', function (_, Fitness, Storage, $scope, $ionicPlatform, Collector, $moment) {
 
 
-
-
   /*
    var goals = Storage.goals.last().$loaded().then(function (goal) {
    console.log('last goal: ');
@@ -126,7 +134,7 @@ controllers.controller('ActivityController', function (_, Fitness, Storage, $sco
       });
     } else {
       $scope.days.push({
-        label: $moment.utc().subtract(i, 'days').format('dd'),
+        label: $moment().subtract(i, 'days').format('dd'),
         reached: {
           steps: false,
           active: false
@@ -137,6 +145,7 @@ controllers.controller('ActivityController', function (_, Fitness, Storage, $sco
 
 
   $ionicPlatform.ready(function () {
+    window.FirebasePlugin.logEvent('page_view', {page: 'activity'});
 
     // save device information
     var dev = Storage.device();
@@ -250,22 +259,26 @@ controllers.controller('ActivityController', function (_, Fitness, Storage, $sco
       console.log('Active data of week returned:');
       console.log(active);
       if (active !== undefined) {
+
+
         active.days = _.sortKeysBy(active.days);
         var days = [];
         var total = 0;
         var idx = 0;
-        _.each(active.days, function (day) {
+        _.each(active.days, function (day, i) {
           days.push(day.total.min);
-          if (day.total.min >= $scope.goals.active && $scope.goals.active > 0) {
+          if (day.total.activeTime >= $scope.goals.active && $scope.goals.active > 0) {
             $scope.days[idx].reached.active = true;
           } else {
             $scope.days[idx].reached.active = false;
           }
+
           total += day.total.activeTime;
           idx += 1;
+          $scope.activeWeekDetail[6 - Object.keys(active.days).length + idx] = day.total.min;
         });
 
-        $scope.activeWeekDetail = days;
+        //$scope.activeWeekDetail = days;
         $scope.activeWeek = total;
       } else {
         $scope.activeWeekDetail = 0;
@@ -277,7 +290,12 @@ controllers.controller('ActivityController', function (_, Fitness, Storage, $sco
   });
 });
 
-controllers.controller('GoalController', function ($scope, $ionicPopup, Storage, $moment) {
+controllers.controller('GoalController', function ($ionicPlatform, $scope, $ionicPopup, Storage, $moment) {
+
+  $ionicPlatform.ready(function () {
+    window.FirebasePlugin.logEvent('page_view', {page: 'goal'});
+  });
+
   $scope.goals = {
     steps: 0,
     active: 0,
@@ -419,9 +437,14 @@ controllers.controller('GoalController', function ($scope, $ionicPopup, Storage,
 
 });
 
-controllers.controller('WelcomeController', function (Authentication, $scope, $timeout, $ionicPopup, $ionicSlideBoxDelegate, $localStorage,
+controllers.controller('WelcomeController', function ($ionicPlatform, Authentication, $scope, $timeout, $ionicPopup, $ionicSlideBoxDelegate, $localStorage,
                                                       Permissions) {
-  console.log('Welcome Controller');
+
+
+  $ionicPlatform.ready(function () {
+    console.log('Welcome Controller');
+    window.FirebasePlugin.logEvent('page_view', {page: 'welcome'});
+  });
 
   $scope.permissions = $localStorage.permissions;
 
@@ -447,6 +470,11 @@ controllers.controller('WelcomeController', function (Authentication, $scope, $t
     }).error(function (error) {
       console.error(error);
     });
+  };
+
+  $scope.askPushNotificationPermission = function () {
+    window.FirebasePlugin.grantPermission();
+
   };
 
   $scope.next = function (idx) {
@@ -505,9 +533,23 @@ controllers.controller('RecessController', function (Authentication, $scope, $io
 
   // if user doesn't exist yet, don't load it.
   if ($localStorage.user !== undefined) {
-    $scope.user = Storage.user();
+    Storage.user().$loaded().then(function (user) {
+      window.FirebasePlugin.onTokenRefresh(function (token) {
+        // save this server-side and use it to push notifications to this device
+        console.log('Push Token refresh: ' + token);
+        user.pushToken = token;
+        // store in firebase
+        user.$save();
+
+        $scope.user = user;
+      }, function (error) {
+        console.error(error);
+      });
+    });
 
     $scope.chat = Storage.config.chat();
+
+
   }
 
 
