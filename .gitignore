@@ -51,3 +51,7 @@ www/*/*.html
 www/js/firebase.json
 www/js/firebase*.js
 www/js/firebase.json
+
+google-services*.json
+GoogleService-Info*.plist
+

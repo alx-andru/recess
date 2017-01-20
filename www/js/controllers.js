@@ -1,5 +1,5 @@
 'use strict';
-var appVersion = '0.0.8';
+var appVersion = '0.0.9';
 
 var controllers = angular.module('recess.controllers', [
   'ngStorage',

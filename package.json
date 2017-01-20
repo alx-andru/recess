@@ -1,6 +1,6 @@
 {
   "name": "recess-app",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "recess-app: An Ionic project",
   "dependencies": {
     "faker": "^3.1.0",
