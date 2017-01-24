@@ -45,6 +45,9 @@ recess.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider
   // force tabs for android to be displayed at the bottom as well
   $ionicConfigProvider.tabs.position('bottom');
 
+  // disable all transistions for performance reasons
+  $ionicConfigProvider.views.transition('none');
+
   $stateProvider
   // Welcome
     .state('welcome', {

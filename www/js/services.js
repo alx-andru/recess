@@ -232,6 +232,7 @@ services.service('Fitness', function ($q, $moment) {
       total: {
         ms: 0,
         min: 0,
+        hours: 0,
       }
     };
 
@@ -251,6 +252,7 @@ services.service('Fitness', function ($q, $moment) {
             activity.days[day] = activityData;
             activity.total.ms += activityData.total.ms;
             activity.total.min += activityData.total.min;
+            //activity.total.hours =
 
             // when last Data is reached, return callback
             if (Object.keys(activity.days).length === daysCollected) {

@@ -275,7 +275,8 @@ controllers.controller('ActivityController', function (_, Fitness, Storage, $sco
 
           total += day.total.activeTime;
           idx += 1;
-          $scope.activeWeekDetail[6 - Object.keys(active.days).length + idx] = day.total.min;
+          // if no data is available for days, make sure that the values we have are filled in the right spot
+          $scope.activeWeekDetail[6 - Object.keys(active.days).length + idx] = day.total.activeTime;
         });
 
         //$scope.activeWeekDetail = days;

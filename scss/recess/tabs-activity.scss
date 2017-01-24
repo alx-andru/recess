@@ -133,7 +133,7 @@
 }
 
 .half-left, .half-right {
-  color: $primary_steps;
+  color: lighten($primary_steps, 40%);
 
   font-size: 1.5em;
   width: 0.75em;
@@ -151,7 +151,7 @@
 }
 
 .half-right {
-  color: $primary_active;
+  color: lighten($primary_active, 40%);
   overflow: hidden;
   i {
     margin-left: -1em;

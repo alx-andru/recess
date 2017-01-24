@@ -10380,7 +10380,7 @@ a.button {
   flex-grow: 1; }
 
 .half-left, .half-right {
-  color: #27ae60;
+  color: #b3eecc;
   font-size: 1.5em;
   width: 0.75em;
   overflow: hidden;
@@ -10393,7 +10393,7 @@ a.button {
     padding: 0; }
 
 .half-right {
-  color: #2980b9;
+  color: #bedcf0;
   overflow: hidden; }
   .half-right i {
     margin-left: -1em; }

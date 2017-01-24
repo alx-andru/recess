@@ -791,7 +791,7 @@ directives.directive('uiChartActivityWeek', function ($moment, _) {
                 ticks: {
                   beginAtZero: true,
                   min: 1,
-                  max: 300
+                  max: 24
                 }
               }]
             },
