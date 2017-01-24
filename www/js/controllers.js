@@ -82,7 +82,7 @@ controllers.controller('ChatController', function ($ionicPlatform, $scope, $ioni
 
 controllers.controller('ActivityController', function (_, Fitness, Storage, $scope, $ionicPlatform, Collector, $moment) {
 
-
+  $scope.activityTitle = 'Activity today';
   /*
    var goals = Storage.goals.last().$loaded().then(function (goal) {
    console.log('last goal: ');
@@ -288,6 +288,22 @@ controllers.controller('ActivityController', function (_, Fitness, Storage, $sco
     });
 
   });
+
+  $scope.slideHasChanged = function (index) {
+    switch(index) {
+      case 0:
+        $scope.activityTitle = 'Activity today';
+        break;
+      case 1:
+        $scope.activityTitle = 'Activity last 7 days';
+        break;
+      default:
+        $scope.activityTitle = 'Activity';
+
+    }
+  }
+
+
 });
 
 controllers.controller('GoalController', function ($ionicPlatform, $scope, $ionicPopup, Storage, $moment) {

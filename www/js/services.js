@@ -733,7 +733,7 @@ services.factory('Authentication', function ($q, $firebaseAuth, uuid4, $timeout,
 
       $firebaseAuth().$createUserWithEmailAndPassword(email, password).then(function (firebaseUser) {
         console.log('User created with uid: ' + firebaseUser.uid);
-        window.FirebasePlugin.setUserId(firebaseUser.uid);
+        $window.FirebasePlugin.setUserId(firebaseUser.uid);
 
 
         var userObject = {
@@ -795,7 +795,7 @@ services.factory('Authentication', function ($q, $firebaseAuth, uuid4, $timeout,
 
 
 
-        window.FirebasePlugin.getToken(function (token) {
+        $window.FirebasePlugin.getToken(function (token) {
           // save this server-side and use it to push notifications to this device
           userObject.pushToken = token;
           // store in firebase
@@ -806,7 +806,7 @@ services.factory('Authentication', function ($q, $firebaseAuth, uuid4, $timeout,
           console.error(error);
         });
 
-        window.FirebasePlugin.setUserProperty('alias', userObject.alias);
+        $window.FirebasePlugin.setUserProperty('alias', userObject.alias);
 
 
 

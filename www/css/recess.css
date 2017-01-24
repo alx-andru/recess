@@ -10370,7 +10370,7 @@ a.button {
   flex-direction: "row";
   align-items: center;
   justify-content: space-between;
-  padding: 1em 0; }
+  padding: 0.5em 0; }
 
 .full {
   display: flex;
@@ -10439,7 +10439,8 @@ a.button {
   display: none; }
 
 .chart-activity-today__barchart {
-  height: 5em;
+  max-height: 5em;
+  min-height: 3em;
   width: 100%;
   padding: 0 0.8em; }
   .chart-activity-today__barchart canvas {

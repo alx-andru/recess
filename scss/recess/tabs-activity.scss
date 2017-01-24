@@ -120,7 +120,7 @@
 .achievements {
   //background-color: $greensea;
   @include flex('row');
-  padding: 1em 0;
+  padding: 0.5em 0;
 
 }
 
@@ -208,8 +208,8 @@
 
 .chart-activity-today__barchart {
   //background-color: red;
-  height: 5em;
-
+  max-height: 5em;
+  min-height: 3em;
   width: 100%;
   padding: 0 0.8em;
 
