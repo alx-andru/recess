@@ -1,11 +1,13 @@
 {
-  "name": "My Ionic App",
-  "short_name": "My Ionic App",
+  "name": "Recess Study",
+  "short_name": "Recess",
   "start_url": "index.html",
   "display": "standalone",
   "icons": [{
-    "src": "icon.png",
+    "src": "assets/imgs/logo.png",
     "sizes": "512x512",
     "type": "image/png"
-  }]
+  }],
+  "background_color": "#f1c40f",
+  "theme_color": "#f1c40f"
 }

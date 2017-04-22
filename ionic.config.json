@@ -1,12 +1,6 @@
 {
   "name": "recess-app",
-  "app_id": "recess-app",
-  "gulpStartupTasks": [
-    "sass",
-    "watch"
-  ],
-  "watchPatterns": [
-    "www/**/*",
-    "!www/lib/**/*"
-  ]
+  "app_id": "recess",
+  "v2": true,
+  "typescript": true
 }
