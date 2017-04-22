@@ -1,0 +1,32 @@
+page-chat-inactive {
+
+  ion-content {
+    text-align: center;
+
+  }
+
+  .badge {
+    padding-top: 20%;
+    img {
+      max-width: 50%;
+    }
+
+  }
+  .comeback {
+    font-weight: bold;
+  }
+
+  .coach {
+    height: 100%;
+    padding-top: 10%;
+    h1 {
+      margin-top: 20rem;
+    }
+
+    p {
+      padding: 0 4rem;
+      color: $recess_base_contrast_3;
+    }
+
+  }
+}

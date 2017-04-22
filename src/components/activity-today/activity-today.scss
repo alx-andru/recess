@@ -1,0 +1,47 @@
+activity-today {
+
+  .wrap {
+    height: 21.5rem;
+
+    .bars {
+      @include flex('row');
+      height: 10rem;
+      max-height: 12rem;
+      padding: 0 2rem;
+
+      .bar {
+        display: block;
+        width: 0.8rem;
+        height: 15rem;
+        max-height: 100%;
+        @include border-radius(2rem);
+        background-color: $recess_base_2;
+        &.highlight {
+          background-color: $primary_active;
+        }
+        &.highlight-buddy {
+          background-color: $secondary_active;
+        }
+        &.selected {
+          background-color: $primary_recess;
+        }
+
+      }
+      &:last-child {
+        //margin-right: 0;
+      }
+    }
+
+    .legend {
+      @include flex('row');
+      padding: 0.5rem 2rem 0 2rem;
+      font-size: 1.4rem;
+    }
+  }
+
+
+
+
+
+}
+

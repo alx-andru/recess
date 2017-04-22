@@ -1,0 +1,12 @@
+ui-tooltip {
+  width: 100%;
+  @include flex();
+  font-size: 1.4rem;
+  height: 3rem;
+
+  .tooltip {
+    @include flex('row');
+    align-items: center;
+    justify-content: flex-start;
+  }
+}

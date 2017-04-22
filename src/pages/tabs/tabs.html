@@ -1,0 +1,4 @@
+<ion-tabs class="tabs-recess" selectedIndex="1" [ngClass]="{'hideTabs':hideTabs}">
+  <ion-tab *ngFor="let tab of tabs" [root]="tab.root" [tabIcon]="tab.icon" [tabBadgeStyle]="danger" [tabBadge]="tab.badge"></ion-tab>
+
+</ion-tabs>

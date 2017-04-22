@@ -1,0 +1,199 @@
+//TODO create reusable mixin
+
+.alert--select-goal {
+  &.alert--select-goal {
+    * {
+      color: $recess_base_1;
+      border: 0;
+    }
+
+    .alert-wrapper {
+      background-color: $primary_steps !important;
+
+      .alert-sub-title {
+        color: $recess_base_1;
+        padding: 0 2rem;
+      }
+    }
+  }
+
+  .alert-checkbox-group, .alert-radio-group, .alert-checkbox-group {
+    border: 0 !important;
+    padding: 0 6rem;
+  }
+
+  .alert-button-group {
+    padding: 1rem;
+
+    .alert-button {
+      border: 0 !important;
+      &:last-child {
+        background-color: $recess_base_1;
+        @include border-radius(2rem);
+        & .button-inner {
+          color: $primary_steps;
+          padding: 0 2rem;
+        }
+      }
+    }
+
+  }
+
+  button[aria-checked=true] .alert-radio-label {
+    color: $recess_base_1;
+    font-weight: 700;
+  }
+
+}
+
+////
+
+.alert--select-activity {
+  &.alert--select-activity {
+    * {
+      color: $recess_base_1;
+      border: 0;
+    }
+
+    .alert-wrapper {
+      background-color: $primary_active !important;
+
+      .alert-sub-title {
+        color: $recess_base_1;
+        padding: 0 2rem;
+      }
+    }
+  }
+
+  .alert-checkbox-group, .alert-radio-group, .alert-checkbox-group {
+    border: 0 !important;
+    padding: 0 6rem;
+  }
+
+  .alert-button-group {
+    padding: 1rem;
+
+    .alert-button {
+      border: 0 !important;
+      &:last-child {
+        background-color: $recess_base_1;
+        @include border-radius(2rem);
+        & .button-inner {
+          color: $primary_active;
+          padding: 0 2rem;
+        }
+      }
+    }
+  }
+
+  button[aria-checked=true] .alert-radio-label {
+    color: $recess_base_1;
+    font-weight: 700;
+  }
+
+}
+
+////
+
+.alert--select-start {
+  &.alert--select-start {
+    * {
+      color: $recess_base_contrast_1;
+      border: 0;
+    }
+
+    .alert-wrapper {
+      background-color: $primary_recess !important;
+
+      .alert-sub-title {
+        color: $recess_base_contrast_1;
+        padding: 0 2rem;
+      }
+    }
+  }
+
+  .alert-checkbox-group, .alert-radio-group, .alert-checkbox-group {
+    border: 0 !important;
+    padding: 0 2rem;
+  }
+
+  .alert-button-group {
+    padding: 1rem;
+
+    .alert-button {
+      border: 0 !important;
+      &:last-child {
+        background-color: $recess_base_1;
+        @include border-radius(2rem);
+        & .button-inner {
+          color: $recess_base_contrast_1;
+          padding: 0 2rem;
+        }
+      }
+    }
+  }
+
+  button[aria-checked=true] .alert-radio-label {
+    color: $recess_base_contrast_1;
+    font-weight: 700;
+  }
+
+}
+
+.alert-ios {
+
+  button[aria-checked=true] .alert-radio-inner {
+    border-color: $recess_base_1;
+    font-weight: 700;
+  }
+
+}
+
+.alert-md {
+  .button-inner .alert-radio-icon {
+    border-color: $recess_base_1;
+    .alert-radio-inner {
+      background-color: $recess_base_1;
+    }
+  }
+
+  button[aria-checked=true] .alert-radio-icon {
+    border-color: $recess_base_1;
+  }
+
+}
+
+// TODO select alert--select-start
+.select-alert {
+  .alert-wrapper {
+    background-color: $primary_recess !important;
+    .alert-radio-group {
+      border: none;
+
+      button[aria-checked=true] {
+        .alert-radio-label {
+          color: $recess_base_3;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .alert-button-group {
+      .alert-button {
+        border: none;
+        color: $recess_base_contrast_1;
+
+        &.activated {
+          background: none;
+          @include border-radius(2rem);
+        }
+      }
+
+    }
+  }
+}
+
+
+
+
+

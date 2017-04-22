@@ -1,0 +1,138 @@
+{
+  "date": 1492138799999,
+  "details": {
+    "0": {
+      "active": false,
+      "label": "0-1am",
+      "selected": false,
+      "value": 0
+    },
+    "1": {
+      "active": false,
+      "label": "1-2am",
+      "selected": false,
+      "value": 0
+    },
+    "2": {
+      "active": false,
+      "label": "2-3am",
+      "selected": false,
+      "value": 0
+    },
+    "3": {
+      "active": false,
+      "label": "3-4am",
+      "selected": false,
+      "value": 0
+    },
+    "4": {
+      "active": false,
+      "label": "4-5am",
+      "selected": false,
+      "value": 0
+    },
+    "5": {
+      "active": false,
+      "label": "5-6am",
+      "selected": false,
+      "value": 553350
+    },
+    "6": {
+      "active": true,
+      "label": "7-8am",
+      "selected": false,
+      "value": 1729800
+    },
+    "7": {
+      "active": false,
+      "label": "8-9am",
+      "selected": false,
+      "value": 0
+    },
+    "8": {
+      "active": false,
+      "label": "9-10am",
+      "selected": false,
+      "value": 0
+    },
+    "9": {
+      "active": false,
+      "label": "10-11am",
+      "selected": false,
+      "value": 0
+    },
+    "10": {
+      "active": false,
+      "label": "11-12pm",
+      "selected": false,
+      "value": 0
+    },
+    "11": {
+      "active": false,
+      "label": "12-1pm",
+      "selected": false,
+      "value": 0
+    },
+    "12": {
+      "active": false,
+      "label": "1-2pm",
+      "selected": false,
+      "value": 0
+    },
+    "13": {
+      "active": false,
+      "label": "2-3pm",
+      "selected": false,
+      "value": 0
+    },
+    "14": {
+      "active": false,
+      "label": "3-4pm",
+      "selected": false,
+      "value": 0
+    },
+    "15": {
+      "active": false,
+      "label": "4-5pm",
+      "selected": false,
+      "value": 0
+    },
+    "16": {
+      "active": false,
+      "label": "5-6pm",
+      "selected": false,
+      "value": 0
+    },
+    "17": {
+      "active": false,
+      "label": "6-7pm",
+      "selected": false,
+      "value": 0
+    },
+    "18": {
+      "active": false,
+      "label": "7-8pm",
+      "selected": false,
+      "value": 0
+    },
+    "19": {
+      "active": false,
+      "label": "8-9pm",
+      "selected": false,
+      "value": 0
+    },
+    "20": {
+      "active": false,
+      "label": "10-11pm",
+      "selected": false,
+      "value": 0
+    },
+    "21": {
+      "active": false,
+      "label": "11-12am",
+      "selected": false,
+      "value": 0
+    }
+  },
+  "totalHours": 1
+}

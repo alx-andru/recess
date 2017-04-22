@@ -1,0 +1,16 @@
+<ion-content padding>
+
+  <div class="coach">
+    <h1>Set your goals</h1>
+    <p>Soon you will be able to set your own fitness goals.</p>
+    <p>Be active for {{goals.activity}} hours a day.</p>
+    <p>Walk {{goals.steps | number:0}} steps a day.</p>
+
+    <div class="comeback">
+      Come back in {{backinDays | number:0}} day<span *ngIf="backinDays>1">s</span>.
+    </div>
+
+  </div>
+
+
+</ion-content>

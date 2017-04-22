@@ -1,0 +1,13 @@
+{
+  "name": "Recess Study",
+  "short_name": "Recess",
+  "start_url": "index.html",
+  "display": "standalone",
+  "icons": [{
+    "src": "assets/imgs/logo.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }],
+  "background_color": "#f1c40f",
+  "theme_color": "#f1c40f"
+}

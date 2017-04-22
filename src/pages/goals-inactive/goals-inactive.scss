@@ -1,0 +1,25 @@
+page-goals-inactive {
+
+  ion-content {
+    text-align: center;
+
+  }
+
+  .comeback {
+    font-weight: bold;
+  }
+
+  .coach {
+    height: 100%;
+    padding-top: 40%;
+    h1 {
+      margin-top: 20rem;
+    }
+
+    p {
+      padding: 0 4rem;
+      color: $recess_base_contrast_3;
+    }
+
+  }
+}

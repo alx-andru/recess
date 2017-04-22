@@ -1,0 +1,233 @@
+
+page-intro {
+
+  .recess-steps {
+    color: $primary_steps;
+    font-weight: 600;
+  }
+
+  .recess-activity {
+    color: $primary_active;
+    font-weight: 600;
+  }
+
+  background-color: $primary_recess;
+
+  .bar-button-default-ios, .bar-button-default.bar-button-ios-default, .bar-button-clear-ios-default {
+    color: $recess_base_contrast_3;
+  }
+
+  .swiper-wrapper {
+    height: 92%;
+  }
+
+  ion-content {
+    height: 100%;
+    &.content {
+      background: none;
+
+      & .scroll-content {
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+      }
+    }
+
+    ion-slide {
+      height: 100%;
+
+      &.activity {
+        @include flex();
+        justify-content: flex-start;
+        margin-bottom: 5rem;
+        overflow: hidden;
+
+        .text {
+          height: 15rem;
+          padding: 0 4rem;
+
+          .tab-icon {
+            i {
+              font-size: 4rem;
+            }
+          }
+        }
+
+        .image {
+          overflow: hidden;
+          img {
+            width: 90%;
+          }
+        }
+
+      }
+
+      &.activity-2 {
+        height: 100%;
+        .slide-zoom {
+          height: 100%;
+          @include flex('row');
+          justify-content: flex-start;
+
+          .image {
+            background-color: $primary_recess;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            display: block;
+
+            text-align: left;
+
+            img {
+              height: 100%;
+
+            }
+          }
+          .text {
+            background-color: $primary_recess;
+            height: 100%;
+            width: 100%;
+            @include flex();
+            justify-content: space-between;
+            padding: 8rem 0;
+            margin-right: 2rem;
+
+            .star {
+              @include flex('row');
+              align-items: center;
+              justify-content: center;
+              img {
+                width: 5rem;
+              }
+            }
+
+          }
+        }
+
+      }
+
+      &.activity-3 {
+        height: 100%;
+        .slide-zoom {
+          height: 100%;
+          overflow: hidden;
+          .text {
+            height: 15rem;
+            img {
+              width: 5rem;
+            }
+
+            padding: 0 4rem;
+          }
+        }
+      }
+
+      &.activity-4 {
+        height: 100%;
+        .slide-zoom {
+          height: 100%;
+          overflow: hidden;
+          .text {
+            height: 15rem;
+            img {
+              width: 5rem;
+            }
+
+            padding: 0 4rem;
+            text-align: center;
+            .tab-icon {
+              @include flex();
+              justify-content: center;
+              text-align: center;
+              i {
+                padding-left: 4rem;
+                font-size: 4rem;
+              }
+            }
+          }
+        }
+      }
+
+      &.activity-5 {
+        height: 100%;
+        .slide-zoom {
+          height: 100%;
+          @include flex('row');
+          justify-content: flex-start;
+          overflow: hidden;
+          .image {
+            background-color: $primary_recess;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            display: block;
+
+            text-align: left;
+
+            img {
+              height: 100%;
+
+            }
+          }
+          .text {
+            background-color: $primary_recess;
+            height: 100%;
+            width: 100%;
+            @include flex();
+            justify-content: flex-start;
+            padding: 8rem 0;
+            margin-right: 2rem;
+            .tab-icon {
+
+              i {
+                font-size: 4rem;
+              }
+            }
+          }
+        }
+      }
+
+      &.activity-6 {
+        height: 100%;
+        .slide-zoom {
+          height: 100%;
+          overflow: hidden;
+          .text {
+            height: 15rem;
+            img {
+              width: 5rem;
+            }
+
+            padding: 0 4rem;
+          }
+        }
+      }
+
+      &.activity-7 {
+        height: 100%;
+        .slide-zoom {
+          height: 100%;
+          overflow: hidden;
+
+          .text {
+
+            padding: 20% 8rem 0 8rem;
+
+
+            &:first-child {
+              img {
+                width: 15rem;
+                padding-bottom: 4rem;
+              }
+            }
+
+          }
+        }
+      }
+
+    }
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: $recess_base_contrast_3;
+  }
+}

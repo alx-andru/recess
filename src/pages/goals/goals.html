@@ -1,0 +1,74 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Set your Goals</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content no-bounce padding>
+
+  <div class="wrap">
+
+    <div class="steps">
+
+      <div class="icon icon-steps">
+        <i class="material-icons">directions_run</i>
+      </div>
+
+      <div class="title">Steps</div>
+
+      <div class="description">Walking keeps you active, is good for your balance, blood pressure.</div>
+
+      <div class="selection">
+
+        <div class="prefix">I'm walking</div>
+
+        <div class="selector" (tap)="showSteps()">
+          <div class="value value--steps">{{goals.steps | number:0}}</div>
+          <div class="dials">
+            <i class="material-icons">expand_less</i>
+            <i class="material-icons">expand_more</i>
+          </div>
+        </div>
+
+        <div class="postfix">steps a day.</div>
+
+      </div>
+    </div>
+
+    <div class="steps">
+
+      <div class="icon icon-activity">
+        <i class="material-icons">whatshot</i>
+      </div>
+
+      <div class="title">Active all day</div>
+
+      <div class="description">Walk at least 200 steps a minute for 11 minutes an hour.</div>
+
+      <div class="selection">
+
+        <div class="prefix">I'm active in</div>
+
+        <div class="selector" (tap)="showActivity()">
+          <div class="value value--activity">{{goals.activity | number:0}}</div>
+          <div class="dials">
+            <i class="material-icons">expand_less</i>
+            <i class="material-icons">expand_more</i>
+          </div>
+        </div>
+
+        <div class="postfix">hours a day.</div>
+
+      </div>
+    </div>
+
+    <div class="start">
+      <div class="recess-button" (tap)="showChallenge()">Start Challenge</div>
+    </div>
+
+
+  </div>
+
+</ion-content>

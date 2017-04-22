@@ -1,0 +1,11 @@
+<div class="full" [ngClass]="{'full-buddy':isBuddy}" (tap)="presentPopover()">
+  <div class="half-left">
+    <i class="material-icons notreached" *ngIf="!isStepsAchieved">star_border</i>
+    <i class="material-icons" *ngIf="isStepsAchieved">star</i>
+  </div>
+
+  <div class="half-right">
+    <i class="material-icons notreached" *ngIf="!isActivityAchieved">star_border</i>
+    <i class="material-icons" *ngIf="isActivityAchieved">star</i>
+  </div>
+</div>

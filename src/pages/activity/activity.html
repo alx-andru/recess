@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar>
+
+    <!--
+    <ion-buttons>
+      <button ion-button icon-only (click)="presentPopover($event)" class="phases" #assistant>
+        <ion-icon name="flash-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+    //-->
+
+    <ion-title class="activity-title">
+      <i class="material-icons white" *ngIf="isBuddyActive">arrow_drop_down</i>
+      {{title}}
+      <i class="material-icons" *ngIf="isBuddyActive">arrow_drop_down</i>
+    </ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="presentPopoverHelp($event)">
+        <ion-icon name="help-buoy"></ion-icon>
+      </button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content no-bounce scroll="false">
+
+  <ion-refresher (ionRefresh)="doRefresh($event)" [enabled]="true">
+    <ion-refresher-content
+      pullingIcon="person"
+      pullingText="Pull to switch user"
+      refreshingSpinner="person"
+      refreshingText="Switching...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+
+  <ion-slides pager (ionSlideDidChange)="slideChanged()">
+    <ion-slide>
+      <div class="activities">
+
+        <steps-today [refresh]="refresh" [isBuddy]=isBuddy (goalReachedToday)="stepsReachedToday($event)"></steps-today>
+
+        <achievements [achievements]="achievementsToday" [isBuddy]=isBuddy></achievements>
+
+        <activity-today [refresh]="refresh" [isBuddy]=isBuddy
+                        (goalReachedToday)="activityReachedToday($event)"></activity-today>
+
+        <div class="pager-spacer"></div>
+      </div>
+    </ion-slide>
+
+    <ion-slide>
+      <div class="activities">
+
+
+        <steps-week [refresh]="refresh" [isBuddy]=isBuddy (goalReachedWeek)="stepsReachedWeek($event)"></steps-week>
+
+        <achievements [achievements]="achievementsWeek" [isBuddy]=isBuddy></achievements>
+
+        <activity-week [refresh]="refresh" [isBuddy]=isBuddy
+                       (goalReachedWeek)="activityReachedWeek($event)"></activity-week>
+
+
+        <div class="pager-spacer"></div>
+      </div>
+    </ion-slide>
+
+  </ion-slides>
+
+
+</ion-content>

@@ -1,0 +1,41 @@
+ui-achieved-and-goal {
+  height: 4rem;
+  #stats {
+    //background-color: $emerald;
+    @include flex('row');
+    width: 100%;
+
+    padding: 1rem 2rem;
+
+    .today, .goal {
+      grow: 3;
+      width: 100%;
+    }
+
+    .icon {
+      width: 100%;
+      grow: 1;
+      i {
+        font-size: 4rem;
+        color: $primary_active;
+      }
+    }
+
+    .icon-buddy {
+      i {
+        color: $secondary_active;
+      }
+    }
+
+    .value {
+      font-size: 2rem;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 1.2rem;
+    }
+
+  }
+}

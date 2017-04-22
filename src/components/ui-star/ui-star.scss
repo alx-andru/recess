@@ -1,0 +1,65 @@
+ui-star {
+
+  .full {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-size: 1em;
+    flex-grow: 1;
+    width: 100%;
+  }
+
+
+
+  .half-left, .half-right {
+    color: $primary_steps;
+
+    & .notreached {
+      //color: lighten($primary_steps, 40%);
+      opacity: 0.4;
+    }
+
+    font-size: 1.5em;
+    width: 0.75em;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    i {
+      font-size: 1.5em;
+
+      width: 0.5em;
+
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  .half-right {
+    color: $primary_active;
+
+    &.notreached {
+      color: lighten($primary_active, 40%);
+    }
+    overflow: hidden;
+    i {
+      margin-left: -1em;
+    }
+  }
+
+  .full-buddy {
+
+    .half-left {
+      color: $secondary_steps;
+      &.notreached {
+        color: $secondary_steps;
+      }
+    }
+    .half-right {
+      color: $secondary_active;
+      &.notreached {
+        color: $secondary_active;
+      }
+    }
+
+  }
+}

@@ -1,0 +1,64 @@
+@import "../../theme/mixins";
+.has-refresher > .scroll-content {
+  border:none;
+}
+
+.activity-title {
+  .toolbar-title {
+    .white {
+      color: $white;
+    }
+    @include flex('row');
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+
+page-activity {
+
+  .phases {
+
+    background-color: $primary_recess;
+    color: $recess_base_3;
+    width: 2rem;
+    padding: 1rem 2rem !important;
+    @include border-radius(4rem);
+  }
+
+  .slides {
+    height: 100%;
+    .slide-zoom {
+      height: 100%;
+    }
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: $primary_recess;
+  }
+
+  .pager-spacer {
+    height: 2rem;
+
+  }
+
+  .activities {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 100%;
+
+    achievements-today {
+      flex-grow: 1;
+    }
+
+  }
+
+  .steps-today {
+    background-color: $emerald;
+    width: 100%;
+  }
+
+}
+

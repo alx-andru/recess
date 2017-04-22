@@ -1,0 +1,92 @@
+chart-week {
+  .wrap {
+    width: 100%;
+
+    height: 16rem;
+
+    background-color: white;
+
+    @include flex();
+    justify-content: flex-start;
+
+    ui-tooltip {
+      height: 3rem;
+    }
+
+    .week {
+      height: 13rem;
+      width: 100%;
+      padding: 0 2rem;
+      @include flex('row');
+      //
+
+      .day {
+        @include flex();
+        align-content: stretch;
+        height: 100%;
+        justify-content: flex-start;
+        width: 3rem;
+        .color {
+          overflow:hidden;
+          @include border-radius(0.25rem);
+          background-color: $recess_base_2;
+          width: 100%;
+          height: 100%;
+          display: block;
+          @include flex();
+          justify-content: flex-end;
+
+          .highlight {
+            width: 100%;
+            background-color: $primary_steps;
+            &.selected {
+              background-color: $primary_recess;
+            }
+
+          }
+
+          .highlight-buddy {
+            background-color: $secondary_steps;
+          }
+        }
+
+        .title {
+
+          @include flex();
+          font-size: 1.4rem;
+          height: 2rem;
+
+          span {
+            line-height: 2rem;
+            width: 4rem;
+          }
+
+        }
+      }
+    }
+
+    &.bottom {
+      height: 15rem;
+
+      .week {
+        height: 12rem;
+        .day {
+          .color {
+            overflow: hidden;
+            .highlight {
+              background-color: $primary_active;
+              &.selected {
+                background-color: $primary_recess;
+              }
+            }
+            .highlight-buddy {
+              background-color: $secondary_active;
+            }
+          }
+        }
+
+      }
+    }
+
+  }
+}

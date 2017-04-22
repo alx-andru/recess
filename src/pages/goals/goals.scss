@@ -1,0 +1,98 @@
+page-goals {
+  padding: 0;
+  margin: 0;
+  .wrap {
+    @include flex();
+    justify-content: space-between;
+    height: 100%;
+    overflow:hidden;
+  }
+
+  .steps {
+    text-align: center;
+  }
+
+  .icon {
+
+    &.icon-steps {
+      color: $primary_steps;
+    }
+
+    &.icon-activity {
+      color: $primary_active;
+    }
+
+    i {
+      font-size: 4rem;
+    }
+  }
+
+  .title {
+    font-size: 2rem;
+    font-weight: 500;
+  }
+
+  .description {
+    color: $recess_base_contrast_1;
+    line-height: 2rem;
+    font-weight: 400;
+    padding: 0 2rem;
+    margin: 1rem 0;
+  }
+
+  .selection {
+    @include flex('row');
+    justify-content: space-around;
+
+    height: 4rem;
+
+    .prefix {
+      text-align: right;
+      width: 100%;
+    }
+
+    .postfix {
+      text-align: left;
+      width: 100%;
+    }
+
+    .selector {
+      max-width: 100%;
+      margin: 0 1rem;
+      @include flex('row');
+      justify-content: space-between;
+      .value {
+        font-size: 2rem;
+        font-weight: 500;
+        &.value--steps {
+          color: $primary_steps;
+        }
+        &.value--activity {
+          color: $primary_active;
+        }
+      }
+      .dials {
+        @include flex();
+        justify-content: space-around;
+        i {
+          line-height: 1rem;
+        }
+      }
+    }
+  }
+
+  .start {
+    align-self: flex-end;
+    width: 100%;
+    @include flex('row');
+    justify-content: space-around;
+
+    .recess-button {
+      background-color: $primary_recess;
+      @include border-radius(2rem);
+      padding: 1rem 2rem;
+      font-weight: 500;
+    }
+  }
+
+}

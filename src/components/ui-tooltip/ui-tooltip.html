@@ -1,0 +1,21 @@
+<div class="tooltip" [hidden]="!value">
+  <i class="material-icons" *ngIf="isSteps">directions_run</i>
+  <i class="material-icons" *ngIf="!isSteps">whatshot</i>
+
+  <span *ngIf="isDay">
+     <span>{{value}}</span>
+  </span>
+
+  <span *ngIf="!isDay">
+
+    <span *ngIf="isSteps">
+      <span>{{value | number: 0}}</span>
+      <span>&nbsp;steps on {{timestamp | amDateFormat:'LL'}}</span>
+    </span>
+
+    <span *ngIf="!isSteps">
+     <span>{{value}}&nbsp;hours active on {{timestamp | amDateFormat:'LL'}}</span>
+    </span>
+  </span>
+
+</div>

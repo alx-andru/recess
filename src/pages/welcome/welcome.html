@@ -1,0 +1,269 @@
+<ion-content no-bounce>
+
+
+  <ion-slides (ionSlideDidChange)="slideChanged()">
+
+    <ion-slide class="hi">
+      <header>
+        <img src="assets/recess_logo_transparent_square.png">
+      </header>
+
+      <section>
+        <h1>Welcome to <br><strong>Recess</strong></h1>
+
+        <p>
+          Recess is a research project at the University of Waterloo led by the School of Computer Science and
+          Department of Kinesiology to promote physical activity.
+        </p>
+        <p>
+          To participate you have to read and agree to our Research Consent.
+        </p>
+      </section>
+
+
+      <div class="actions">
+        <div class="stretch"></div>
+        <div class="recess-button recess-button--white" (click)="goToTerms()">
+          Sure, let's go <i class="material-icons">chevron_right</i>
+        </div>
+        <div class="stretch"></div>
+      </div>
+
+    </ion-slide>
+
+    <ion-slide class="policy">
+
+      <h1>Research Consent</h1>
+
+
+      <div class="terms">
+        <p>
+          Increasing physical activity and reducing sedentary time is important for overall health and
+          wellness. However, many individuals are not active enough to meet recommended guidelines
+          for health benefits. The purpose of this study is to determine which features of a smartphone
+          application (app, called RECESS) are effective in improving daily physical activity and reducing
+          sedentary (sitting, lying) time. Participation in this study will involve downloading RECESS. You
+          will then provide some information about yourself (e.g. age, occupation, physical activity level).
+          The app will then download 1 week of your prior activity data (from Apple Health or Google
+          Health) to provide information about your current activity. You will then use the RECESS app for
+          three weeks. The features of RECESS will vary week to week so that we can investigate which
+          features are more effective in promoting activity. The features may include goal setting and
+          giving and receiving coaching from a buddy with similar activity levels and/or goals. While the
+          app monitors you physical activity and sedentary behaviour, you are not required to change
+          your behaviour but we hope that the feedback may help you meet physical activity targets.  No
+          intense activity is recommended, simply being active more often through light activity over the
+          course of the day.
+        </p>
+        <p>
+          We are looking for individuals between the ages of 18-99 to participate. Your participation is
+          voluntary. You can withdraw from the study at any time by deleting RECESS from your smart
+          phone. By indicating yes at the end of this information letter, you indicate your consent to
+          participate in this study.
+        </p>
+        <p>
+          There are no known or anticipated risks to participating in this study. It is important for you to
+          know that any information that you provide and share will be anonymous and confidential.
+          RECESS is programmed to collect responses and data by study ID. It will not collect any
+          information that could potentially identify you (such as name or phone identifiers). The
+          RECESS app will collect the available amount of steps and distance walked prior to one week of
+          the app installation until the app is removed or the recess service disabled. In addition, usage
+          behaviour of the app itself like open and close times, duration of usage and interaction with user
+          interface elements is recorded. Every user input through the built-in messaging system is stored
+          with a corresponding time value. The app will not be accessing any potentially sensitive
+          information on the phone (e.g. email, web browsing data, photos), the only data accessed
+          outside of the RECESS app is the activity data from Apple Health (iOS) or Google Health
+          (Android).
+        </p>
+        <p>
+          The data collected through RECESS will be transmitted and stored in Firebase, which is a cloud
+          service provided by Google. When information is transmitted over the internet (such as through
+          Firebase), privacy cannot be guaranteed. There is always a risk your data may be intercepted
+          by a third party (e.g., government agencies, hackers). The data will be electronically archived
+          after completion of the study and maintained on an password protected, encrypted computer at
+          the University of Waterloo for seven years and then erased.
+        </p>
+        <p>
+          This study has been reviewed and received ethics clearance through a University of Waterloo Research Ethics
+          Committee <strong>(ORE#22034)</strong>. If you have questions for the Committee contact the Chief Ethics
+          Officer, Office of
+          Research Ethics, at <a class="phone" itemprop="telephone" href="tel:15198884567">1-519- 888-4567 ext.
+          36005</a>
+          <br>or<br>
+          <a itemprop="email" href="mailto:ore-ceo@uwaterloo.ca">ore-ceo@uwaterloo.ca</a>
+        </p>
+        <p itemscope itemtype="http://schema.org/EducationalOrganization">
+          Should you have any questions about the study, please contact <br> <br>
+          <a href="mailto:recess.research.study@gmail.com">recess.research.study@gmail.com</a>
+        </p>
+
+        <p>
+          By selecting <strong>YES</strong> at the bottom of this consent form, you are not waiving your legal rights or
+          releasing the investigator(s) or involved institution(s) from their legal and professional
+          responsibilities.
+        </p>
+
+        <p>
+          I have read the information presented in the information letter and have had the opportunity to
+          ask any questions I may have about the study. I am aware that I may withdraw from the study at
+          any time by deleting the smart phone app (RECESS) from my phone.
+        </p>
+        <p>
+          With full knowledge of all foregoing, I agree, of my own free will, to participate in this study.
+        </p>
+
+        <br><br>
+      </div>
+
+      <div class="browserlink" (click)="openTerms()">
+        <div class="recess-button recess-button--browser">Open Link and read in browser
+          <i class="material-icons">open_in_browser</i></div>
+      </div>
+
+
+      <div class="actions">
+        <div class="recess-button recess-button--black" (click)="goToStart()">
+          <i class="material-icons">chevron_left</i> I disagree
+        </div>
+        <div class="recess-button recess-button--white" (click)="goToSurveyStart()">
+          I agree <i class="material-icons">chevron_right</i>
+        </div>
+      </div>
+
+    </ion-slide>
+
+    <ion-slide class="survey-basic">
+      <section class="title">
+        <h1>Some info about you</h1>
+        <h2>Tell us a few more things about yourself before we get started.</h2>
+
+      </section>
+
+      <section>
+        <h1>How old are you?</h1>
+        <ion-item>
+          <ion-input [(ngModel)]="survey.age" type="number" placeholder="18-99 years"></ion-input>
+        </ion-item>
+
+        <h1>What's the gender you identify yourself with?</h1>
+        <ion-item>
+          <ion-label>Select Gender</ion-label>
+          <ion-select [(ngModel)]="survey.gender">
+            <ion-option value="female" selected="true">Female</ion-option>
+            <ion-option value="male">Male</ion-option>
+            <ion-option value="other">Other</ion-option>
+            <ion-option value="none">I'd rather not say</ion-option>
+          </ion-select>
+        </ion-item>
+
+        <h1>What's your occupation?</h1>
+        <ion-item>
+          <ion-label>Choose occupation</ion-label>
+          <ion-select [(ngModel)]="survey.occupation">
+            <ion-option value="student" selected="true">Student</ion-option>
+            <ion-option value="education">Education or research</ion-option>
+            <ion-option value="executive">Executive</ion-option>
+            <ion-option value="administrator">Administrator or senior manager</ion-option>
+            <ion-option value="professional">Professional</ion-option>
+            <ion-option value="technical_support">Technical support</ion-option>
+            <ion-option value="sales">Sales</ion-option>
+            <ion-option value="administrative_m">Administrative support</ion-option>
+            <ion-option value="service">Service occupation</ion-option>
+            <ion-option value="tradesperson">Tradesperson</ion-option>
+            <ion-option value="operator">Operator</ion-option>
+            <ion-option value="laborer">Laborer</ion-option>
+            <ion-option value="unemployed">Unemployed</ion-option>
+          </ion-select>
+        </ion-item>
+      </section>
+
+      <div class="actions">
+        <div class="recess-button recess-button--white" (click)="goToSurveyEnd()">
+          Three more questions <i class="material-icons">chevron_right</i>
+        </div>
+      </div>
+
+
+    </ion-slide>
+
+    <ion-slide class="survey-advanced">
+      <section class="title">
+        <h1>Some info about you</h1>
+        <h2>Tell us a few more things about yourself before we get started.</h2>
+
+      </section>
+
+      <section>
+        <h1>Do you currently exercise more than twice each week at an intensity that would make it difficult to
+          sing?</h1>
+        <ion-item>
+          <ion-label>Select your response?</ion-label>
+          <ion-select [(ngModel)]="survey.intensity">
+            <ion-option value="yes" selected="true">yes</ion-option>
+            <ion-option value="no">no</ion-option>
+          </ion-select>
+        </ion-item>
+
+        <h1>Have you used a smartphone application to monitor your physical activity?</h1>
+        <ion-item>
+          <ion-label>Let us know</ion-label>
+          <ion-select [(ngModel)]="survey.app" action-sheet="actionSheet">
+            <ion-option value="yes" selected="true">yes</ion-option>
+            <ion-option value="no">no</ion-option>
+          </ion-select>
+        </ion-item>
+
+        <h1>Have you used an activity monitor to track your physical activity (e.g., Fitbit)?</h1>
+        <ion-item>
+          <ion-label>Select response</ion-label>
+          <ion-select [(ngModel)]="survey.tracker">
+            <ion-option value="yes" selected="true">yes</ion-option>
+            <ion-option value="no">no</ion-option>
+          </ion-select>
+        </ion-item>
+      </section>
+
+      <div class="actions">
+        <div class="recess-button recess-button--white" (click)="goToPermissions()">
+          Let's get started <i class="material-icons">chevron_right</i>
+        </div>
+      </div>
+
+    </ion-slide>
+
+    <ion-slide class="survey-permissions">
+      <section class="title">
+        <h1>Permissions</h1>
+        <h2>To collect necessary data and be able to engage with you, we need a few permissions from you.</h2>
+      </section>
+
+      <section>
+        <ion-list>
+
+          <ion-item class="permission">
+            <ion-label>Health Information</ion-label>
+            <ion-toggle [(ngModel)]="health" (ionChange)="askHealthPermission()" color="secondary"></ion-toggle>
+          </ion-item>
+
+          <!--
+          <ion-item>
+            <ion-label>Notifications</ion-label>
+            <ion-toggle [(ngModel)]="notifications"(ionChange)="askNotificationPermission()"></ion-toggle>
+          </ion-item>
+          -->
+
+        </ion-list>
+      </section>
+
+
+      <div class="actions">
+        <div class="recess-button recess-button--white" (click)="start()">
+          Give us permissions <i class="material-icons">chevron_right</i>
+        </div>
+      </div>
+
+    </ion-slide>
+
+  </ion-slides>
+
+
+</ion-content>

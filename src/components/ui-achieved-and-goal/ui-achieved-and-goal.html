@@ -1,0 +1,17 @@
+<div id="stats">
+  <div class="today">
+    <div class="value">{{hours}}<span> hour<span ng-if="hours>1">s</span></span></div>
+    <div class="title">with active time</div>
+  </div>
+
+  <div class="icon" [ngClass]="{'icon-buddy':isBuddy}" (click)="presentPopover($event)">
+    <i class="material-icons">whatshot</i>
+  </div>
+
+  <div class="goal">
+    <div class="value">{{goal}}<span> hours</span></div>
+    <div *ngIf="!isBuddy" class="title">Your Goal</div>
+    <div *ngIf="isBuddy" class="title">Buddy's Goal</div>
+  </div>
+
+</div>

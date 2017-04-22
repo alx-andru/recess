@@ -1,0 +1,25 @@
+<div class="wrap" [ngClass]="{'bottom': isBottom }">
+  <ui-tooltip [value]="tooltipValue" [timestamp]="tooltipTimestamp"
+              [index]="dayselected"
+              [isSteps]=!isBottom
+              (vanished)="removeSelections($event)">
+  </ui-tooltip>
+
+  <div class="week">
+    <div class="day" *ngFor="let day of days; let i = index" (tap)="showTooltip(i)">
+
+      <div class="color">
+
+        <div class="highlight" [ngClass]="{'highlight-buddy':isBuddy, 'selected': day.selected }"
+             [style.height]="(day.percentage)"></div>
+
+      </div>
+
+      <div class="title">
+        <span *ngIf="i!==6">{{day.day | amDateFormat: 'dd'}}</span>
+        <span *ngIf="i===6">Today</span>
+      </div>
+    </div>
+  </div>
+
+</div>

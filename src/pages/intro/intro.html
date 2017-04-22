@@ -1,0 +1,131 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title></ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding no-bounce>
+
+  <ion-slides pager (ionSlideDidChange)="slideChanged()">
+
+    <ion-slide class="activity">
+      <div class="text">
+        <div class="tab-icon">
+          <i class="material-icons">timeline</i>
+        </div>
+        Track&nbsp;your&nbsp;<strong>Activity</strong>&nbsp;and monitor how close you are to reach your daily goals.
+      </div>
+      <div class="image">
+        <img src="assets/recess_intro_activity.png">
+      </div>
+      <div class="space">
+        Here is some space
+      </div>
+
+    </ion-slide>
+
+    <ion-slide class="activity-2">
+
+      <div class="image">
+        <img src="assets/recess_intro_activity-day.png">
+      </div>
+      <div class="text">
+        <div>
+          See how close you are to reach your daily <span class="recess-steps">Steps</span> goal.
+        </div>
+        <div class="star">
+          Fill up your <img src="assets/recess_intro_star.png">
+        </div>
+        <div>
+          Look at your <span class="recess-activity">Active&nbsp;time</span> throughout the day. Each hour you walk more
+          than <strong>200 steps for 11 minutes</strong> will be marked.
+        </div>
+      </div>
+
+
+    </ion-slide>
+
+    <ion-slide class="activity-3">
+
+      <div class="text">
+        <img src="assets/gesture-swipe.png">
+        <div>
+          <strong>Swipe left</strong> to see your fitness activity of the <strong>past 7 days</strong>.
+        </div>
+      </div>
+
+      <div class="image">
+        <img src="assets/recess_intro_activity-week.png">
+      </div>
+
+    </ion-slide>
+
+    <ion-slide class="activity-4">
+
+      <div class="text">
+        <div class="tab-icon">
+          <i class="material-icons">assignments</i>
+        </div>
+        Set&nbsp;your&nbsp;<strong>Goals</strong>&nbsp;and try to achieve them the <strong>next 7 days</strong>.
+      </div>
+      <div class="image">
+        <img src="assets/recess_intro_goals.png">
+      </div>
+
+    </ion-slide>
+
+
+    <ion-slide class="activity-5">
+
+      <div class="image">
+        <img src="assets/recess_intro_chat.png">
+      </div>
+      <div class="text">
+        <div class="tab-icon">
+          <i class="material-icons">forum</i>
+        </div>
+        <div>
+          During the study you'll be <strong>paired</strong> with a random participant of the study. Help your
+          <strong>"Buddy"</strong> to achieve his
+          fitness goal!
+        </div>
+
+      </div>
+
+
+    </ion-slide>
+
+    <ion-slide class="activity-3">
+
+      <div class="text">
+        <img src="assets/gesture-refresh.png">
+        <div>
+          <strong>Swipe down</strong> to see your <strong>"Buddy's"</strong> fitness activity.
+        </div>
+      </div>
+
+      <div class="image">
+        <img src="assets/recess_intro_buddy.png">
+      </div>
+
+    </ion-slide>
+
+    <ion-slide class="activity-7">
+
+      <div class="text">
+        <div>
+          <img src="assets/recess_logo_transparent_square.png">
+        </div>
+
+        <div class="recess-button recess-button--center recess-button--white" (tap)="start()">Start now!</div>
+      </div>
+
+
+    </ion-slide>
+
+  </ion-slides>
+
+</ion-content>

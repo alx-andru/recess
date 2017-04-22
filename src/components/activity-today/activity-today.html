@@ -1,0 +1,31 @@
+<div class="wrap">
+
+  <ui-tooltip [value]="tooltipValue"
+              [timestamp]="tooltipTimestamp"
+              [index]="dayselected"
+              (vanished)="removeSelections($event)"
+              [isDay]=true>
+  </ui-tooltip>
+
+  <div class="bars">
+    <div class="bar" *ngFor="let hour of day; let i = index"
+         (tap)="showTooltip(i)"
+         [ngClass]="{'selected': hour.selected, 'highlight': hour.active && !isBuddy, 'highlight-buddy': hour.active && isBuddy}">
+    </div>
+  </div>
+
+  <div class="legend">
+    <div>
+      12am
+    </div>
+    <div>
+      noon
+    </div>
+    <div>
+      11pm
+    </div>
+  </div>
+
+  <ui-achieved-and-goal [hours]="hours" [goal]="goal" [isBuddy]=isBuddy ></ui-achieved-and-goal>
+
+</div>
