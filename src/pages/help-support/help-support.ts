@@ -5,6 +5,7 @@ import {BasePage} from '../base/base';
 import {InAppBrowser} from 'ionic-native';
 import {IntroPage} from '../../pages/intro/intro';
 import {TabsPage} from '../../pages/tabs/tabs';
+import {FeedbackPage} from '../../pages/feedback/feedback';
 
 
 @Component({
@@ -14,6 +15,7 @@ import {TabsPage} from '../../pages/tabs/tabs';
 export class HelpSupportPage extends BasePage {
 
   introPage = IntroPage;
+  feedbackPage = FeedbackPage;
   tabs: any = TabsPage;
 
   constructor(public data: DataService, private navCtrl: NavController) {
@@ -25,7 +27,7 @@ export class HelpSupportPage extends BasePage {
   }
 
   openSupport() {
-    let browser = new InAppBrowser('http://ai.uwaterloo.ca/recess/?source=app', '_system');
+    new InAppBrowser('http://ai.uwaterloo.ca/recess/?source=app', '_system');
   }
 
   openIntro() {

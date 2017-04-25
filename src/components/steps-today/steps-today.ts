@@ -35,12 +35,6 @@ export class StepsTodayComponent {
       this.steps = stepsToday;
     });
 
-    this.platform.ready().then(() => {
-
-      //this.refreshData();
-
-    });
-
   }
 
   ngOnChanges(changes: SimpleChanges) {

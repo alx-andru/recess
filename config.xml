@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.alexandrugogan.app.recess" version="0.0.20" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.alexandrugogan.app.recess" version="0.0.21" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Recess</name>
     <description>Research study app.</description>
     <author email="alexandrugogan86@gmail.com" href="http://alexandrugogan.com/">Alex</author>

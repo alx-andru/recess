@@ -27,4 +27,6 @@ export class IntroPage {
     this.navCtrl.setRoot(TabsPage);
   }
 
+
+
 }

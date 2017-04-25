@@ -23,7 +23,7 @@ export class DataService {
 
   public tabevent: EventEmitter<any> = new EventEmitter();
 
-  public version: string = '0.0.20';
+  public version: string = '0.0.21';
 
 
   constructor(public storage: Storage, public af: AngularFire) {
@@ -36,6 +36,7 @@ export class DataService {
         console.log('User is authenticated now.');
         this.isAuthenticated = true;
         this.uid = state.uid;
+        console.log(state);
       }
 
     });
@@ -116,7 +117,7 @@ export class DataService {
 
   }
 
-  updateAppVersion(){
+  updateAppVersion() {
     if (this.isAuthenticated) {
       let version = this.af.database.object(`/users/${this.uid}/device/appVersion`);
       version.set(this.version);
@@ -337,7 +338,12 @@ export class DataService {
           let user = userData.val();
 
           let userCreatedAt = moment(user.createdAt).startOf('day');
+
           let userActiveDays = moment().startOf('day').diff(userCreatedAt, 'days');
+
+          Firebase.setUserId(user.uid);
+          Firebase.setScreenName(user.alias);
+          Firebase.setUserProperty('type', user.type);
 
           console.log(`User Active days ${userActiveDays}`);
           if (userActiveDays < 2) {
@@ -844,6 +850,9 @@ export class DataService {
         timestamp: fb.database.ServerValue.TIMESTAMP,
         meta: meta || null,
       });
+
+      Firebase.logEvent('VIEW_ITEM', {content_type: 'page_view', item_id: type, item_name: module});
+
     }
   }
 

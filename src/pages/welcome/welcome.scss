@@ -143,11 +143,17 @@ page-welcome {
   @include flex('row');
   @include border-radius(2rem);
   align-self: flex-start;
+
   &--center {
     text-align: center;
     justify-content: center;
 
   }
+
+  &--light {
+    background-color: $recess_base_2;
+  }
+
   &--white {
     background-color: $recess_base_3;
   }
@@ -155,6 +161,11 @@ page-welcome {
   &--black {
     background-color: $recess_base_contrast_1;
     color: $recess_base_2;
+  }
+
+  &--recess {
+    background-color: $primary_recess;
+    color: $recess_base_contrast_2;
   }
 
   &--browser {

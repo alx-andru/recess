@@ -29,6 +29,9 @@ export class AuthProvider {
 
       this.data.monitorConfig();
       //this.data.refreshPush();
+
+
+
     });
 
   }

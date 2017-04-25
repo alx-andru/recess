@@ -23,6 +23,8 @@ import {HelpActivityPage} from '../pages/help-activity/help-activity';
 import {HelpStepsPage} from '../pages/help-steps/help-steps';
 import {HelpStarPage} from '../pages/help-star/help-star';
 import {HelpSupportPage} from '../pages/help-support/help-support';
+import {FeedbackPage} from '../pages/feedback/feedback';
+
 
 import {StepsTodayComponent} from '../components/steps-today/steps-today';
 import {ActivityTodayComponent} from '../components/activity-today/activity-today';
@@ -68,6 +70,7 @@ export const firebaseConfig = {
     TabsPage,
     WelcomePage,
     IntroPage,
+    FeedbackPage,
 
     ChatPage,
     ActivityPage,
@@ -117,6 +120,7 @@ export const firebaseConfig = {
     TabsPage,
     WelcomePage,
     IntroPage,
+    FeedbackPage,
 
     GoalsInactivePage,
     ChatInactivePage,

@@ -1,0 +1,65 @@
+
+page-feedback {
+
+  .recess-steps {
+    color: $primary_steps;
+    font-weight: 600;
+  }
+
+  .recess-activity {
+    color: $primary_active;
+    font-weight: 600;
+  }
+
+
+  .bar-button-default-ios, .bar-button-default.bar-button-ios-default, .bar-button-clear-ios-default {
+    color: $recess_base_contrast_3;
+  }
+
+  .swiper-wrapper {
+    height: 92%;
+  }
+
+  ion-content {
+    height: 100%;
+
+    a {
+      color: $recess_base_contrast_1;
+      text-decoration: none;
+      border-bottom: 0.125rem solid $recess_base_contrast_3;
+      font-weight: 600;
+    }
+
+    &.content {
+      background-color: $recess_base_3;
+
+
+      & .scroll-content {
+        line-height: 2rem;
+        padding: 3rem;
+
+      }
+
+      .ethics {
+        background-color: $primary-recess;
+        padding: 1rem;
+
+
+      }
+
+      .signature {
+        font-size: 2rem;
+        font-weight: 600;
+        font-family: Georgia, serif;
+      }
+
+      .actions {
+        @include flex('row');
+      }
+
+    }
+
+
+  }
+
+}
