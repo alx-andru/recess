@@ -326,7 +326,7 @@ export class DataService {
 
 
   getStatus() {
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       console.log('getstatus');
       if (this.isAuthenticated) {
         console.log('isAuthenticated');
@@ -346,19 +346,23 @@ export class DataService {
           Firebase.setUserProperty('type', user.type);
 
           console.log(`User Active days ${userActiveDays}`);
+          let phase = 1;
+          let mode = user.mode;
+
           if (userActiveDays < 2) {
-
-            let mode = user.mode + '1';
-            console.log(`User Mode: ${mode}`);
-            resolve(mode);
-
+            // do nothing
           } else if (userActiveDays < 4) {
-            console.log(`User Mode: ${user.mode}2`);
-            resolve(`${user.mode}2`);
+            phase = 2;
           } else {
-            console.log(`User Mode: ${user.mode}3`);
-            resolve(`${user.mode}3`);
+            phase = 3;
           }
+
+          console.log(`User Mode: ${user.mode}${phase}`);
+
+          resolve({
+            mode: mode,
+            phase: phase
+          });
 
         });
       }
@@ -440,6 +444,34 @@ export class DataService {
       //console.log(`Storage: ${storageData}`);
     }).catch(error => {
       console.error(error)
+    });
+  }
+
+  setConsent() {
+    if (this.isAuthenticated) {
+      let survey = this.af.database.object(`/user/${this.uid}/survey/consent`);
+      survey.set({
+        agreedToShare: true,
+        timestamp: fb.database.ServerValue.TIMESTAMP,
+      });
+
+    }
+
+  }
+
+  getConsent() {
+    return new Promise<string>((resolve, reject) => {
+      if (this.isAuthenticated) {
+        this.af.database.object(`/user/${this.uid}/survey/consent`,
+          {
+            preserveSnapshot: true
+          }).take(1).subscribe((consentData) => {
+
+          let consent = consentData.val();
+          resolve(consent);
+
+        });
+      }
     });
   }
 

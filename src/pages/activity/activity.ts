@@ -1,9 +1,6 @@
 import {Component, Renderer, ViewChild} from '@angular/core';
 import {Platform, PopoverController, Slides} from 'ionic-angular';
 import {AngularFire, FirebaseAuthState} from 'angularfire2';
-import {HelpPhasesSocialPage} from '../help-phases-social/help-phases-social';
-import {HelpPhasesActivityPage} from '../help-phases-activity/help-phases-activity';
-import {HelpPhasesCompletePage} from '../help-phases-complete/help-phases-complete';
 
 import {HelpSupportPage} from '../help-support/help-support';
 
@@ -11,6 +8,8 @@ import {BasePage} from '../base/base';
 import {DataService} from '../../providers/data.service';
 
 import {HealthService} from '../../providers/health.service';
+
+import * as moment from 'moment';
 
 @Component({
   selector: 'page-activity',
@@ -39,7 +38,7 @@ export class ActivityPage extends BasePage {
   refresh: boolean = false;
   syncInitialized: boolean = false;
 
-  mode: any;
+  status: any;
   assistantData: any;
 
   constructor(public platform: Platform,
@@ -50,8 +49,6 @@ export class ActivityPage extends BasePage {
               private renderer: Renderer) {
 
     super(data);
-
-    let self = this;
 
     this.achievementsToday = [{
       isAchievedSteps: false,
@@ -97,52 +94,81 @@ export class ActivityPage extends BasePage {
         this.assistantData = assistantData;
       });
 
+      // TODO: improve me and use await
       this.data.getStatus().then(status => {
-        this.mode = status;
+        this.status = status;
+
+        this.data.getPhases().then(configSocial => {
+          let enableSocialAt = moment(configSocial.social.enableAt);
+          if (moment().isAfter(enableSocialAt, 'day') || moment().isSame(enableSocialAt, 'day')) {
+
+            if ( //
+            (this.status.mode == 'A' && this.status.phases > 2) ||
+            (this.status.mode == 'B' && this.status.phases >= 2) ||
+            (this.status.mode == 'C')
+            ) {
+              this.isBuddyActive = true;
+
+            }
+
+          } else {
+
+            this.isBuddyActive = false;
+
+          }
+
+        });
+
+
+
+
       });
+
+
 
       if (!this.syncInitialized) {
         console.log('sync now');
         this.syncInitialized = true;
         this.health.syncData();
+        /*
+         setTimeout(function () {
+         switch (self.mode) {
+         case 'A1':
+         case 'A2':
+         case 'B1':
+         if (self.assistantData && self.assistantData.phases && self.assistantData.phases.activity > 1) {
+         //self.simulatePopoverClick();
+         self.assistantData.phases.activity--;
+         self.data.setAssistant(self.assistantData);
 
-        setTimeout(function () {
-            switch (self.mode) {
-              case 'A1':
-              case 'A2':
-              case 'B1':
-                if (self.assistantData && self.assistantData.phases && self.assistantData.phases.activity > 1) {
-                  self.simulatePopoverClick();
-                  self.assistantData.phases.activity--;
-                  self.data.setAssistant(self.assistantData);
+         }
+         break;
+         case 'B2':
+         case 'C1':
+         case 'C2':
+         if (this.assistantData && self.assistantData.phases && self.assistantData.phases.social > 1) {
+         self.simulatePopoverClick();
+         self.assistantData.phases.social--;
+         self.data.setAssistant(self.assistantData);
 
-                }
-                break;
-              case 'B2':
-              case 'C1':
-              case 'C2':
-                if (this.assistantData && self.assistantData.phases && self.assistantData.phases.social > 1) {
-                  self.simulatePopoverClick();
-                  self.assistantData.phases.social--;
-                  self.data.setAssistant(self.assistantData);
+         }
+         break;
+         default:
+         console.log('default');
+         self.isBuddyActive = true;
 
-                }
-                break;
-              default:
-                console.log('default');
-                self.isBuddyActive = true;
+         if (this.assistantData && self.assistantData.phases && self.assistantData.phases.goals > 1) {
+         self.simulatePopoverClick();
+         self.assistantData.phases.goals--;
+         self.data.setAssistant(self.assistantData);
 
-                if (this.assistantData && self.assistantData.phases && self.assistantData.phases.goals > 1) {
-                  self.simulatePopoverClick();
-                  self.assistantData.phases.goals--;
-                  self.data.setAssistant(self.assistantData);
+         }
+         break;
+         }
 
-                }
-                break;
-            }
-
-          }, 2000
-        );
+         }, 2000
+         );
+         */
       }
 
 
@@ -152,76 +178,18 @@ export class ActivityPage extends BasePage {
   }
 
   doRefresh(refresher) {
-    console.log('Refresh');
-    this.isBuddy = !this.isBuddy;
+    if (this.isBuddyActive) {
+      console.log('Refresh');
+      this.isBuddy = !this.isBuddy;
 
-    setTimeout(() => {
-      console.log('Async operation has ended');
-      this.slideChanged();
-      refresher.complete();
-    }, 3000);
-  }
-
-  simulatePopoverClick() {
-    let evObj = new Event('click', {bubbles: true});
-
-    this.renderer.invokeElementMethod(this.assistantButton._elementRef.nativeElement,
-      'dispatchEvent',
-      [new MouseEvent('click', evObj)]);
-  }
-
-  presentPopover(myEvent) {
-    let self = this;
-    //console.log('Mode: ' + this.mode);
-
-    let popover;
-
-    switch (this.mode) {
-      case 'A1':
-      case 'A2':
-      case 'B1':
-        //console.log('Case A1 or A2');
-        //
-        popover = this.popoverCtrl.create(HelpPhasesActivityPage, {}, {
-          cssClass: 'phases'
-        });
-        popover.present({
-          ev: myEvent
-        });
-
-
-        break;
-
-      case 'B2':
-      case 'C1':
-      case 'C2':
-        //console.log('Case B2');
-        //
-        popover = this.popoverCtrl.create(HelpPhasesSocialPage, {}, {
-          cssClass: 'phases'
-        });
-        popover.present({
-          ev: myEvent
-        });
-
-
-        break;
-
-      default:
-        //console.log('Case Complete');
-        //
-        popover = this.popoverCtrl.create(HelpPhasesCompletePage, {}, {
-          cssClass: 'phases'
-        });
-        popover.present({
-          ev: myEvent
-        });
-
+      setTimeout(() => {
+        console.log('Async operation has ended');
+        this.slideChanged();
+        refresher.complete();
+      }, 3000);
     }
-
-    this.data.setEvent('button', 'phases');
-
   }
+
 
   presentPopoverHelp(myEvent) {
     let popover = this.popoverCtrl.create(HelpSupportPage, {}, {

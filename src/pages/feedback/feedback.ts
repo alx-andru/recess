@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
-import {AlertController, NavController, NavParams} from 'ionic-angular';
+import {AlertController} from 'ionic-angular';
+import {DataService} from '../../providers/data.service';
 
 /*
  Generated class for the Feedback page.
@@ -13,16 +14,19 @@ import {AlertController, NavController, NavParams} from 'ionic-angular';
 })
 export class FeedbackPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
+  constructor(public data: DataService, public alertCtrl: AlertController) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad FeedbackPage');
+
   }
 
   consent(isConsent: boolean) {
     if (!isConsent) {
       this.showInfo();
+    } else {
+      this.data.setConsent();
     }
   }
 

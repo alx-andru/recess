@@ -2,8 +2,6 @@ import {Component, ViewChild} from '@angular/core';
 import {NavController, Slides, AlertController, Platform} from 'ionic-angular';
 import {InAppBrowser} from 'ionic-native';
 import {DataService} from '../../providers/data.service';
-import {TabsPage} from '../../pages/tabs/tabs';
-
 import {IntroPage} from '../../pages/intro/intro';
 
 import {Health} from 'ionic-native';
