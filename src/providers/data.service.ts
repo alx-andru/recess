@@ -50,54 +50,81 @@ export class DataService {
 
   monitorConfig() {
     if (this.isAuthenticated) {
-      // TODO one subscription per config value
-      this.af.database.list(`/user/${this.uid}/config/phases/activity/enableAt`).subscribe(enableAt => {
+      /*
+       // TODO one subscription per config value
+       this.af.database.list(`/user/${this.uid}/config/phases/activity/enableAt`).subscribe(enableAt => {
 
-      });
+       });
+
+       this.af.database.list(`/user/${this.uid}/config/phases/goals/enableAt`).subscribe(enableAt => {
+
+       });
+
+       this.af.database.list(`/user/${this.uid}/config/phases/social/enableAt`).subscribe(enableAt => {
+
+       });
+
+       this.af.database.object(`/user/${this.uid}/config/showWelcome`, {preserveSnapshot: true})
+       .subscribe(showConfig => {
+       this.setShowWelcome(showConfig.val());
+       });
+
+       this.af.database.object(`/user/${this.uid}/config/phases/goals/settings`, {preserveSnapshot: true})
+       .subscribe(goalsData => {
+       console.log('Goal Monitor');
+       const goal = goalsData.val();
+       console.log('/Goal Monitor');
+
+       this.setGoals(goal, false);
+       });
 
 
-      this.af.database.list(`/user/${this.uid}/config`).subscribe(configs => {
-        //console.log('Got items: ', configs);
 
-        for (let config in configs) {
-          if (configs[config].$key === 'showWelcome') {
-            this.setShowWelcome(configs[config].$value);
 
-          } else if (configs[config].$key === 'phases') {
+       this.af.database.list(`/user/${this.uid}/config`).subscribe(configs => {
+       //console.log('Got items: ', configs);
 
-            if (configs[config].goals.settings) {
-              this.setGoals(configs[config].goals.settings);
-            }
+       for (let config in configs) {
+       if (configs[config].$key === 'showWelcome') {
+       this.setShowWelcome(configs[config].$value);
 
-            if (configs[config].social && configs[config].goals && configs[config].activity) {
+       } else if (configs[config].$key === 'phases') {
 
-              let phss = {
-                social: {
-                  enableAt: configs[config].social.enableAt,
-                },
-                goals: {
-                  enableAt: configs[config].goals.enableAt,
-                },
-                activity: {
-                  enableAt: configs[config].activity.enableAt,
-                },
-              };
+       if (configs[config].goals.settings) {
+       this.setGoals(configs[config].goals.settings);
+       }
 
-              //this.setPhases(phss);
+       if (configs[config].social && configs[config].goals && configs[config].activity) {
 
-              let unreadMessages = configs[config].social.unreadMessages;
+       let phss = {
+       social: {
+       enableAt: configs[config].social.enableAt,
+       },
+       goals: {
+       enableAt: configs[config].goals.enableAt,
+       },
+       activity: {
+       enableAt: configs[config].activity.enableAt,
+       },
+       };
 
-              // emit phases to event
-              this.tabevent.next({
-                phases: phss,
-                unreadMessages: unreadMessages,
-              });
+       //this.setPhases(phss);
 
-            }
+       let unreadMessages = configs[config].social.unreadMessages;
 
-          }
-        }
-      });
+       // emit phases to event
+       this.tabevent.next({
+       phases: phss,
+       unreadMessages: unreadMessages,
+       });
+
+       }
+
+       }
+       }
+       });
+
+       */
 
     }
   }
@@ -135,15 +162,24 @@ export class DataService {
   getGoals() {
     return new Promise<any>((resolve, reject) => {
       if (this.isAuthenticated) {
-        this.af.database.object(`/user/${this.uid}/config/phases/goals/settings`,
+        this.af.database.object(`/user/${this.uid}/config/phases/goals`,
           {
             preserveSnapshot: true
-          }).take(1).subscribe((goals) => {
+          }).take(1).subscribe((goalsData) => {
 
-          resolve(goals.val());
+          const goals = goalsData.val();
+
+
+          resolve({
+            activity: goals.settings.activity,
+            steps: goals.settings.steps,
+            timestamp: goals.settings.timestamp
+          });
+
         });
       } else {
-
+        /*
+        // temporary disable localstorage
         // fallback
         this.storage.get(`Recess.goals`).then(goals => {
           resolve(goals);
@@ -151,22 +187,31 @@ export class DataService {
           console.error(error);
           reject(error);
         });
+        */
       }
     });
   }
 
-  setGoals(goals) {
-
+  setGoals(goals, isUser) {
+    console.log('set goals');
     if (typeof  parseInt(goals.activity) === 'number' && typeof parseInt(goals.steps) === 'number') {
       if (this.isAuthenticated) {
         //console.log(`goals authenticated ${goals.activity} : ${goals.steps}`);
 
         let goalsData = this.af.database.object(`/user/${this.uid}/config/phases/goals/settings`);
-        goalsData.set({
+        let newGoals = {
           activity: parseInt(goals.activity),
-          steps: parseInt(goals.steps)
-        });
-        //console.log(`goals set ${goals.activity} : ${goals.steps}`);
+          steps: parseInt(goals.steps),
+          timestamp: {},
+        };
+
+        if (isUser) {
+          newGoals.timestamp = fb.database.ServerValue.TIMESTAMP;
+        }
+        console.log('new goal');
+        console.log(newGoals);
+
+        goalsData.set(newGoals);
 
       }
 
@@ -357,7 +402,7 @@ export class DataService {
             phase = 3;
           }
 
-          console.log(`User Mode: ${user.mode}${phase}`);
+          console.log(`User Mode: ${mode}${phase}`);
 
           resolve({
             mode: mode,
@@ -460,8 +505,11 @@ export class DataService {
   }
 
   getConsent() {
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
+      console.log('get consent');
       if (this.isAuthenticated) {
+        console.log('get consent authenticated');
+
         this.af.database.object(`/user/${this.uid}/survey/consent`,
           {
             preserveSnapshot: true
@@ -471,6 +519,7 @@ export class DataService {
           resolve(consent);
 
         });
+
       }
     });
   }
@@ -835,7 +884,7 @@ export class DataService {
             enableAt: moment().add(mode.socialActiveInDays, 'days').startOf('day').valueOf(),
             settings: {
               talkTo: userInfo.uid,
-              talkToBot: 'smarty',
+              talkToBot: 'witty',
             },
           },
           goals: {

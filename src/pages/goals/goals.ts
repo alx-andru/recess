@@ -1,9 +1,8 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams, AlertController} from 'ionic-angular';
-import {DataService} from "../../providers/data.service";
+import {AlertController} from 'ionic-angular';
+import {DataService} from '../../providers/data.service';
 import {BasePage} from '../base/base';
-
-
+import * as moment from 'moment';
 
 @Component({
   selector: 'page-goals',
@@ -11,6 +10,9 @@ import {BasePage} from '../base/base';
 })
 export class GoalsPage extends BasePage {
   goals: any;
+
+  isLocked: boolean = false;
+  backinDays: number = 0;
 
   constructor(public data: DataService,
               public alertCtrl: AlertController) {
@@ -21,18 +23,20 @@ export class GoalsPage extends BasePage {
       activity: 8,
     };
 
+  }
+
+  init() {
     this.data.getGoals().then(goals => {
       this.goals = goals;
       //console.log(goals);
-    });
+      this.isLocked = !moment().isAfter(moment(goals.timestamp).add(7, 'days'));
+      this.backinDays = moment(goals.timestamp).add(7, 'days').startOf('day').diff(moment().startOf('day'), 'days');
 
+    });
   }
 
   ionViewWillEnter() {
-    this.data.getGoals().then(goals => {
-      this.goals = goals;
-      //console.log(goals);
-    });
+    this.init();
   }
 
   showSteps() {
@@ -144,7 +148,8 @@ export class GoalsPage extends BasePage {
       handler: data => {
         //this.testRadioOpen = false;
         //this.testRadioResult = data;
-        this.data.setGoals(this.goals);
+        this.data.setGoals(this.goals, true);
+        this.init();
       }
     });
     alert.present();

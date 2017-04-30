@@ -17,9 +17,20 @@ export class HelpSupportPage extends BasePage {
   introPage = IntroPage;
   feedbackPage = FeedbackPage;
   tabs: any = TabsPage;
+  showFeedback: boolean = false;
 
   constructor(public data: DataService, private navCtrl: NavController) {
     super(data);
+
+
+    this.data.getStatus().then(status => {
+
+      if (status.phase > 2) {
+        this.showFeedback = true;
+      }
+
+    });
+
   }
 
   ionViewDidLoad() {
@@ -31,7 +42,7 @@ export class HelpSupportPage extends BasePage {
   }
 
   openIntro() {
-    this.navCtrl.setRoot(IntroPage);
+    this.navCtrl.push(IntroPage);
   }
 
 }

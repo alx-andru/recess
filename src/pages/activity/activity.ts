@@ -1,5 +1,5 @@
 import {Component, Renderer, ViewChild} from '@angular/core';
-import {Platform, PopoverController, Slides} from 'ionic-angular';
+import {NavController, Platform, PopoverController, Slides, ViewController} from 'ionic-angular';
 import {AngularFire, FirebaseAuthState} from 'angularfire2';
 
 import {HelpSupportPage} from '../help-support/help-support';
@@ -10,6 +10,7 @@ import {DataService} from '../../providers/data.service';
 import {HealthService} from '../../providers/health.service';
 
 import * as moment from 'moment';
+import {FeedbackPage} from '../feedback/feedback';
 
 @Component({
   selector: 'page-activity',
@@ -41,12 +42,16 @@ export class ActivityPage extends BasePage {
   status: any;
   assistantData: any;
 
+  self: any;
+
   constructor(public platform: Platform,
               public af: AngularFire,
               public popoverCtrl: PopoverController,
               public health: HealthService,
               public data: DataService,
-              private renderer: Renderer) {
+              private renderer: Renderer,
+              public navCtrl: NavController,
+              ) {
 
     super(data);
 
@@ -87,49 +92,75 @@ export class ActivityPage extends BasePage {
 
     this.title = this.TXT_TITLE_ACTIVITY_TODAY;
 
+    const self = this;
+
     this.af.auth.subscribe((state: FirebaseAuthState) => {
       console.log('Activity auth state:', state);
 
-      this.data.getAssistant().then(assistantData => {
-        this.assistantData = assistantData;
-      });
+      /*
+       this.data.getAssistant().then(assistantData => {
+       this.assistantData = assistantData;
+       });
+       */
 
       // TODO: improve me and use await
-      this.data.getStatus().then(status => {
-        this.status = status;
-
-        this.data.getPhases().then(configSocial => {
-          let enableSocialAt = moment(configSocial.social.enableAt);
-          if (moment().isAfter(enableSocialAt, 'day') || moment().isSame(enableSocialAt, 'day')) {
-
-            if ( //
-            (this.status.mode == 'A' && this.status.phases > 2) ||
-            (this.status.mode == 'B' && this.status.phases >= 2) ||
-            (this.status.mode == 'C')
-            ) {
-              this.isBuddyActive = true;
-
-            }
-
-          } else {
-
-            this.isBuddyActive = false;
-
-          }
-
-        });
-
-
-
-
-      });
-
 
 
       if (!this.syncInitialized) {
         console.log('sync now');
         this.syncInitialized = true;
         this.health.syncData();
+
+
+        this.data.getStatus().then(status => {
+          console.log('Status: ' + JSON.stringify(status));
+
+          this.status = status;
+
+          this.data.getPhases().then(configSocial => {
+
+            let enableSocialAt = moment(configSocial.social.enableAt);
+            if (moment().isAfter(enableSocialAt, 'day') || moment().isSame(enableSocialAt, 'day')) {
+
+              if ( //
+              (status.mode == 'A' && status.phase > 2) ||
+              (status.mode == 'B' && status.phase >= 2) ||
+              (status.mode == 'C')
+              ) {
+                this.isBuddyActive = true;
+
+              }
+
+            } else {
+
+              this.isBuddyActive = false;
+
+            }
+
+
+          });
+
+
+        });
+
+
+        this.data.getStatus().then(status => {
+
+          this.data.getConsent().then(function (consent) {
+            console.log('dfsdfasdfasdfasfdasdfasdfsfs');
+            console.log(consent.agreedToShare);
+            console.log(status.phase);
+            if (!consent.agreedToShare && status.phase > 2) {
+              console.log('push it baby');
+              self.showFeedback();
+
+            }
+
+          });
+
+        });
+
+
         /*
          setTimeout(function () {
          switch (self.mode) {
@@ -177,7 +208,13 @@ export class ActivityPage extends BasePage {
 
   }
 
+  showFeedback() {
+    this.navCtrl.push(FeedbackPage);
+
+  }
+
   doRefresh(refresher) {
+
     if (this.isBuddyActive) {
       console.log('Refresh');
       this.isBuddy = !this.isBuddy;
@@ -188,6 +225,7 @@ export class ActivityPage extends BasePage {
         refresher.complete();
       }, 3000);
     }
+
   }
 
 
@@ -229,7 +267,6 @@ export class ActivityPage extends BasePage {
 
   ionViewDidLoad() {
     //console.log('ionViewDidLoad ActivityPage');
-
 
   }
 

@@ -1,12 +1,3 @@
-<ion-header>
-
-  <ion-navbar>
-    <ion-title></ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
 <ion-content>
   <div>
     <i class="material-icons">feedback</i>
@@ -49,13 +40,20 @@
   <p>
     Please indicate whether you still consent for the researchers to use you data for the purpose of research:
   </p>
-  <div class="actions">
+  <div class="actions" *ngIf="!agreedToShare">
     <div class="recess-button recess-button--light" (click)="consent(false)">
-     I disagree
+      I disagree
     </div>
     <div class="recess-button recess-button--recess" (click)="consent(true)">
       <i class="material-icons">check</i> I agree
     </div>
+  </div>
+  <div *ngIf="agreedToShare">
+    Thank you for participating!
+    <div class="recess-button recess-button--recess" (click)="consent(true)">
+       Back to Activity <i class="material-icons">timeline</i>
+    </div>
+
   </div>
 </ion-content>
 

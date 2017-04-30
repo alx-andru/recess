@@ -32,6 +32,9 @@ export class WelcomePage extends BasePage {
     // survey blueprint
     this.survey = {
       agreedToStudy: true,
+      consent: {
+        agreedToShare: false,
+      },
       age: null,
       gender: null,
       occupation: null,

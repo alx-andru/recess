@@ -64,8 +64,12 @@
       </div>
     </div>
 
-    <div class="start">
-      <div class="recess-button" (tap)="showChallenge()">Start Challenge</div>
+    <div class="start" *ngIf="isLocked">
+      <div class="recess-button recess-button--light">{{backinDays}} days until new challenge</div>
+    </div>
+
+    <div class="start" *ngIf="!isLocked">
+      <div class="recess-button recess-button--recess" (tap)="showChallenge()">Start Challenge</div>
     </div>
 
 

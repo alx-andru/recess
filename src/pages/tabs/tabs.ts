@@ -14,6 +14,7 @@ import * as moment from 'moment';
 
 import {BasePage} from '../base/base';
 import {AngularFire} from 'angularfire2';
+import {FeedbackPage} from '../feedback/feedback';
 
 
 @Component({
@@ -62,23 +63,42 @@ export class TabsPage extends BasePage {
 
   setTabs(phases) {
 
-    if (null === phases) {
-      return;
-    }
+    this.data.getStatus().then(status => {
 
-    let enableGoalsAt = moment(phases.goals.enableAt);
-    if (moment().isAfter(enableGoalsAt, 'day') || moment().isSame(enableGoalsAt, 'day')) {
-      this.tabs[2].root = GoalsPage
-    } else {
-      this.tabs[2].root = GoalsInactivePage;
-    }
+      this.data.getConsent().then(function (consent) {
 
-    let enableSocialAt = moment(phases.social.enableAt);
-    if (moment().isAfter(enableSocialAt, 'day') || moment().isSame(enableSocialAt, 'day')) {
-      this.tabs[0].root = ChatPage;
-    } else {
-      this.tabs[0].root = ChatInactivePage;
-    }
+        if (null === phases) {
+          return;
+        }
+
+        let enableGoalsAt = moment(phases.goals.enableAt);
+        if (moment().isAfter(enableGoalsAt, 'day') || moment().isSame(enableGoalsAt, 'day')) {
+          this.tabs[2].root = GoalsPage
+        } else {
+          this.tabs[2].root = GoalsInactivePage;
+        }
+
+        let enableSocialAt = moment(phases.social.enableAt);
+        if (moment().isAfter(enableSocialAt, 'day') || moment().isSame(enableSocialAt, 'day')) {
+          this.tabs[0].root = ChatPage;
+        } else {
+          this.tabs[0].root = ChatInactivePage;
+        }
+
+        if (!consent.agreedToShare && status.phase > 2) {
+          console.log('push it baby');
+            this.tabs[1].root = FeedbackPage;
+
+        }
+
+      });
+
+    });
+
+
+
+
+
 
   }
 
