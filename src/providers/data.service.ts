@@ -179,15 +179,15 @@ export class DataService {
         });
       } else {
         /*
-        // temporary disable localstorage
-        // fallback
-        this.storage.get(`Recess.goals`).then(goals => {
-          resolve(goals);
-        }).catch(error => {
-          console.error(error);
-          reject(error);
-        });
-        */
+         // temporary disable localstorage
+         // fallback
+         this.storage.get(`Recess.goals`).then(goals => {
+         resolve(goals);
+         }).catch(error => {
+         console.error(error);
+         reject(error);
+         });
+         */
       }
     });
   }
@@ -946,7 +946,7 @@ export class DataService {
       // Activity + Goals             | Activity + Goals          | Activity + Goals + Social
       return {
         group: 'A',
-        socialActiveInDays: 3,
+        socialActiveInDays: 14,
         activityActiveInDays: -7,
         goalsActiveInDays: -1,
       };
@@ -956,7 +956,7 @@ export class DataService {
       // Activity + Goals             | Activity + Goals + Social | Activity + Goals + Social
       return {
         group: 'B',
-        socialActiveInDays: 2,
+        socialActiveInDays: 7,
         activityActiveInDays: -7,
         goalsActiveInDays: -1,
       };
