@@ -43,6 +43,9 @@ export class WelcomePage extends BasePage {
       tracker: null
     };
 
+    this.data.setEvent('process', 'start', 'welcome');
+
+
 
   }
 
@@ -52,6 +55,8 @@ export class WelcomePage extends BasePage {
 
   goToTerms() {
     this.slides.slideTo(1, 200);
+    this.data.setEvent('process', 'terms', 'welcome');
+
   }
 
   goToStart() {
@@ -60,6 +65,8 @@ export class WelcomePage extends BasePage {
   }
 
   openTerms() {
+    this.data.setEvent('process', 'terms_web', 'welcome');
+
     new InAppBrowser('http://ai.uwaterloo.ca/recess/policy?source=app', '_system');
   }
 
@@ -67,6 +74,8 @@ export class WelcomePage extends BasePage {
     // TODO: data.set.... user
     this.slides.lockSwipes(false);
     this.slides.slideTo(2, 100);
+    this.data.setEvent('process', 'start_again', 'welcome');
+
   }
 
   goToSurveyEnd() {
@@ -85,6 +94,8 @@ export class WelcomePage extends BasePage {
   goToPermissions() {
     this.slides.lockSwipes(false);
     this.slides.slideTo(4, 100);
+    this.data.setEvent('process', 'permissions', 'welcome');
+
   }
 
   start() {
@@ -106,6 +117,8 @@ export class WelcomePage extends BasePage {
   }
 
   askHealthPermission() {
+    this.data.setEvent('process', 'ask_permission_health', 'welcome');
+
     Health.requestAuthorization(['steps', 'distance']).then(isAuthorized => {
       console.log(`Authorization ${isAuthorized}`);
     }).catch(error => {

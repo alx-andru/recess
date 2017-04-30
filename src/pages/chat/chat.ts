@@ -153,6 +153,8 @@ export class ChatPage extends BasePage {
       msg.setFocus();
       msg.value = null;
 
+      this.data.setEvent('message', 'message_send', 'chat');
+
       this.toBottom();
     }
 

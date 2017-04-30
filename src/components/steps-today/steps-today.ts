@@ -116,7 +116,7 @@ export class StepsTodayComponent {
       ev: myEvent
     });
 
-    this.data.setEvent('button', 'steps');
+    this.data.setEvent('button', 'tap', 'steps');
   }
 
 }

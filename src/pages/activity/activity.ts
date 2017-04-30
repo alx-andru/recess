@@ -1,5 +1,5 @@
 import {Component, Renderer, ViewChild} from '@angular/core';
-import {NavController, Platform, PopoverController, Slides, ViewController} from 'ionic-angular';
+import {NavController, Platform, PopoverController, Slides} from 'ionic-angular';
 import {AngularFire, FirebaseAuthState} from 'angularfire2';
 
 import {HelpSupportPage} from '../help-support/help-support';
@@ -50,8 +50,7 @@ export class ActivityPage extends BasePage {
               public health: HealthService,
               public data: DataService,
               private renderer: Renderer,
-              public navCtrl: NavController,
-              ) {
+              public navCtrl: NavController,) {
 
     super(data);
 
@@ -218,6 +217,9 @@ export class ActivityPage extends BasePage {
     if (this.isBuddyActive) {
       console.log('Refresh');
       this.isBuddy = !this.isBuddy;
+      const currentIndex = this.slides.getActiveIndex();
+
+      this.data.setEvent('button', 'switch_buddy', 'activity', {isDay: currentIndex !== 1});
 
       setTimeout(() => {
         console.log('Async operation has ended');
@@ -237,7 +239,7 @@ export class ActivityPage extends BasePage {
       ev: myEvent
     });
 
-    this.data.setEvent('button', 'support');
+    this.data.setEvent('button', 'tap', 'support');
   }
 
 

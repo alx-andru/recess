@@ -23,6 +23,7 @@ export class GoalsPage extends BasePage {
       activity: 8,
     };
 
+
   }
 
   init() {

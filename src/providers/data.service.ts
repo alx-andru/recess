@@ -213,6 +213,9 @@ export class DataService {
 
         goalsData.set(newGoals);
 
+        this.setEvent('goal', 'start', 'goals', newGoals);
+
+
       }
 
       this.storage.set('Recess.goals', goals).then(storageData => {
@@ -402,7 +405,9 @@ export class DataService {
             phase = 3;
           }
 
-          console.log(`User Mode: ${mode}${phase}`);
+          //console.log(`User Mode: ${mode}${phase}`);
+          Firebase.setUserProperty('phase', `${phase}`);
+          Firebase.setUserProperty('mode', `${mode}`);
 
           resolve({
             mode: mode,
@@ -483,6 +488,12 @@ export class DataService {
       let survey = this.af.database.object(`/user/${this.uid}/survey`);
       surveyFilledOut.filledOutAt = moment().valueOf();
       survey.set(surveyFilledOut);
+
+      for (var question in surveyFilledOut) {
+        if (surveyFilledOut.hasOwnProperty(question)) {
+          Firebase.setUserProperty(question, surveyFilledOut[question]);
+        }
+      }
     }
 
     this.storage.set('Recess.survey', surveyFilledOut).then(storageData => {
@@ -789,7 +800,7 @@ export class DataService {
     return new Promise<any>((resolve, reject) => {
       if (this.isAuthenticated) {
         this.af.auth.subscribe(authData => {
-          console.log(authData);
+          //console.log(authData);
           resolve(authData);
 
         });
@@ -804,6 +815,26 @@ export class DataService {
       }
     });
 
+  }
+
+  getUserInfo() {
+    return new Promise<any>((resolve, reject) => {
+
+      if (this.isAuthenticated) {
+
+        this.af.database.object(`/users/${this.uid}`,
+          {
+            preserveSnapshot: true,
+
+          }).take(1).subscribe((user) => {
+
+          resolve(user.val());
+
+        });
+
+      }
+
+    });
   }
 
   initPush() {
@@ -891,7 +922,8 @@ export class DataService {
             enableAt: moment().add(mode.goalsActiveInDays, 'days').startOf('day').valueOf(),
             settings: {
               activity: 8,
-              steps: 10000
+              steps: 10000,
+              timestamp: moment().subtract(10, 'days'),
             },
 
           },
@@ -921,18 +953,19 @@ export class DataService {
 
   }
 
-  setEvent(type: string, module: string, meta?: any) {
+  setEvent(type: string, action: string, module: string, meta?: any) {
     if (this.isAuthenticated) {
       let timestamp = moment();
       let event = this.af.database.object(`/user/${this.uid}/events/${timestamp.format('YYYY-MM-DD')}/${timestamp.valueOf()}`);
       event.set({
         type: type,
+        action: action,
         module: module,
         timestamp: fb.database.ServerValue.TIMESTAMP,
         meta: meta || null,
       });
 
-      Firebase.logEvent('VIEW_ITEM', {content_type: 'page_view', item_id: type, item_name: module});
+      Firebase.logEvent(type, {content_type: action, item_id: type, item_name: module});
 
     }
   }

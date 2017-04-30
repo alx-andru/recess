@@ -9,7 +9,6 @@ import {DataService} from '../../providers/data.service';
 })
 
 
-
 export class UiStarComponent {
 
   @Input() isStepsAchieved: boolean = false;
@@ -31,7 +30,7 @@ export class UiStarComponent {
       ev: myEvent
     });
 
-    this.data.setEvent('button', 'phases');
+    this.data.setEvent('button', 'tap', 'phases');
 
 
   }

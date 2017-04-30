@@ -1,10 +1,12 @@
-import {Injectable, EventEmitter} from '@angular/core';
-import {AuthProviders, AngularFire, FirebaseAuthState, AuthMethods} from 'angularfire2';
+import {EventEmitter, Injectable} from '@angular/core';
+import {Firebase} from 'ionic-native';
+
+import {AngularFire, AuthMethods, AuthProviders, FirebaseAuthState} from 'angularfire2';
 import {UUID} from 'angular2-uuid';
 import {Http} from '@angular/http';
 
-import {DataService} from "./data.service";
-import {HealthService} from "./health.service";
+import {DataService} from './data.service';
+import {HealthService} from './health.service';
 
 import * as firebase from 'firebase';
 import * as faker from 'faker';
@@ -31,7 +33,6 @@ export class AuthProvider {
       //this.data.refreshPush();
 
 
-
     });
 
   }
@@ -48,8 +49,16 @@ export class AuthProvider {
     }).then((authData) => {
       console.log(authData);
 
-      // update verison
+      // update version
       this.data.updateAppVersion();
+
+      // analytics
+
+      this.data.getUserInfo().then(userInfo => {
+        Firebase.setUserProperty('mode', userInfo.mode);
+        Firebase.setUserProperty('type', userInfo.type);
+        Firebase.setUserId(userInfo.uid);
+      });
 
 
     }).catch((error) => {
@@ -96,7 +105,6 @@ export class AuthProvider {
   loginOrCreateUser() {
 
     this.data.getUser().then(user => {
-      console.log(user);
       console.log(this.af.auth);
       // create user
       if (null === user) {
