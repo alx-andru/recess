@@ -23,7 +23,7 @@ export class DataService {
 
   public tabevent: EventEmitter<any> = new EventEmitter();
 
-  public version: string = '0.0.21';
+  public version: string = '0.0.22';
 
 
   constructor(public storage: Storage, public af: AngularFire) {
@@ -50,6 +50,22 @@ export class DataService {
 
   monitorConfig() {
     if (this.isAuthenticated) {
+
+      this.af.database.object(`/user/${this.uid}/config/showWelcome`, {preserveSnapshot: true})
+        .subscribe(showConfig => {
+          this.setShowWelcome(showConfig.val());
+        });
+
+      this.af.database.object(`/user/${this.uid}/config/phases/goals/settings`, {preserveSnapshot: true})
+        .subscribe(goalsData => {
+          console.log('Goal Monitor');
+          const goal = goalsData.val();
+          console.log('/Goal Monitor');
+
+          this.setGoals(goal, false);
+        });
+
+
       /*
        // TODO one subscription per config value
        this.af.database.list(`/user/${this.uid}/config/phases/activity/enableAt`).subscribe(enableAt => {
@@ -64,10 +80,7 @@ export class DataService {
 
        });
 
-       this.af.database.object(`/user/${this.uid}/config/showWelcome`, {preserveSnapshot: true})
-       .subscribe(showConfig => {
-       this.setShowWelcome(showConfig.val());
-       });
+
 
        this.af.database.object(`/user/${this.uid}/config/phases/goals/settings`, {preserveSnapshot: true})
        .subscribe(goalsData => {
@@ -323,6 +336,7 @@ export class DataService {
   getPhases() {
     return new Promise<any>((resolve, reject) => {
       if (this.isAuthenticated) {
+        console.log('getphases: is auth');
         this.af.database.object(`/user/${this.uid}/config/phases`, {
           preserveSnapshot: true
         }).take(1).subscribe((phases) => {
@@ -330,7 +344,7 @@ export class DataService {
           resolve(phases.val());
         });
       } else {
-
+        console.log('getphases: is not auth');
         // fallback
         this.storage.get(`Recess.phases`).then(goals => {
           resolve(goals);
@@ -923,7 +937,7 @@ export class DataService {
             settings: {
               activity: 8,
               steps: 10000,
-              timestamp: moment().subtract(10, 'days'),
+              timestamp: moment().subtract(10, 'days').valueOf(),
             },
 
           },
@@ -941,7 +955,7 @@ export class DataService {
       console.error(error)
     });
 
-    this.setAssistant(user.config.assistant);
+    //this.setAssistant(user.config.assistant);
 
     let users = this.af.database.object(`/user/${userInfo.uid}`);
     users.set(user);
@@ -957,13 +971,15 @@ export class DataService {
     if (this.isAuthenticated) {
       let timestamp = moment();
       let event = this.af.database.object(`/user/${this.uid}/events/${timestamp.format('YYYY-MM-DD')}/${timestamp.valueOf()}`);
-      event.set({
+      const eventData = {
         type: type,
         action: action,
         module: module,
         timestamp: fb.database.ServerValue.TIMESTAMP,
-        meta: meta || null,
-      });
+        // meta: meta || null,
+      };
+      console.log(JSON.stringify(eventData));
+      event.set(eventData);
 
       Firebase.logEvent(type, {content_type: action, item_id: type, item_name: module});
 

@@ -108,20 +108,10 @@ export class AuthProvider {
       console.log(this.af.auth);
       // create user
       if (null === user) {
-
-
         this.registerUser();
-
-
         // login
       } else {
-        /*
-         const credentials = ({
-         email: 'test@teste.g0g',
-         password: 'testee'
-         }); //Added next lines
-         this.loginWithEmail(credentials);
-         */
+
         this.loginWithEmail(user);
       }
 

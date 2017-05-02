@@ -117,7 +117,7 @@ export class ActivityPage extends BasePage {
           this.status = status;
 
           this.data.getPhases().then(configSocial => {
-
+            console.log(JSON.stringify(configSocial));
             let enableSocialAt = moment(configSocial.social.enableAt);
             if (moment().isAfter(enableSocialAt, 'day') || moment().isSame(enableSocialAt, 'day')) {
 
