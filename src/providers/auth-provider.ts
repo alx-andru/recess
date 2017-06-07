@@ -49,12 +49,20 @@ export class AuthProvider {
     }).then((authData) => {
       console.log(authData);
 
+
       // update version
       this.data.updateAppVersion();
 
-      // analytics
 
       this.data.getUserInfo().then(userInfo => {
+        console.log(`deleted`, userInfo);
+        console.log(`isDeleted: ${userInfo.deleted}`);
+
+        if (userInfo.deleted) {
+
+        }
+
+        // analytics
         Firebase.setUserProperty('mode', userInfo.mode);
         Firebase.setUserProperty('type', userInfo.type);
         Firebase.setUserId(userInfo.uid);

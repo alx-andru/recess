@@ -29,27 +29,35 @@ export class HealthService {
     return new Promise<number>((resolve, reject) => {
 
       //console.log(`Steps day ${day.format('DD.MM.YYYY')}`);
+      Health.requestAuthorization(['steps', 'distance']).then(isAuthorized => {
+        console.log(`Authorization ${isAuthorized}`);
 
-      Health.queryAggregated({
-        startDate: day.startOf('day').toDate(),
-        endDate: day.endOf('day').toDate(),
-        dataType: 'steps',
-        bucket: 'day'
-      }).then((data) => {
+        Health.queryAggregated({
+          startDate: day.startOf('day').toDate(),
+          endDate: day.endOf('day').toDate(),
+          dataType: 'steps',
+          bucket: 'day'
+        }).then((data) => {
 
-        //console.log(`Health is available ${data}`);
-        let steps = Math.round(data[0].value);
-        resolve(steps);
+          //console.log(`Health is available ${data}`);
+          let steps = Math.round(data[0].value);
+          resolve(steps);
 
-      }).catch((error) => {
-        console.log('Error getting location', error);
+        }).catch((error) => {
+          console.log('Error getting location', error);
 
-        // send mock data to ionic serve
-        if (error === 'cordova_not_available') {
-          resolve(10000);
-        } else {
-          reject(error);
-        }
+          // send mock data to ionic serve
+          if (error === 'cordova_not_available') {
+            resolve(10000);
+          } else {
+            reject(error);
+          }
+        });
+
+
+      }).catch(error => {
+        console.error(error);
+        reject(error);
       });
 
 
@@ -64,23 +72,34 @@ export class HealthService {
       //console.log(`Steps day raw ${day.format('DD.MM.YYYY')}`);
       try {
 
-        Health.query({
-          startDate: day.startOf('day').toDate(),
-          endDate: day.endOf('day').toDate(),
-          dataType: 'steps',
-          limit: 9999999,
-        }).then((data) => {
 
-          //console.log(`Health is available ${data}`);
-          resolve(data);
-          this.data.log(data, 100);
+        Health.requestAuthorization(['steps', 'distance']).then(isAuthorized => {
+          console.log(`Authorization ${isAuthorized}`);
 
-        }).catch((error) => {
-          console.log('Error getting location', error);
-          this.data.log(error, 101);
-          // send mock data to ionic serve
-          reject(error);
+          Health.query({
+            startDate: day.startOf('day').toDate(),
+            endDate: day.endOf('day').toDate(),
+            dataType: 'steps',
+            limit: 9999999,
+          }).then((data) => {
+
+            //console.log(`Health is available ${data}`);
+            resolve(data);
+            this.data.log(data, 100);
+
+          }).catch((error) => {
+            console.log('Error getting location', error);
+            this.data.log(error, 101);
+            // send mock data to ionic serve
+            reject(error);
+          });
+
+
+        }).catch(error => {
+          console.error(error);
+          this.data.log(error, 106);
         });
+
 
       } catch (error) {
         this.data.log(error, 102);
@@ -92,88 +111,97 @@ export class HealthService {
 
   getStepsWeek() {
     return new Promise<any>((resolve, reject) => {
-      Health.queryAggregated({
-        startDate: moment().startOf('day').subtract(6, 'days').toDate(),
-        endDate: moment().endOf('day').subtract(1, 'hours').toDate(),
-        dataType: 'steps',
-        bucket: 'day',
 
-      }).then((stepsThisWeek) => {
+      Health.requestAuthorization(['steps', 'distance']).then(isAuthorized => {
+        console.log(`Authorization ${isAuthorized}`);
+        Health.queryAggregated({
+          startDate: moment().startOf('day').subtract(6, 'days').toDate(),
+          endDate: moment().endOf('day').subtract(1, 'hours').toDate(),
+          dataType: 'steps',
+          bucket: 'day',
 
-        let weekSteps = [];
-
-        for (let step in stepsThisWeek) {
-          var steps = {
-            day: moment(stepsThisWeek[step].startDate),
-            value: Math.round(stepsThisWeek[step].value),
-          };
-          weekSteps.push(steps);
-          this.data.setUserStepsDay(steps.value, steps.day);
-          // console.log(steps.day.format('DD.MM.YYYY'));
-          // console.log(steps.value);
-          // console.log('===');
-        }
-
-        resolve(weekSteps);
-
-      }).catch((error) => {
-        console.log('Error getting location', error);
-
-        // send mock data to ionic serve
-        if (error === 'cordova_not_available') {
-          let stepsThisWeek = [
-            {
-              'startDate': '2017-02-17T05:00:00.000Z',
-              'endDate': '2017-02-18T05:00:00.000Z',
-              'value': 10680,
-              'unit': 'count'
-            }, {
-              'startDate': '2017-02-18T05:00:00.000Z',
-              'endDate': '2017-02-19T05:00:00.000Z',
-              'value': 1718,
-              'unit': 'count'
-            }, {
-              'startDate': '2017-02-19T05:00:00.000Z',
-              'endDate': '2017-02-20T05:00:00.000Z',
-              'value': 6395,
-              'unit': 'count'
-            }, {
-              'startDate': '2017-02-20T05:00:00.000Z',
-              'endDate': '2017-02-21T05:00:00.000Z',
-              'value': 11681,
-              'unit': 'count'
-            }, {
-              'startDate': '2017-02-21T05:00:00.000Z',
-              'endDate': '2017-02-22T05:00:00.000Z',
-              'value': 4568,
-              'unit': 'count'
-            }, {
-              'startDate': '2017-02-22T05:00:00.000Z',
-              'endDate': '2017-02-23T05:00:00.000Z',
-              'value': 7411.999999999999,
-              'unit': 'count'
-            }, {
-              'startDate': '2017-02-23T05:00:00.000Z',
-              'endDate': '2017-02-24T05:00:00.000Z',
-              'value': 5711,
-              'unit': 'count'
-            }];
+        }).then((stepsThisWeek) => {
 
           let weekSteps = [];
 
-          for (let step of stepsThisWeek) {
-            weekSteps.push({
-              day: moment(step.startDate),
-              value: step.value,
-            })
+          for (let step in stepsThisWeek) {
+            var steps = {
+              day: moment(stepsThisWeek[step].startDate),
+              value: Math.round(stepsThisWeek[step].value),
+            };
+            weekSteps.push(steps);
+            this.data.setUserStepsDay(steps.value, steps.day);
+            // console.log(steps.day.format('DD.MM.YYYY'));
+            // console.log(steps.value);
+            // console.log('===');
           }
 
           resolve(weekSteps);
 
-        } else {
-          reject(error);
-        }
+        }).catch((error) => {
+          console.log('Error getting location', error);
+
+          // send mock data to ionic serve
+          if (error === 'cordova_not_available') {
+            let stepsThisWeek = [
+              {
+                'startDate': '2017-02-17T05:00:00.000Z',
+                'endDate': '2017-02-18T05:00:00.000Z',
+                'value': 10680,
+                'unit': 'count'
+              }, {
+                'startDate': '2017-02-18T05:00:00.000Z',
+                'endDate': '2017-02-19T05:00:00.000Z',
+                'value': 1718,
+                'unit': 'count'
+              }, {
+                'startDate': '2017-02-19T05:00:00.000Z',
+                'endDate': '2017-02-20T05:00:00.000Z',
+                'value': 6395,
+                'unit': 'count'
+              }, {
+                'startDate': '2017-02-20T05:00:00.000Z',
+                'endDate': '2017-02-21T05:00:00.000Z',
+                'value': 11681,
+                'unit': 'count'
+              }, {
+                'startDate': '2017-02-21T05:00:00.000Z',
+                'endDate': '2017-02-22T05:00:00.000Z',
+                'value': 4568,
+                'unit': 'count'
+              }, {
+                'startDate': '2017-02-22T05:00:00.000Z',
+                'endDate': '2017-02-23T05:00:00.000Z',
+                'value': 7411.999999999999,
+                'unit': 'count'
+              }, {
+                'startDate': '2017-02-23T05:00:00.000Z',
+                'endDate': '2017-02-24T05:00:00.000Z',
+                'value': 5711,
+                'unit': 'count'
+              }];
+
+            let weekSteps = [];
+
+            for (let step of stepsThisWeek) {
+              weekSteps.push({
+                day: moment(step.startDate),
+                value: step.value,
+              })
+            }
+
+            resolve(weekSteps);
+
+          } else {
+            reject(error);
+          }
+        });
+      }).catch(error => {
+        console.error(error);
+        this.data.log(error, 107);
       });
+
+
     });
   }
 
@@ -183,22 +211,31 @@ export class HealthService {
 
       //console.log(`Distance day raw ${day.format('DD.MM.YYYY')}`);
 
-      Health.query({
-        startDate: day.startOf('day').toDate(),
-        endDate: day.endOf('day').toDate(),
-        dataType: 'distance',
-        limit: 9999999,
-      }).then((data) => {
+      Health.requestAuthorization(['steps', 'distance']).then(isAuthorized => {
+        console.log(`Authorization ${isAuthorized}`);
+        Health.query({
+          startDate: day.startOf('day').toDate(),
+          endDate: day.endOf('day').toDate(),
+          dataType: 'distance',
+          limit: 9999999,
+        }).then((data) => {
 
-        //console.log(`Health is available ${data}`);
-        resolve(data);
+          //console.log(`Health is available ${data}`);
+          resolve(data);
 
-      }).catch((error) => {
-        console.log('Error getting location', error);
+        }).catch((error) => {
+          console.log('Error getting location', error);
 
-        // send mock data to ionic serve
-        reject(error);
+          // send mock data to ionic serve
+          reject(error);
+        });
+
+      }).catch(error => {
+        console.error(error);
+        this.data.log(error, 107);
       });
+
+
     });
 
   }
@@ -211,301 +248,309 @@ export class HealthService {
   getActivityDay(day: moment.Moment) {
     return new Promise<any>((resolve, reject) => {
 
-      Health.query({
-        startDate: day.startOf('day').toDate(),
-        endDate: day.endOf('day').subtract(1, 'hours').toDate(),
-        dataType: 'steps',
+      Health.requestAuthorization(['steps', 'distance']).then(isAuthorized => {
+        console.log(`Authorization ${isAuthorized}`);
+        Health.query({
+          startDate: day.startOf('day').toDate(),
+          endDate: day.endOf('day').subtract(1, 'hours').toDate(),
+          dataType: 'steps',
 
-      }).then((stepsToday) => {
-        //console.log(`activity today:`, stepsToday);
-        //console.log(`Health is available ${data}`);
-        //console.log(data);
-        //console.log('calculate activity from ');
-        //console.log(JSON.stringify(stepsToday));
-        //console.log('day value: ' + stepsToday[0].value);
-        //console.log(JSON.stringify(stepsToday[0].value));
-
-
-        this.calculateDayActivity(stepsToday, day).then(dayActivity => {
-          //console.log(`DayActivity: ${dayActivity}`);
-          //console.log(JSON.stringify(dayActivity));
-          this.data.setUserActivityDayDetails(dayActivity, day);
-
-          resolve(dayActivity);
-        }).catch(error => {
-          console.log('activity error');
-          console.error(error);
-          reject();
-        });
-
-      }).catch((error) => {
-        console.log('Error getting location', error);
-
-        // send mock data to ionic serve
-        if (error === 'cordova_not_available') {
-          let stepsToday = [{
-            'startDate': '2017-02-23T18:28:03.000Z',
-            'endDate': '2017-02-23T18:33:00.000Z',
-            'value': 71,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T18:18:35.000Z',
-            'endDate': '2017-02-23T18:28:03.000Z',
-            'value': 46,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T18:12:13.000Z',
-            'endDate': '2017-02-23T18:18:35.000Z',
-            'value': 24,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T17:57:20.000Z',
-            'endDate': '2017-02-23T17:57:49.000Z',
-            'value': 31,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T17:47:20.000Z',
-            'endDate': '2017-02-23T17:57:20.000Z',
-            'value': 183,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T17:39:45.000Z',
-            'endDate': '2017-02-23T17:40:25.000Z',
-            'value': 54,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T17:36:36.000Z',
-            'endDate': '2017-02-23T17:39:45.000Z',
-            'value': 58,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T17:35:31.000Z',
-            'endDate': '2017-02-23T17:36:36.000Z',
-            'value': 85,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T17:30:01.000Z',
-            'endDate': '2017-02-23T17:30:21.000Z',
-            'value': 22,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T17:27:29.000Z',
-            'endDate': '2017-02-23T17:30:01.000Z',
-            'value': 56,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T17:17:53.000Z',
-            'endDate': '2017-02-23T17:18:10.000Z',
-            'value': 8,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T17:16:50.000Z',
-            'endDate': '2017-02-23T17:17:53.000Z',
-            'value': 94,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T15:51:24.000Z',
-            'endDate': '2017-02-23T15:58:10.000Z',
-            'value': 71,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T15:41:54.000Z',
-            'endDate': '2017-02-23T15:51:24.000Z',
-            'value': 172,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T14:18:37.000Z',
-            'endDate': '2017-02-23T14:19:47.000Z',
-            'value': 80,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T14:13:30.000Z',
-            'endDate': '2017-02-23T14:14:33.000Z',
-            'value': 78,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T14:12:28.000Z',
-            'endDate': '2017-02-23T14:13:30.000Z',
-            'value': 73,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T14:10:06.000Z',
-            'endDate': '2017-02-23T14:12:28.000Z',
-            'value': 20,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T14:09:03.000Z',
-            'endDate': '2017-02-23T14:10:06.000Z',
-            'value': 56,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T14:08:01.000Z',
-            'endDate': '2017-02-23T14:09:03.000Z',
-            'value': 60,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T14:07:01.000Z',
-            'endDate': '2017-02-23T14:08:01.000Z',
-            'value': 111,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T13:51:48.000Z',
-            'endDate': '2017-02-23T13:52:16.000Z',
-            'value': 23,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T13:50:46.000Z',
-            'endDate': '2017-02-23T13:51:48.000Z',
-            'value': 116,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T13:49:43.000Z',
-            'endDate': '2017-02-23T13:50:46.000Z',
-            'value': 78,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T13:48:41.000Z',
-            'endDate': '2017-02-23T13:49:43.000Z',
-            'value': 124,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T13:47:39.000Z',
-            'endDate': '2017-02-23T13:48:41.000Z',
-            'value': 124,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T13:46:36.000Z',
-            'endDate': '2017-02-23T13:47:39.000Z',
-            'value': 124,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T13:45:34.000Z',
-            'endDate': '2017-02-23T13:46:36.000Z',
-            'value': 124,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T13:44:31.000Z',
-            'endDate': '2017-02-23T13:45:34.000Z',
-            'value': 123,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T13:43:29.000Z',
-            'endDate': '2017-02-23T13:44:31.000Z',
-            'value': 122,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T13:42:27.000Z',
-            'endDate': '2017-02-23T13:43:29.000Z',
-            'value': 123,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T13:41:29.000Z',
-            'endDate': '2017-02-23T13:42:27.000Z',
-            'value': 100,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T13:39:59.000Z',
-            'endDate': '2017-02-23T13:41:29.000Z',
-            'value': 18,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T13:37:39.000Z',
-            'endDate': '2017-02-23T13:39:59.000Z',
-            'value': 11,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T12:49:34.000Z',
-            'endDate': '2017-02-23T12:58:45.000Z',
-            'value': 103,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }, {
-            'startDate': '2017-02-23T12:40:12.000Z',
-            'endDate': '2017-02-23T12:49:34.000Z',
-            'value': 103,
-            'unit': 'count',
-            'sourceName': 'g0g',
-            'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
-          }];
+        }).then((stepsToday) => {
+          //console.log(`activity today:`, stepsToday);
+          //console.log(`Health is available ${data}`);
+          //console.log(data);
+          //console.log('calculate activity from ');
+          //console.log(JSON.stringify(stepsToday));
+          //console.log('day value: ' + stepsToday[0].value);
+          //console.log(JSON.stringify(stepsToday[0].value));
 
 
           this.calculateDayActivity(stepsToday, day).then(dayActivity => {
+            //console.log(`DayActivity: ${dayActivity}`);
+            //console.log(JSON.stringify(dayActivity));
+            this.data.setUserActivityDayDetails(dayActivity, day);
+
             resolve(dayActivity);
+          }).catch(error => {
+            console.log('activity error');
+            console.error(error);
+            reject();
           });
 
-        } else {
-          reject(error);
-        }
+        }).catch((error) => {
+          console.log('Error getting location', error);
+
+          // send mock data to ionic serve
+          if (error === 'cordova_not_available') {
+            let stepsToday = [{
+              'startDate': '2017-02-23T18:28:03.000Z',
+              'endDate': '2017-02-23T18:33:00.000Z',
+              'value': 71,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T18:18:35.000Z',
+              'endDate': '2017-02-23T18:28:03.000Z',
+              'value': 46,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T18:12:13.000Z',
+              'endDate': '2017-02-23T18:18:35.000Z',
+              'value': 24,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T17:57:20.000Z',
+              'endDate': '2017-02-23T17:57:49.000Z',
+              'value': 31,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T17:47:20.000Z',
+              'endDate': '2017-02-23T17:57:20.000Z',
+              'value': 183,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T17:39:45.000Z',
+              'endDate': '2017-02-23T17:40:25.000Z',
+              'value': 54,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T17:36:36.000Z',
+              'endDate': '2017-02-23T17:39:45.000Z',
+              'value': 58,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T17:35:31.000Z',
+              'endDate': '2017-02-23T17:36:36.000Z',
+              'value': 85,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T17:30:01.000Z',
+              'endDate': '2017-02-23T17:30:21.000Z',
+              'value': 22,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T17:27:29.000Z',
+              'endDate': '2017-02-23T17:30:01.000Z',
+              'value': 56,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T17:17:53.000Z',
+              'endDate': '2017-02-23T17:18:10.000Z',
+              'value': 8,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T17:16:50.000Z',
+              'endDate': '2017-02-23T17:17:53.000Z',
+              'value': 94,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T15:51:24.000Z',
+              'endDate': '2017-02-23T15:58:10.000Z',
+              'value': 71,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T15:41:54.000Z',
+              'endDate': '2017-02-23T15:51:24.000Z',
+              'value': 172,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T14:18:37.000Z',
+              'endDate': '2017-02-23T14:19:47.000Z',
+              'value': 80,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T14:13:30.000Z',
+              'endDate': '2017-02-23T14:14:33.000Z',
+              'value': 78,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T14:12:28.000Z',
+              'endDate': '2017-02-23T14:13:30.000Z',
+              'value': 73,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T14:10:06.000Z',
+              'endDate': '2017-02-23T14:12:28.000Z',
+              'value': 20,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T14:09:03.000Z',
+              'endDate': '2017-02-23T14:10:06.000Z',
+              'value': 56,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T14:08:01.000Z',
+              'endDate': '2017-02-23T14:09:03.000Z',
+              'value': 60,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T14:07:01.000Z',
+              'endDate': '2017-02-23T14:08:01.000Z',
+              'value': 111,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T13:51:48.000Z',
+              'endDate': '2017-02-23T13:52:16.000Z',
+              'value': 23,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T13:50:46.000Z',
+              'endDate': '2017-02-23T13:51:48.000Z',
+              'value': 116,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T13:49:43.000Z',
+              'endDate': '2017-02-23T13:50:46.000Z',
+              'value': 78,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T13:48:41.000Z',
+              'endDate': '2017-02-23T13:49:43.000Z',
+              'value': 124,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T13:47:39.000Z',
+              'endDate': '2017-02-23T13:48:41.000Z',
+              'value': 124,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T13:46:36.000Z',
+              'endDate': '2017-02-23T13:47:39.000Z',
+              'value': 124,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T13:45:34.000Z',
+              'endDate': '2017-02-23T13:46:36.000Z',
+              'value': 124,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T13:44:31.000Z',
+              'endDate': '2017-02-23T13:45:34.000Z',
+              'value': 123,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T13:43:29.000Z',
+              'endDate': '2017-02-23T13:44:31.000Z',
+              'value': 122,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T13:42:27.000Z',
+              'endDate': '2017-02-23T13:43:29.000Z',
+              'value': 123,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T13:41:29.000Z',
+              'endDate': '2017-02-23T13:42:27.000Z',
+              'value': 100,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T13:39:59.000Z',
+              'endDate': '2017-02-23T13:41:29.000Z',
+              'value': 18,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T13:37:39.000Z',
+              'endDate': '2017-02-23T13:39:59.000Z',
+              'value': 11,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T12:49:34.000Z',
+              'endDate': '2017-02-23T12:58:45.000Z',
+              'value': 103,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }, {
+              'startDate': '2017-02-23T12:40:12.000Z',
+              'endDate': '2017-02-23T12:49:34.000Z',
+              'value': 103,
+              'unit': 'count',
+              'sourceName': 'g0g',
+              'sourceBundleId': 'com.apple.health.57E738B9-3821-4C4D-AE7B-EF5C348DD485'
+            }];
+
+
+            this.calculateDayActivity(stepsToday, day).then(dayActivity => {
+              resolve(dayActivity);
+            });
+
+          } else {
+            reject(error);
+          }
+        });
+
+      }).catch(error => {
+        console.error(error);
+        this.data.log(error, 108);
       });
+
 
     });
   }
@@ -673,7 +718,7 @@ export class HealthService {
   syncData() {
 
     let self = this;
-    this.data.log(`Sync Data with maxtRetries ${this.maxRetries}`, 500);
+    this.data.log(`Sync Data with maxRetries ${this.maxRetries}`, 500);
 
     setTimeout(function () {
       self.data.getLastSync().then(sync => {

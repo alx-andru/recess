@@ -23,7 +23,7 @@ export class DataService {
 
   public tabevent: EventEmitter<any> = new EventEmitter();
 
-  public version: string = '0.0.22';
+  public version: string = '0.0.23';
 
 
   constructor(public storage: Storage, public af: AngularFire) {
@@ -906,6 +906,7 @@ export class DataService {
     userInfo.week = moment().isoWeekYear();
 
     let user = {
+      deleted: false,
       sync: {
         last: moment().subtract(7, 'days').startOf('day').valueOf(),
       },
